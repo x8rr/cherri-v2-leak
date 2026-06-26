@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cherri | games</title>
+    <link rel="shortcut icon" href="/assets/img/fav.png" type="image/x-icon">
+    <link rel="stylesheet" href="/assets/css/font.css?v=4">
+    <link rel="stylesheet" href="/assets/css/colors/default.css" id="csslink">
+    <link rel="stylesheet" href="/assets/css/index.css?v=34">
+    <link rel="stylesheet" href="/assets/icons/css/all-pro.css">
+    <link rel="stylesheet" href="/assets/css/dropdowns.css">
+</head>
+
+<body class="obfuscate">
+    <center>
+        <br>
+        <div class="flex-row" style="gap: 10px; position: relative; width: 100%; justify-content: center;">
+            <div id="dropdown" class="game-dropdown">
+                <div id="d-selected-item" onclick="toggleDropdown('game-dropdown')">
+                    <span>Lumin</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div id="d-item-list">
+                    <div onclick="load('lumin')">
+                        Lumin
+                    </div>
+                    <div onclick="load('gn-math')">
+                        GN Math
+                    </div>
+                    <div onclick="load('truffled')">
+                        Truffled
+                    </div>
+                    <div onclick="load('ugs')">
+                        UGS
+                    </div>
+                    <div onclick="load('ngg')">
+                        NowGG
+                    </div>
+                </div>
+            </div>
+            <input type="text"
+                style="width: 400px; height: 50px; box-sizing: border-box; border: 1px solid var(--border-4);"
+                placeholder="Search for a game...">
+        </div>
+        <br>
+        <div id="game-container" style="justify-content: center;">
+        </div>
+    </center>
+    <br><br><br><br><br><br>
+    <script>
+        document.getElementById("csslink").href = `/assets/css/colors/${localStorage.getItem("cherri_theme") ?? "default"}.css`
+    </script>
+    <script src="https://cdn.jsdelivr.net/gh/luminsdk/script@latest/lumin.min.js"></script>
+    <script src="/assets/js/cherri.loader.js?v=20260619a"></script>
+    <script src="/assets/js/cherri.dropdowns.js"></script>
+
+    <script src="/assets/js/cherri.ads.js"></script>
+
+</body>
+
+</html>

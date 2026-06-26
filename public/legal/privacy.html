@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cherri - Privacy Policy</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f4f4f4;
+        }
+
+        #content {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #333;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="content"></div>
+    <br><br><br>
+    <center>
+        <small>The markdown on this page was generated with Marked.</small>
+    </center>
+
+    <script>
+        const tosMarkdown = `
+# CHERRI PRIVACY POLICY
+
+**Last Updated: March 20, 2026**
+
+This Privacy Policy describes how Cherri ("we," "us," or "our") collects, uses, and shares your information when you use our website and services.
+
+### 1. INFORMATION WE COLLECT
+
+We only collect information that is necessary to provide you with our services and maintain a secure environment.
+
+* **Account Information:** When you authenticate or create an account, we may collect your username, email address, and profile data.
+
+* **Activity & Connection Logs:** To ensure account security and policy enforcement, our backend (Fastify) automatically logs your IP address during specific account actions, including signup, login, and logout events.
+
+* **Communications:** We store the messages and content you send through our communication features to ensure they can be delivered to other users.
+
+* **Technical Data:** We may collect your browser type and device information to maintain security and prevent abuse of our websockets.
+
+### 2. HOW WE USE YOUR INFORMATION
+
+We use the collected data to:
+
+* Provide, maintain, and improve the Site.
+
+* **Account Enforcement**: Use IP logging to identify and take action against accounts violating our Terms of Service, including banquet evasion or automated abuse.
+
+* Monitor for "targeted harassment" or "prohibited behavior" as defined in our TOS.
+
+* Protect our servers from malicious attacks or unauthorized websocket connections.
+
+### 3. ADVERTISING AND THIRD PARTIES
+
+* **Third-Party Ads:** As stated in our TOS, we display advertisements. These third-party ad providers may use cookies or web beacons to collect non-identifying information about your visit to Cherri to provide relevant ads.
+
+* **External Links:** We do not share your personal account information (like your email) with advertisers. However, if you click an ad, you are subject to that third party’s privacy policy.
+
+### 4. DATA STORAGE AND TRANSFERS
+
+* **Location:** Cherri is operated from the United States. By using our service, you acknowledge that your information will be transferred to and processed in the U.S., where data protection laws may differ from those in your home country.
+
+* **Retention:** We retain account and log data for as long as your account is active. If an account is terminated for a violation of our terms, we may retain certain identifiers (including IP history) to prevent the creation of new accounts by the same user.
+
+* **Data we Store:** When you create an account on Cherri, we store information such as display name, username, profile picture, and game saves. If you're not signed in, data is privately stored on your device through Local Storage APIs.
+
+### 5. CHILDREN'S PRIVACY (COPPA)
+
+Cherri is not intended for children under the age of 13. We do not knowingly collect personal information from children under 13. If we become aware that a child under 13 has provided us with personal information, we will delete it immediately.
+
+### 6. YOUR RIGHTS
+
+Depending on your location, you may have the right to:
+
+* Access the personal data we hold about you.
+
+* Request the deletion of your account and associated data.
+
+* Opt-out of certain data collection by disabling cookies in your browser.
+
+### 7. CHANGES TO THIS POLICY
+
+We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new policy on this page and updating the "Last Updated" date at the top.
+
+### 8. CONTACT US
+
+If you have questions about this Privacy Policy or your data, please contact the Cherri development team through our official support channels.
+        `;
+        document.getElementById('content').innerHTML = marked.parse(tosMarkdown);
+    </script>
+</body>
+
+</html>

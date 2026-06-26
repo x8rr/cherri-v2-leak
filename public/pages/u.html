@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cherri | profile</title>
+    <link rel="shortcut icon" href="/assets/img/fav.png" type="image/x-icon">
+    <link rel="stylesheet" href="/assets/css/font.css?v=2349">
+    <link rel="stylesheet" href="/assets/css/colors/default.css" id="csslink">
+    <link rel="stylesheet" href="/assets/css/index.css">
+    <link rel="stylesheet" href="/assets/icons/css/all-pro.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'figtree normal'; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px 16px 60px;
+        }
+
+        .up-shell {
+            width: 100%;
+            max-width: 680px;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        /* Back nav */
+        .up-nav { margin-bottom: 16px; }
+        .up-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 14px;
+            border-radius: 12px;
+            background: var(--bg-2);
+            border: 1px solid var(--border-4);
+            color: var(--text-2);
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: .15s;
+        }
+        .up-back:hover { background: var(--bg-3); color: var(--text); }
+
+        /* Single unified card */
+        .up-card {
+            background: var(--bg-2);
+            border: 1px solid var(--border-4);
+            border-radius: 20px;
+            overflow: hidden; /* clips the banner to the card's corners */
+        }
+
+        /* Banner — no border-radius needed, card handles it */
+        .up-banner {
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(135deg, var(--accent) 0%, #5a2090 100%);
+            background-size: cover;
+            background-position: center;
+            flex-shrink: 0;
+        }
+
+        /* Avatar + actions row */
+        .up-below-banner {
+            padding: 0 20px 0;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            margin-top: -40px; /* pulls row up into banner */
+        }
+
+        .up-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--bg-2);
+            background: var(--bg-3);
+            flex-shrink: 0;
+            display: block;
+        }
+
+        .up-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+            padding-bottom: 6px; /* align to avatar baseline */
+        }
+
+        /* Info section */
+        .up-info {
+            padding: 12px 20px 20px;
+        }
+
+        .up-nameline {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .up-display { font-size: 20px; font-weight: 700; }
+        .up-verified { color: var(--accent); font-size: 15px; }
+
+        .up-username {
+            font-size: 13px;
+            color: var(--text-2);
+            margin-top: 2px;
+        }
+
+        .up-badges {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+        .badge-pill {
+            padding: 2px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+        }
+        .badge-pill-trusted { background: var(--accent-glow); color: var(--accent); }
+        .badge-pill-admin   { background: rgba(255,71,71,.15); color: #ff6b6b; }
+        .badge-pill-mod     { background: rgba(76,175,130,.15); color: #4caf82; }
+        .badge-pill-dev     { background: rgba(100,130,255,.15); color: #8899ff; }
+        .badge-pill-user    { background: var(--bg-3); color: var(--text-2); }
+
+        .up-bio {
+            font-size: 14px;
+            color: var(--text);
+            opacity: .8;
+            line-height: 1.5;
+            margin-top: 10px;
+        }
+
+        .up-stats {
+            display: flex;
+            gap: 16px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-4);
+            flex-wrap: wrap;
+        }
+        .up-stat { font-size: 13px; color: var(--text-2); }
+        .up-stat strong { color: var(--text); font-weight: 700; }
+
+        /* Action buttons */
+        .btn-up {
+            padding: 7px 15px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 13px;
+            font-family: 'figtree normal';
+            transition: .15s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-up:hover { filter: brightness(1.1); }
+        .btn-up-primary   { background: var(--accent); color: #fff; }
+        .btn-up-secondary { background: var(--bg-3); border: 1px solid var(--border-4); color: var(--text); }
+        .btn-up-green     { background: rgba(76,175,130,.9); color: #fff; }
+        .btn-up-ghost     { background: var(--bg-3); border: 1px solid var(--border-4); color: var(--text-2); }
+
+        /* Unfriend dropdown */
+        .up-dropdown { position: relative; display: inline-block; }
+        .up-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: calc(100% + 4px);
+            right: 0;
+            background: var(--bg-2);
+            border: 1px solid var(--border-4);
+            border-radius: 12px;
+            min-width: 130px;
+            padding: 4px;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,.4);
+        }
+        .up-dropdown:hover .up-dropdown-menu { display: block; }
+        .up-dropdown-menu button {
+            width: 100%;
+            background: none;
+            border: none;
+            color: #ff6b6b;
+            padding: 7px 12px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 13px;
+            border-radius: 8px;
+            font-family: 'figtree normal';
+        }
+        .up-dropdown-menu button:hover { background: rgba(255,71,71,.1); }
+
+        /* States */
+        .up-loading, .up-not-found {
+            text-align: center;
+            padding: 60px 20px;
+            opacity: .55;
+        }
+        .up-loading i, .up-not-found i { font-size: 28px; margin-bottom: 12px; display: block; }
+        .up-not-found h2 { font-size: 20px; margin-bottom: 6px; }
+        .up-not-found p  { font-size: 14px; }
+    </style>
+</head>
+<body class="obfuscate">
+<script>document.getElementById("csslink").href=`/assets/css/colors/${localStorage.getItem("cherri_theme")??"default"}.css`;</script>
+
+<div class="up-shell">
+    <div class="up-nav">
+        <a href="/pages/chatrooms.html" class="up-back"><i class="fas fa-arrow-left"></i> Back to Chat</a>
+    </div>
+
+    <div class="up-loading" id="up-loading">
+        <i class="fas fa-spinner fa-spin"></i>
+        Loading profile…
+    </div>
+
+    <div id="up-content" style="display:none;">
+        <div class="up-card">
+            <!-- Banner lives inside the card, clipped by card's border-radius -->
+            <div class="up-banner" id="up-banner"></div>
+
+            <!-- Avatar overlaps the banner via negative margin-top on this row -->
+            <div class="up-below-banner">
+                <img class="up-avatar" id="up-avatar" src="/assets/img/fav.png" alt="">
+                <div class="up-actions" id="up-actions"></div>
+            </div>
+
+            <!-- Info -->
+            <div class="up-info">
+                <div class="up-nameline">
+                    <span class="up-display" id="up-display"></span>
+                    <i class="fas fa-circle-check up-verified" id="up-verified" style="display:none;"></i>
+                </div>
+                <div class="up-username" id="up-username"></div>
+                <div class="up-badges" id="up-badges"></div>
+                <p class="up-bio" id="up-bio" style="display:none;"></p>
+                <div class="up-stats" id="up-stats"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="up-not-found" id="up-not-found" style="display:none;">
+        <i class="fas fa-user-slash"></i>
+        <h2>User not found</h2>
+        <p>This profile doesn't exist or has been removed.</p>
+    </div>
+</div>
+
+<script>
+(async () => {
+    const parts = window.location.pathname.split("/").filter(Boolean);
+    const username = parts[parts.length - 1] || "";
+
+    if (!username || username === "u") { showNotFound(); return; }
+    document.title = `cherri | @${username}`;
+
+    try {
+        const [profileRes, meRes] = await Promise.all([
+            fetch(`/api/profile/${encodeURIComponent(username)}`),
+            fetch("/api/auth/me", { credentials: "same-origin" }),
+        ]);
+
+        const profileData = await profileRes.json();
+        if (!profileRes.ok || !profileData.profile) { showNotFound(); return; }
+
+        const me = (await meRes.json().catch(() => ({}))).user || null;
+        render(profileData.profile, me);
+    } catch {
+        showNotFound();
+    }
+
+    function showNotFound() {
+        hide("up-loading");
+        show("up-not-found");
+    }
+
+    function show(id) { document.getElementById(id).style.display = ""; }
+    function hide(id) { document.getElementById(id).style.display = "none"; }
+
+    function badgeCls(b) {
+        return b === "admin"   ? "badge-pill-admin"
+             : b === "mod"     ? "badge-pill-mod"
+             : b === "dev"     ? "badge-pill-dev"
+             : b === "trusted" ? "badge-pill-trusted"
+             : "badge-pill-user";
+    }
+
+    function render(p, me) {
+        hide("up-loading");
+        show("up-content");
+        document.title = `cherri | ${p.display} (@${p.username})`;
+
+        if (p.bannerUrl) {
+            document.getElementById("up-banner").style.backgroundImage = `url(${JSON.stringify(p.bannerUrl)})`;
+        }
+
+        const av = document.getElementById("up-avatar");
+        av.src = p.pfp || "/assets/img/fav.png";
+        av.onerror = () => { av.src = "/assets/img/fav.png"; };
+
+        document.getElementById("up-display").textContent = p.display || p.username;
+        if (p.trusted) show("up-verified");
+        document.getElementById("up-username").textContent = `@${p.username}`;
+
+        const bads = (p.badges || []).filter(b => b !== "user");
+        if (p.trusted && !bads.includes("trusted")) bads.unshift("trusted");
+        document.getElementById("up-badges").innerHTML = bads
+            .map(b => `<span class="badge-pill ${badgeCls(b)}">${b}</span>`).join("");
+
+        if (p.bio) {
+            const bioEl = document.getElementById("up-bio");
+            bioEl.textContent = p.bio;
+            show("up-bio");
+        }
+
+        const joined = p.createdAt
+            ? new Date(p.createdAt).toLocaleDateString(undefined, { month: "long", year: "numeric" })
+            : null;
+        document.getElementById("up-stats").innerHTML =
+            `<span class="up-stat"><strong>${p.friendCount ?? 0}</strong> friends</span>`
+            + (joined ? `<span class="up-stat">Joined <strong>${joined}</strong></span>` : "");
+
+        renderActions(p, me);
+    }
+
+    function renderActions(p, me) {
+        const el = document.getElementById("up-actions");
+        el.innerHTML = "";
+        const isSelf = me && me.id === p.id;
+        const status = p.friendshipStatus;
+
+        if (isSelf) {
+            el.appendChild(link("/pages/profile.html", "btn-up btn-up-secondary", `<i class="fas fa-pen"></i> Edit Profile`));
+            return;
+        }
+        if (!me) return;
+
+        if (status === "none") {
+            el.appendChild(btn("Add Friend", "btn-up btn-up-primary", async () => {
+                await api(`/api/friends/request/${p.id}`, "POST");
+                p.friendshipStatus = "pending_sent";
+                renderActions(p, me);
+            }));
+        } else if (status === "pending_sent") {
+            el.appendChild(btn("Request Sent", "btn-up btn-up-secondary", async () => {
+                await api(`/api/friends/request/${p.id}`, "DELETE");
+                p.friendshipStatus = "none";
+                renderActions(p, me);
+            }));
+        } else if (status === "pending_received") {
+            el.appendChild(btn("Accept", "btn-up btn-up-green", async () => {
+                await api(`/api/friends/${p.id}/accept`, "POST");
+                p.friendshipStatus = "friends";
+                renderActions(p, me);
+            }));
+            el.appendChild(btn("Decline", "btn-up btn-up-ghost", async () => {
+                await api(`/api/friends/request/${p.id}`, "DELETE");
+                p.friendshipStatus = "none";
+                renderActions(p, me);
+            }));
+        } else if (status === "friends") {
+            const wrap = document.createElement("div");
+            wrap.className = "up-dropdown";
+            wrap.innerHTML = `
+                <button class="btn-up btn-up-secondary">
+                    <i class="fas fa-user-check"></i> Friends <i class="fas fa-chevron-down" style="font-size:9px;"></i>
+                </button>
+                <div class="up-dropdown-menu">
+                    <button id="uf-btn"><i class="fas fa-user-minus"></i> Unfriend</button>
+                </div>`;
+            wrap.querySelector("#uf-btn").onclick = async () => {
+                await api(`/api/friends/${p.id}`, "DELETE");
+                p.friendshipStatus = "none";
+                renderActions(p, me);
+            };
+            el.appendChild(wrap);
+        }
+
+        el.appendChild(link(
+            `/pages/chatrooms.html?dm=${encodeURIComponent(p.username)}`,
+            "btn-up btn-up-secondary",
+            `<i class="fas fa-comment"></i> Message`
+        ));
+    }
+
+    function btn(label, cls, onClick) {
+        const b = document.createElement("button");
+        b.className = cls;
+        b.innerHTML = label;
+        b.onclick = async () => { b.disabled = true; try { await onClick(); } catch { b.disabled = false; } };
+        return b;
+    }
+
+    function link(href, cls, html) {
+        const a = document.createElement("a");
+        a.href = href;
+        a.className = cls;
+        a.innerHTML = html;
+        return a;
+    }
+
+    async function api(path, method, body) {
+        const res = await fetch(path, {
+            method,
+            credentials: "same-origin",
+            headers: body ? { "Content-Type": "application/json" } : {},
+            body: body ? JSON.stringify(body) : undefined,
+        });
+        if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || "Request failed");
+        return res.json();
+    }
+})();
+</script>
+</body>
+</html>

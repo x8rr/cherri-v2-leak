@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cherri | Onboarding</title>
+    <link rel="stylesheet" href="/assets/css/index.css">
+    <link rel="stylesheet" href="/assets/css/font.css?v=2">
+    <link rel="stylesheet" href="/assets/css/colors/default.css" id="csslink">
+    <link rel="shortcut icon" id="siteicon" href="/assets/img/fav.png" type="image/x-icon">
+    <script src="/assets/js/lib/particles.js"></script>
+    <script src="/assets/js/cherri.ui.js?v=20260619a"></script>
+    <link rel="stylesheet" href="/assets/icons/css/all-pro.css">
+</head>
+<style>
+    .onboarding-container {
+        background: var(--bg-2);
+        border: 1px solid var(--border-4);
+        height: 500px;
+        width: 420px;
+        padding: 40px;
+        border-radius: 25px;
+        position: fixed;
+        box-sizing: border-box;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%) scale(0.95);
+        transform-origin: center center;
+        transition: 0.3s;
+        opacity: 0;
+        pointer-events: none;
+        text-align: center;
+    }
+
+    .onboarding-container.active {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    button {
+        border-radius: 15px;
+        border: 1px solid var(--border-4);
+        background: none;
+        color: var(--text);
+        padding: 15px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    button:hover {
+        scale: 1.03;
+        background: var(--bg-3);
+    }
+
+    button.active {
+        background: var(--accent);
+        color: var(--bright-text);
+    }
+
+    input {
+        width: 100%;
+        border: 1px solid var(--border-4);
+        box-sizing: border-box;
+        margin-bottom: 10px;
+        border-radius: 15px;
+    }
+</style>
+
+<body class="obfuscate">
+    <div id="particles-container"></div>
+
+    <div class="onboarding-container active" data-index="0" style="height: 400px;">
+        <div
+            style="display: flex; flex-direction: column; height: 100%; width: 100%; align-items: center; justify-content: center;">
+            <img src="/assets/img/fav.png" height="72" alt="">
+            <br>
+            <h1 style="margin-bottom: 0px;">Welcome to Cherri</h1>
+            <p style="opacity: 0.5; font-size: 14px; margin-bottom: 15px;">The settings you choose can always be changed later.</p>
+            <button onclick="indexPage('1')">Get Started</button>
+        </div>
+    </div>
+    <div class="onboarding-container" data-index="1" style="height: 470px;">
+        <h1 style="margin-bottom: 10px;">Choose a Theme</h1><br>
+        <div class="flex-row theme-buttons" style="flex-wrap: wrap; width: 100%; gap: 7px;">
+            <button onclick="setTheme('default')" style="width: 48.5%;" class="active">Default</button>
+            <button onclick="setTheme('forest')" style="width: 48.5%;">Forest</button>
+            <button onclick="setTheme('crimson')" style="width: 48.5%;">Crimson</button>
+            <button onclick="setTheme('lavendar')" style="width: 48.5%;">Lavendar</button>
+            <button onclick="setTheme('monochrome')" style="width: 48.5%;">Monochrome</button>
+            <button onclick="setTheme('midnight')" style="width: 48.5%;">Midnight</button>
+            <button onclick="setTheme('sunset')" style="width: 48.5%;">Sunset</button>
+            <button onclick="setTheme('ocean')" style="width: 48.5%;">Ocean</button>
+        </div>
+        <button onclick="indexPage('2')" style="position: relative; bottom: -5%; left: 0; width: 100%;">
+            Continue
+        </button>
+    </div>
+    <div class="onboarding-container" data-index="2" style="height: 490px;">
+        <h1 style="margin-bottom: 10px;">Choose a Cloak</h1><br>
+        <div class="flex-row cloak-buttons" style="flex-wrap: wrap; width: 100%; gap: 7px;">
+            <button onclick="setCloak('none')" style="width: 48.5%;" class="active">None</button>
+            <button onclick="setCloak('google')" style="width: 48.5%;">Google</button>
+            <button onclick="setCloak('classroom')" style="width: 48.5%;">Google Classroom</button>
+            <button onclick="setCloak('drive')" style="width: 48.5%;">Google Drive</button>
+            <button onclick="setCloak('blooket')" style="width: 48.5%;">Blooket</button>
+            <button onclick="setCloak('kahoot')" style="width: 48.5%;">Kahoot</button>
+            <button onclick="setCloak('edpuzzle')" style="width: 48.5%;">Edpuzzle</button>
+            <button onclick="setCloak('iready')" style="width: 48.5%;">i-Ready</button>
+        </div>
+        <button onclick="indexPage('3')" style="position: relative; bottom: -5%; left: 0; width: 100%;">
+            Continue
+        </button>
+    </div>
+    <div class="onboarding-container" data-index="3" style="height: 310px;">
+        <h1 style="margin-bottom: 10px;">Would you like to Auto Cloak?</h1><br>
+        <button onclick="autoCloak()"
+            style="position: relative; bottom: -1%; background: var(--accent); border: none; left: 0; width: 100%;">Yes</button>
+        <button onclick="indexPage('4')" style="position: relative; bottom: -5%; left: 0; width: 100%;">
+            Skip
+        </button>
+    </div>
+    <div class="onboarding-container" data-index="4" style="height: 400px;">
+        <h1 style="margin-bottom: 10px;">Create Your Account</h1><br>
+        <input type="text" placeholder="Username" id="userinput">
+        <input type="password" placeholder="Password" id="passinput">
+        <button onclick="createAccount()"
+            style="position: relative; bottom: -1%; background: var(--accent); border: none; left: 0; width: 100%;">Create
+            Account</button>
+        <button onclick="indexPage('5')" style="position: relative; bottom: -5%; left: 0; width: 100%;">
+            Skip
+        </button>
+    </div>
+    <div class="onboarding-container" data-index="5" style="height: 390px;">
+        <h1 style="margin-bottom: 10px;">Are you sure?</h1>
+        <p>If you create an account now, all your game progress and settings are saved to your account! Creating an
+            account also gives you access to the Chatrooms and the upcoming features.</p>
+        <button onclick="indexPage('6')" style="position: relative; left: 0; width: 100%;">
+            Yes, I'm sure
+        </button><br>
+        <button onclick="indexPage('4')"
+            style="position: relative; bottom: -5%; background: var(--accent); border: none; left: 0; width: 100%;">Go back</button>
+    </div>
+    <div class="onboarding-container" data-index="6" style="height: 290px;">
+        <i class="fas fa-check-circle" style="color: var(--accent); font-size: 60px; margin-bottom: 20px;"></i>
+        <h1 style="margin-bottom: 10px;">You're All Set!</h1>
+        <button onclick="continueToSite()" style="position: relative; bottom: -5%; left: 0; width: 100%;">
+            Continue
+        </button>
+    </div>
+    <script>
+        particlesJS.load("particles-container", "/assets/json/config/particles.json")
+
+        function indexPage(i) {
+            const pages = document.querySelectorAll(".onboarding-container")
+            pages.forEach(p => {
+                p.classList.remove("active")
+                if (p.dataset.index === i) {
+                    setTimeout(() => {
+                        p.classList.add("active")
+                    }, 200)
+                }
+            })
+        }
+
+        function setTheme(theme) {
+            document.getElementById("csslink").href = `/assets/css/colors/${theme}.css`
+            document.querySelectorAll(".theme-buttons button").forEach(btn => {
+                btn.classList.remove("active")
+                if (btn.textContent.toLowerCase() === theme) {
+                    btn.classList.add("active")
+                }
+            })
+            localStorage.setItem("cherri_theme", theme)
+        }
+
+        function setCloak(cloak) {
+            let cloakTitle
+            let cloakIcon
+            let cloakIndex
+            switch (cloak) {
+                case "none":
+                    cloakTitle = "cherri"
+                    cloakIcon = "/assets/img/fav.png"
+                    cloakIndex = 0
+                    break
+                case "google":
+                    cloakTitle = "Google"
+                    cloakIcon = "/assets/img/cloaks/google.png"
+                    cloakIndex = 1
+                    break
+                case "classroom":
+                    cloakTitle = "Home"
+                    cloakIcon = "/assets/img/cloaks/gclassroom.png"
+                    cloakIndex = 2
+                    break
+                case "drive":
+                    cloakTitle = "Home - Google Drive"
+                    cloakIcon = "/assets/img/cloaks/gdrive.png"
+                    cloakIndex = 3
+                    break
+                case "blooket":
+                    cloakTitle = "Blooket - Fun, Free, Educational Games for Everyone"
+                    cloakIcon = "/assets/img/cloaks/blooket.png"
+                    cloakIndex = 4
+                    break
+                case "kahoot":
+                    cloakTitle = "Enter Game PIN - Kahoot!"
+                    cloakIcon = "/assets/img/cloaks/kahoot.png"
+                    cloakIndex = 5
+                    break
+                case "edpuzzle":
+                    cloakTitle = "Edpuzzle"
+                    cloakIcon = "/assets/img/cloaks/edpuzzle.png"
+                    cloakIndex = 6
+                    break
+                case "iready":
+                    cloakTitle = "Choose a subject, i-Ready"
+                    cloakIcon = "/assets/img/cloaks/iready.png"
+                    cloakIndex = 7
+                    break
+            }
+            localStorage.setItem("cherri_cloakTitle", cloakTitle)
+            localStorage.setItem("cherri_cloakIcon", cloakIcon)
+            localStorage.setItem("cherri_cloakIndex", cloakIndex)
+            document.title = cloakTitle
+            document.getElementById("siteicon").href = cloakIcon
+            document.querySelectorAll(".cloak-buttons button").forEach(btn => {
+                btn.classList.remove("active")
+                if (btn.textContent.toLowerCase() === cloak) {
+                    btn.classList.add("active")
+                }
+            })
+        }
+
+        const params = new URLSearchParams(window.location.search)
+        if (params.has("index")) {
+            indexPage(params.get("index"))
+        }
+
+        function continueToSite() {
+            localStorage.setItem("cherri_clearCache", "yes")
+            localStorage.setItem("cherri_completedOnboarding", "yes")
+            window.location.href = "/"
+        }
+    </script>
+    <script>
+        const AUTH_USER_ID_KEY = "cherri_auth_uid"
+
+        function escapeChars(value) {
+            return String(value || "").replace(/<\/?[^>]+(>|$)/g, "")
+        }
+
+        async function apiRequest(path, options = {}) {
+            const requestOptions = {
+                method: options.method || "GET",
+                headers: {
+                    "content-type": "application/json",
+                    ...(options.headers || {}),
+                },
+                credentials: "same-origin",
+            }
+
+            if (options.body !== undefined) {
+                requestOptions.body = JSON.stringify(options.body)
+            }
+
+            let response
+            try {
+                response = await fetch(path, requestOptions)
+            } catch (error) {
+                const message =
+                    error && error.message
+                        ? error.message
+                        : "Network error while contacting the server"
+                throw new Error(message, { cause: error })
+            }
+            let payload = null
+            try {
+                payload = await response.json()
+            } catch {
+                payload = null
+            }
+
+            if (!response.ok) {
+                throw new Error(payload && payload.error ? payload.error : "Request failed")
+            }
+
+            return payload
+        }
+
+        async function createAccount() {
+            const username = escapeChars(document.getElementById("userinput").value).trim().toLowerCase()
+            const password = document.getElementById("passinput").value.trim()
+
+            if (!username || !password) {
+                toast("fa-times-circle", "Username and password are required")
+                return
+            }
+
+            try {
+                const payload = await apiRequest("/api/auth/signup", {
+                    method: "POST",
+                    body: {
+                        username,
+                        password,
+                    },
+                })
+
+                if (payload.user && payload.user.id) {
+                    localStorage.setItem(AUTH_USER_ID_KEY, payload.user.id)
+                }
+
+                toast("fa-check-circle", "Account created!")
+                indexPage("5")
+            } catch (error) {
+                toast("fa-times-circle", error.message)
+            }
+        }
+
+        function autoCloak() {
+            const win = window.open()
+            const doc = win.document
+            const frame = doc.createElement("iframe")
+            frame.src = window.location.href
+            frame.style.border = "0"
+            frame.style.position = "fixed"
+            frame.style.left = "0"
+            frame.style.top = "0"
+            frame.style.width = "100vw"
+            frame.style.height = "100vh"
+            doc.body.appendChild(frame)
+            localStorage.setItem("cherri_autoCloak", "yes")
+            window.location.href = "about:blank"
+        }
+    </script>
+    
+</body>
+
+</html>

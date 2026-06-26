@@ -1,0 +1,2094 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cherri | profile</title>
+    <link rel="shortcut icon" href="/assets/img/fav.png" type="image/x-icon">
+    <link rel="stylesheet" href="/assets/css/font.css?v=2">
+    <link rel="stylesheet" href="/assets/css/colors/default.css" id="csslink">
+    <link rel="stylesheet" href="/assets/css/index.css">
+    <link rel="stylesheet" href="/assets/icons/css/all-pro.css">
+</head>
+<style>
+    * {
+        font-family: 'figtree normal';
+    }
+
+    #pfp-wrapper img {
+        height: 80px;
+        width: 80px;
+        border-radius: 25px;
+        background: var(--bg-3);
+        object-fit: cover;
+    }
+
+    .setting-label {
+        display: block;
+        text-align: left;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--accent);
+        margin-bottom: 8px;
+        text-transform: uppercase;
+    }
+
+    .rift-input {
+        background: var(--bg-3);
+        border: 1px solid var(--border-4);
+        border-radius: 15px;
+        padding: 12px 15px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .rift-input:focus {
+        background: var(--bg-4);
+        border-color: var(--accent);
+    }
+
+    .btn-pink-main {
+        background: var(--accent);
+        color: white;
+        border: none;
+        border-radius: 15px;
+        padding: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        filter: drop-shadow(0 0 10px var(--accent-glow));
+        transition: 0.2s;
+    }
+
+    .btn-pink-sm {
+        background: var(--accent);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 10px 15px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .btn-outline {
+        background: transparent;
+        border: 1px solid var(--accent);
+        color: var(--accent);
+        border-radius: 15px;
+        padding: 12px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .btn-pink-main:hover,
+    .btn-pink-sm:hover {
+        transform: scale(1.02);
+        filter: drop-shadow(0 0 15px var(--accent-glow));
+    }
+
+    .btn-outline:hover {
+        scale: 1.02;
+    }
+
+    .divider {
+        display: flex;
+        align-items: center;
+        margin: 10px 0;
+    }
+
+    .divider::before,
+    .divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--border-4);
+    }
+
+    .divider span {
+        padding: 0 10px;
+        font-size: 10px;
+        color: var(--text-2);
+        font-weight: bold;
+    }
+
+    #errormessage {
+        color: tomato;
+        font-weight: bold;
+        font-size: 14px;
+        display: none;
+    }
+
+    #logged-in-layout {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    #profile-col {
+        width: 380px;
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    #admin-panel {
+        width: 400px;
+        flex-shrink: 0;
+        display: none;
+        height: 515px;
+        z-index: 0;
+    }
+
+    #admin-panel-inner {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        height: 515px;
+    }
+
+    .admin-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .admin-badge {
+        background: #ff4747;
+        color: white;
+        font-size: 10px;
+        font-weight: 800;
+        padding: 3px 8px;
+        border-radius: 6px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .admin-tabs {
+        display: flex;
+        gap: 6px;
+    }
+
+    .admin-tab {
+        background: var(--bg-3);
+        border: 1px solid var(--border-4);
+        color: var(--text-2);
+        border-radius: 10px;
+        padding: 7px 14px;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.15s;
+        font-family: 'figtree normal';
+    }
+
+    .admin-tab.active {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: white;
+    }
+
+    .admin-tab-pane {
+        display: none;
+    }
+
+    .admin-tab-pane.active {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    #admin-user-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-height: 385px;
+        overflow-y: auto;
+        padding-right: 2px;
+    }
+
+    #admin-user-list::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    #admin-user-list::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    #admin-user-list::-webkit-scrollbar-thumb {
+        background: var(--border-4);
+        border-radius: 4px;
+    }
+
+    #admin-ipban-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        max-height: 290px;
+        overflow-y: auto;
+        padding-right: 2px;
+    }
+
+    #admin-ipban-list::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    #admin-ipban-list::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    #admin-ipban-list::-webkit-scrollbar-thumb {
+        background: var(--border-4);
+        border-radius: 4px;
+    }
+
+    #admin-muted-user-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        max-height: 420px;
+        overflow-y: auto;
+        padding-right: 2px;
+    }
+
+    #admin-muted-user-list::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    #admin-muted-user-list::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    #admin-muted-user-list::-webkit-scrollbar-thumb {
+        background: var(--border-4);
+        border-radius: 4px;
+    }
+
+    #admin-ticket-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-height: 420px;
+        overflow-y: auto;
+        padding-right: 2px;
+    }
+
+    #admin-appeal-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-height: 420px;
+        overflow-y: auto;
+        padding-right: 2px;
+    }
+
+    #admin-ticket-list::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    #admin-ticket-list::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    #admin-ticket-list::-webkit-scrollbar-thumb {
+        background: var(--border-4);
+        border-radius: 4px;
+    }
+
+    .admin-ticket-card {
+        background: var(--bg-3);
+        border: 1px solid var(--border-4);
+        border-radius: 15px;
+        padding: 12px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .admin-ticket-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    .admin-ticket-title {
+        font-weight: 700;
+    }
+
+    .admin-ticket-meta,
+    .admin-ticket-status {
+        font-size: 12px;
+        color: var(--text-2);
+        opacity: 0.85;
+    }
+
+    .ticket-messages {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 10px;
+    }
+
+    .ticket-message-row {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .ticket-message-user {
+        font-size: 12px;
+        color: var(--text-2);
+        opacity: 0.75;
+    }
+
+    .ticket-message-content {
+        font-size: 13px;
+        line-height: 1.4;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+
+    .ticket-notes {
+        font-size: 13px;
+        color: var(--text);
+        white-space: pre-wrap;
+        word-break: break-word;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 10px;
+    }
+
+    .ticket-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .ticket-actions {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
+    .ticket-actions button {
+        font-size: 11px;
+        padding: 6px 10px;
+        border-radius: 9px;
+        border: none;
+        cursor: pointer;
+        font-weight: 700;
+        transition: 0.15s;
+        font-family: 'figtree normal';
+        white-space: nowrap;
+    }
+
+    .ticket-actions button:hover {
+        transform: scale(1.03);
+    }
+
+    .ticket-actions .btn-admin-resolve,
+    .ticket-actions .btn-admin-rename {
+        background: var(--accent);
+        color: white;
+    }
+
+    .ticket-actions .btn-admin-dismiss {
+        background: var(--bg-4);
+        color: var(--text-1);
+        border: 1px solid var(--border-4);
+    }
+
+    .ticket-actions .btn-admin-ban {
+        background: #ff4747;
+        color: white;
+    }
+
+    .ticket-actions .btn-admin-delete {
+        background: var(--bg-4);
+        color: var(--text-1);
+        border: 1px solid var(--border-4);
+    }
+
+    .ticket-actions .btn-admin-mute {
+        background: #ffb84d;
+        color: white;
+    }
+
+    .ticket-message-empty {
+        color: var(--text-2);
+        font-size: 13px;
+    }
+
+    .admin-user-card {
+        background: var(--bg-3);
+        border: 1px solid var(--border-4);
+        border-radius: 15px;
+        padding: 12px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .admin-ipban-card {
+        background: var(--bg-3);
+        border: 1px solid var(--border-4);
+        border-radius: 12px;
+        padding: 10px 14px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .admin-muted-user-card {
+        background: var(--bg-3);
+        border: 1px solid var(--border-4);
+        border-radius: 12px;
+        padding: 10px 14px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .admin-ipban-info {
+        flex: 1;
+        min-width: 0;
+        text-align: left;
+    }
+
+    .admin-muted-user-info {
+        flex: 1;
+        min-width: 0;
+        text-align: left;
+    }
+
+    .admin-ipban-ip {
+        font-weight: 700;
+        font-size: 13px;
+        font-family: monospace;
+    }
+
+    .admin-ipban-meta {
+        font-size: 11px;
+        color: var(--text-2);
+        opacity: 0.6;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .admin-ipban-user {
+        font-size: 11px;
+        color: var(--text-2);
+        opacity: 0.8;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .admin-muted-user-name {
+        font-weight: 700;
+        font-size: 13px;
+    }
+
+    .admin-muted-user-meta {
+        font-size: 11px;
+        color: var(--text-2);
+        opacity: 0.6;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .admin-user-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .admin-user-pfp {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        object-fit: cover;
+        background: var(--bg-4);
+        flex-shrink: 0;
+    }
+
+    .admin-user-info {
+        flex: 1;
+        min-width: 0;
+        text-align: left;
+    }
+
+    .admin-user-display {
+        font-weight: 700;
+        font-size: 14px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .admin-user-username {
+        font-size: 11px;
+        color: var(--text-2);
+        opacity: 0.6;
+    }
+
+    .admin-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .admin-actions button {
+        font-size: 11px;
+        padding: 6px 10px;
+        border-radius: 9px;
+        border: none;
+        cursor: pointer;
+        font-weight: 700;
+        transition: 0.15s;
+        font-family: 'figtree normal';
+    }
+
+    .admin-actions button:hover {
+        transform: scale(1.03);
+    }
+
+    .btn-admin-rename {
+        background: var(--accent);
+        color: white;
+    }
+
+    .btn-admin-resetpfp {
+        background: var(--bg-4);
+        color: var(--text-1);
+        border: 1px solid var(--border-4) !important;
+    }
+
+    .btn-admin-purge {
+        background: #ff8800;
+        color: white;
+    }
+
+    .btn-admin-resetpw {
+        background: var(--bg-4);
+        color: var(--text-1);
+        border: 1px solid var(--border-4) !important;
+    }
+
+    .btn-admin-badges {
+        background: var(--bg-4);
+        color: var(--text-1);
+        border: 1px solid var(--border-4) !important;
+    }
+
+    .btn-admin-ban {
+        background: #ff4747;
+        color: white;
+    }
+
+    .btn-admin-delete {
+        background: var(--bg-4);
+        color: var(--text-1);
+        border: 1px solid var(--border-4) !important;
+    }
+
+    .btn-admin-unban {
+        background: #4caf82;
+        color: white;
+        font-size: 11px;
+        padding: 6px 10px;
+        border-radius: 9px;
+        border: none;
+        cursor: pointer;
+        font-weight: 700;
+        font-family: 'figtree normal';
+        transition: 0.15s;
+    }
+
+    .btn-admin-unban:hover {
+        transform: scale(1.03);
+    }
+
+    .admin-inline-form {
+        display: none;
+        flex-direction: column;
+        gap: 6px;
+        padding-top: 4px;
+    }
+
+    .admin-inline-form.visible {
+        display: flex;
+    }
+
+    .admin-inline-form input {
+        font-size: 12px;
+        padding: 8px 12px;
+        border-radius: 10px;
+    }
+
+    .admin-inline-form .form-row {
+        display: flex;
+        gap: 6px;
+    }
+
+    .admin-inline-form .form-row button {
+        font-size: 11px;
+        padding: 8px 12px;
+        border-radius: 9px;
+        border: none;
+        cursor: pointer;
+        font-weight: 700;
+        font-family: 'figtree normal';
+    }
+
+    .btn-confirm {
+        background: var(--accent);
+        color: white;
+    }
+
+    .btn-cancel {
+        background: var(--bg-4);
+        color: var(--text-2);
+        border: 1px solid var(--border-4) !important;
+    }
+
+    .btn-danger {
+        background: #ff4747;
+        color: white;
+    }
+
+    .admin-status {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text-2);
+        min-height: 14px;
+    }
+
+    .admin-status.ok {
+        color: #4caf82;
+    }
+
+    .admin-status.err {
+        color: tomato;
+    }
+
+    .admin-empty {
+        text-align: center;
+        padding: 20px;
+        font-size: 13px;
+        color: var(--text-2);
+        opacity: 0.5;
+    }
+
+    .ipban-add-form {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 12px 14px;
+        background: var(--bg-3);
+        border: 1px solid var(--border-4);
+        border-radius: 20px;
+    }
+
+    .ipban-add-row {
+        display: flex;
+        gap: 8px;
+    }
+
+    .ipban-add-row input {
+        flex: 1;
+    }
+
+    /* Account Standing Button */
+    .btn-standing {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        background: linear-gradient(135deg, var(--accent-glow), transparent);
+        border: 1px solid var(--accent);
+        color: var(--accent);
+        border-radius: 15px;
+        padding: 12px;
+        font-weight: 700;
+        font-size: 15px;
+        cursor: pointer;
+        transition: 0.2s;
+        font-family: 'figtree normal';
+        width: 100%;
+    }
+
+    .btn-standing:hover {
+        background: var(--accent);
+        color: white;
+        filter: drop-shadow(0 0 8px var(--accent-glow));
+    }
+
+    .preset-pfp {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: border-color 0.15s, transform 0.15s;
+        flex-shrink: 0;
+    }
+    .preset-pfp:hover { border-color: var(--accent); transform: scale(1.08); }
+    .preset-pfp.selected { border-color: var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
+
+    /* Profile tabs */
+    .profile-tabs {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 14px;
+    }
+    .profile-tab {
+        background: var(--bg-3);
+        border: 1px solid var(--border-4);
+        color: var(--text-2);
+        border-radius: 10px;
+        padding: 6px 14px;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.15s;
+        font-family: 'figtree normal';
+    }
+    .profile-tab.active {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: white;
+    }
+    .setting-row {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        padding-bottom: 11px;
+        border-bottom: 1px solid var(--border-4);
+        margin-bottom: 11px;
+    }
+    .setting-row:last-of-type { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .preset-grid {
+        display: flex;
+        gap: 7px;
+        flex-wrap: wrap;
+        margin-bottom: 7px;
+    }
+    .upload-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+    }
+    .upload-hint {
+        font-size: 11px;
+        color: var(--text-2);
+        opacity: 0.55;
+    }
+    .btn-logout {
+        background: #ff4747;
+        border: none;
+        border-radius: 12px;
+        color: white;
+        font-weight: 700;
+        cursor: pointer;
+        padding: 10px 16px;
+        font-family: 'figtree normal';
+        font-size: 13px;
+        transition: 0.2s;
+    }
+    .btn-logout:hover { filter: brightness(1.1); }
+
+    /* Account Standing Modal */
+    .standing-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.18s ease;
+    }
+
+    .standing-backdrop.open {
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    .standing-modal {
+        background: var(--bg-2);
+        border: 1px solid var(--border-4);
+        border-radius: 20px;
+        padding: 28px;
+        width: 420px;
+        max-width: 92vw;
+        max-height: 80vh;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        animation: modal-slide-in 0.18s ease;
+    }
+
+    @keyframes modal-slide-in {
+        from { transform: translateY(12px); opacity: 0; }
+        to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    .standing-modal h2 {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--bright-text);
+        margin: 0;
+    }
+
+    .standing-status-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+        border-radius: 14px;
+        background: var(--bg-3);
+        border: 1px solid var(--border-4);
+    }
+
+    .standing-status-icon {
+        font-size: 24px;
+        flex-shrink: 0;
+        width: 28px;
+        text-align: center;
+    }
+
+    .standing-status-label {
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .standing-status-sub {
+        font-size: 12px;
+        color: var(--text);
+        opacity: 0.7;
+        margin-top: 2px;
+    }
+
+    .standing-mute-banner {
+        display: none;
+        background: rgba(255, 184, 77, 0.12);
+        border: 1px solid rgba(255, 184, 77, 0.35);
+        border-radius: 12px;
+        padding: 10px 14px;
+        font-size: 13px;
+        color: #ffb84d;
+        font-weight: 600;
+    }
+
+    .standing-mute-banner.visible {
+        display: block;
+    }
+
+    .standing-list-header {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text);
+        opacity: 0.55;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+    }
+
+    .standing-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        overflow-y: auto;
+        max-height: 260px;
+        padding-right: 2px;
+    }
+
+    .standing-list::-webkit-scrollbar { width: 4px; }
+    .standing-list::-webkit-scrollbar-track { background: transparent; }
+    .standing-list::-webkit-scrollbar-thumb { background: var(--border-4); border-radius: 4px; }
+
+    .standing-infraction-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 10px 12px;
+        background: var(--bg-3);
+        border: 1px solid var(--border-4);
+        border-radius: 12px;
+    }
+
+    .standing-type-badge {
+        font-size: 10px;
+        font-weight: 800;
+        padding: 3px 8px;
+        border-radius: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        flex-shrink: 0;
+        margin-top: 1px;
+    }
+
+    .badge-warn  { background: rgba(255, 184, 77, 0.18); color: #ffb84d; }
+    .badge-mute  { background: rgba(107, 126, 255, 0.18); color: #6b7eff; }
+    .badge-ban   { background: rgba(255, 71, 71, 0.18); color: #ff4747; }
+
+    .standing-infraction-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .standing-infraction-reason {
+        font-size: 13px;
+        color: var(--text);
+        line-height: 1.4;
+        word-break: break-word;
+    }
+
+    .standing-infraction-date {
+        font-size: 11px;
+        color: var(--text);
+        opacity: 0.5;
+        margin-top: 3px;
+    }
+
+    .standing-stats-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .standing-stat-card {
+        background: var(--bg-3);
+        border: 1px solid var(--border-4);
+        border-radius: 12px;
+        padding: 12px 14px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .standing-stat-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: var(--accent-glow);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--accent);
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+
+    .standing-stat-value {
+        font-size: 18px;
+        font-weight: 800;
+        color: var(--bright-text);
+        line-height: 1;
+    }
+
+    .standing-stat-label {
+        font-size: 11px;
+        color: var(--text);
+        opacity: 0.55;
+        margin-top: 3px;
+    }
+
+    .standing-empty {
+        text-align: center;
+        padding: 24px;
+        font-size: 13px;
+        color: var(--text);
+        opacity: 0.45;
+    }
+
+    .standing-close-btn {
+        background: var(--bg-3);
+        border: 1px solid var(--border-4);
+        color: var(--text);
+        border-radius: 12px;
+        padding: 10px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 600;
+        transition: 0.15s;
+        font-family: 'figtree normal';
+        align-self: flex-end;
+    }
+
+    .standing-close-btn:hover {
+        background: var(--bg-4);
+    }
+</style>
+
+<body class="obfuscate">
+    <div class="profile-wrapper" data-page="profile"
+        style="position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); max-height: 92vh; overflow-y: auto; overflow-x: hidden;">
+
+        <div id="logged-in" style="display: none;">
+            <div id="logged-in-layout">
+
+                <div id="profile-col">
+                    <!-- Identity card -->
+                    <div id="profile-card-home" class="bento-card" style="height: auto;">
+                        <div class="flex-row" style="align-items: center;">
+                            <div id="pfp-wrapper">
+                                <img src="/assets/img/branding/rift-white-r.png" alt="" id="pfp">
+                            </div>
+                            <div class="flex-col">
+                                <h2 id="display-label">Account Name</h2>
+                                <p id="username-label" style="color: var(--text-2); font-size: 13px; margin-top: 15px;">@username</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabbed card: Account settings + Cloud save -->
+                    <div class="bento-card" style="height: auto;">
+                        <div class="profile-tabs">
+                            <button class="profile-tab active" onclick="switchProfileTab('account', this)">Account</button>
+                            <button class="profile-tab" onclick="switchProfileTab('cloud', this)">Cloud Save</button>
+                        </div>
+
+                        <!-- Account tab -->
+                        <div id="profile-pane-account" class="profile-pane">
+                            <div class="setting-row">
+                                <label class="setting-label">Display Name</label>
+                                <div class="flex-row" style="gap: 8px;">
+                                    <input type="text" id="display-name-input" placeholder="New display name…" class="rift-input">
+                                    <button onclick="updateName()" class="btn-pink-sm">Update</button>
+                                </div>
+                            </div>
+                            <div class="setting-row">
+                                <label class="setting-label">Bio</label>
+                                <div class="flex-row" style="gap: 8px; align-items: flex-end;">
+                                    <textarea id="bio-input" placeholder="About you… (200 chars max)" maxlength="200" rows="2"
+                                        class="rift-input" style="resize: none; flex: 1; color: var(--text)"></textarea>
+                                    <button onclick="updateBio()" class="btn-pink-sm">Save</button>
+                                </div>
+                            </div>
+                            <div class="setting-row">
+                                <label class="setting-label">Avatar</label>
+                                <div class="preset-grid">
+                                    <img src="/assets/img/pfps/1.png" class="preset-pfp" onclick="selectPresetPfp(1)" title="Default 1">
+                                    <img src="/assets/img/pfps/2.png" class="preset-pfp" onclick="selectPresetPfp(2)" title="Default 2">
+                                    <img src="/assets/img/pfps/3.png" class="preset-pfp" onclick="selectPresetPfp(3)" title="Default 3">
+                                    <img src="/assets/img/pfps/4.png" class="preset-pfp" onclick="selectPresetPfp(4)" title="Default 4">
+                                    <img src="/assets/img/pfps/5.png" class="preset-pfp" onclick="selectPresetPfp(5)" title="Default 5">
+                                    <img src="/assets/img/pfps/6.png" class="preset-pfp" onclick="selectPresetPfp(6)" title="Default 6">
+                                    <img src="/assets/img/pfps/7.png" class="preset-pfp" onclick="selectPresetPfp(7)" title="Default 7">
+                                    <img src="/assets/img/pfps/8.png" class="preset-pfp" onclick="selectPresetPfp(8)" title="Default 8">
+                                </div>
+                                <div class="upload-row">
+                                    <span class="upload-hint">or upload custom (10 MB max)</span>
+                                    <input type="file" id="pfp-upload" accept="image/*" style="display: none;">
+                                    <button onclick="updatePfp()" class="btn-pink-sm">Upload</button>
+                                </div>
+                            </div>
+                            <div class="setting-row">
+                                <div class="upload-row">
+                                    <div>
+                                        <label class="setting-label" style="margin-bottom: 2px;">Banner</label>
+                                        <span class="upload-hint">1500×500 · 10 MB max</span>
+                                    </div>
+                                    <input type="file" id="banner-upload" accept="image/*" style="display: none;">
+                                    <button onclick="updateBanner()" class="btn-pink-sm">Upload</button>
+                                </div>
+                            </div>
+                            <div class="flex-row" style="gap: 8px;">
+                                <button onclick="openStandingModal()" class="btn-standing" style="flex: 1; padding: 10px; font-size: 13px;">
+                                    <i class="fa-solid fa-shield-halved"></i> Standing
+                                </button>
+                                <button onclick="handleLogout()" id="logout-btn-home" class="btn-logout">Log Out</button>
+                            </div>
+                        </div>
+
+                        <!-- Cloud tab -->
+                        <div id="profile-pane-cloud" class="profile-pane" style="display: none;">
+                            <div class="flex-row" style="gap: 8px;">
+                                <button class="btn-pink-main" style="flex: 1; padding: 13px;" onclick="saveNewData()">Save Data</button>
+                                <button class="btn-pink-main" style="flex: 1; padding: 13px;" onclick="getNewData()">Get Data</button>
+                            </div>
+                            <div class="flex-row" style="gap: 8px; margin-top: 8px;">
+                                <button class="btn-outline" style="flex: 1;" onclick="uploadFromJson()">Upload JSON</button>
+                                <button class="btn-outline" style="flex: 1;" onclick="downloadJson()">Download JSON</button>
+                            </div>
+                            <p style="font-size: 11px; color: var(--text-2); opacity: 0.55; text-align: center; margin-top: 10px;">
+                                Syncs your game saves across devices.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="admin-panel">
+                    <div class="bento-card" id="admin-panel-inner">
+                        <div class="admin-header">
+                            <h3 style="margin: 0; font-size: 16px;">Admin Panel</h3>
+                            <button onclick="adminRefresh()" class="btn-pink-sm"
+                                style="margin-left: auto; font-size: 11px; padding: 6px 10px; border-radius: 9px;">Refresh</button>
+                        </div>
+
+                        <div class="admin-tabs">
+                            <button class="admin-tab active" onclick="adminSwitchTab('users')">Users</button>
+                            <button class="admin-tab" onclick="adminSwitchTab('ipbans')">IP Bans</button>
+                            <button class="admin-tab" onclick="adminSwitchTab('muted')">Muted Users</button>
+                            <button class="admin-tab" onclick="adminSwitchTab('tickets')">Tickets</button>
+                            <button class="admin-tab" onclick="adminSwitchTab('appeals')">Appeals</button>
+                        </div>
+
+                        <div class="admin-tab-pane active" id="admin-pane-users">
+                            <input type="text" class="rift-input" id="admin-search" autocomplete="off"
+                                placeholder="Search users..." oninput="adminSearchDebounced(this.value)">
+                            <div id="admin-user-list">
+                                <div class="admin-empty">Loading users...</div>
+                            </div>
+                        </div>
+
+                        <div class="admin-tab-pane" id="admin-pane-ipbans">
+                            <div class="ipban-add-form">
+                                <label class="setting-label" style="margin-bottom: 4px;">Ban IP</label>
+                                <div class="ipban-add-row">
+                                    <input type="text" class="rift-input" id="ipban-ip-input" autocomplete="off"
+                                        placeholder="IP address...">
+                                    <input type="text" class="rift-input" id="ipban-reason-input"
+                                        placeholder="Reason (optional)...">
+                                </div>
+                                <button class="btn-pink-sm" style="background:#ff4747;" onclick="adminAddIpBan()">Ban
+                                    IP</button>
+                            </div>
+                            <div id="admin-ipban-list">
+                                <div class="admin-empty">Loading...</div>
+                            </div>
+                        </div>
+
+                        <div class="admin-tab-pane" id="admin-pane-muted">
+                            <div id="admin-muted-user-list">
+                                <div class="admin-empty">Loading...</div>
+                            </div>
+                        </div>
+
+                        <div class="admin-tab-pane" id="admin-pane-tickets">
+                            <div id="admin-ticket-list">
+                                <div class="admin-empty">Loading tickets...</div>
+                            </div>
+                        </div>
+                        <div class="admin-tab-pane" id="admin-pane-appeals">
+                            <div id="admin-appeal-list">
+                                <div class="admin-empty">Loading appeals...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="sign-in" class="bento-card" style="width: 380px; height: auto; display: block;">
+            <center>
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <h2 class="title" style="font-size: 40px; filter: none;">Log in</h2>
+                    <p style="color: var(--text-2); opacity: 0.6;">Welcome back to Cherri</p>
+                </div>
+            </center>
+            <div class="flex-col" style="gap: 10px;">
+                <input type="text" class="rift-input" placeholder="Username..." id="username-input">
+                <input type="password" class="rift-input" placeholder="Password..." id="password-input">
+                <button class="btn-pink-main"
+                    onclick="signIn(document.getElementById('username-input').value.trim(), document.getElementById('password-input').value.trim())">Sign
+                    In</button>
+                <div class="divider"><span>OR</span></div>
+                <button class="btn-outline"
+                    onclick="signUp(document.getElementById('username-input').value.trim(), document.getElementById('password-input').value.trim())">Create
+                    an account</button>
+                <button class="btn-outline" onclick="window.location.href='/pages/appeal.html'">Appeal a ban</button>
+                <p id="errormessage"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Standing Modal -->
+    <div class="standing-backdrop" id="standing-backdrop" onclick="closeStandingModal(event)">
+        <div class="standing-modal">
+            <h2><i class="fa-solid fa-shield-halved" style="margin-right: 8px; color: var(--accent);"></i>Account Standing</h2>
+            <div class="standing-status-row" id="standing-status-row">
+                <span class="standing-status-icon" id="standing-status-icon"><i class="fa-solid fa-spinner fa-spin"></i></span>
+                <div>
+                    <div class="standing-status-label" id="standing-status-label">Loading...</div>
+                    <div class="standing-status-sub" id="standing-status-sub"></div>
+                </div>
+            </div>
+            <div class="standing-mute-banner" id="standing-mute-banner"></div>
+            <div>
+                <div class="standing-list-header">Stats</div>
+                <div class="standing-stats-grid" id="standing-stats-grid" style="margin-top: 8px;"></div>
+            </div>
+            <div>
+                <div class="standing-list-header">Infractions</div>
+                <div class="standing-list" id="standing-list" style="margin-top: 8px;"></div>
+            </div>
+            <button class="standing-close-btn" onclick="closeStandingModal()">Close</button>
+        </div>
+    </div>
+
+    <script src="/assets/js/cherri.data.js?v=20260619a"></script>
+    <script src="/assets/js/cherri.auth.js?v=20260619a"></script>
+    <script src="/assets/js/cherri.ui.js?v=20260619a"></script>
+    <script>
+        document.getElementById("csslink").href = `/assets/css/colors/${localStorage.getItem("cherri_theme") ?? "default"}.css`;
+    </script>
+    <script src="/assets/js/cherri.ads.js"></script>
+
+    <script>
+        const ADMIN_USERNAMES = new Set([
+            "x8r",
+            "sprintingsnail",
+            "dinguschan",
+            "syntaxerror52",
+            "yash",
+            "josh22_28",
+            "yzycoin",
+            "beetlejuice",
+            "snake","blairebear",,
+        ]);
+
+        let adminAllUsers = [];
+        let adminCurrentTab = "users";
+        const adminUserMap = new Map();
+
+        async function adminApiRequest(path, options = {}) {
+            const opts = {
+                method: options.method || "GET",
+                headers: options.body !== undefined ? { "content-type": "application/json" } : {},
+                credentials: "same-origin",
+            };
+            if (options.body !== undefined) opts.body = JSON.stringify(options.body);
+            const res = await fetch(path, opts);
+            const data = await res.json().catch(() => null);
+            if (!res.ok) throw new Error(data?.error || "Request failed");
+            return data;
+        }
+
+        function adminSwitchTab(tab) {
+            adminCurrentTab = tab;
+            document.querySelectorAll(".admin-tab").forEach((el, i) => {
+                el.classList.toggle("active",
+                    (i === 0 && tab === "users") ||
+                    (i === 1 && tab === "ipbans") ||
+                    (i === 2 && tab === "muted") ||
+                    (i === 3 && tab === "tickets")
+                );
+            });
+            document.getElementById("admin-pane-users").classList.toggle("active", tab === "users");
+            document.getElementById("admin-pane-ipbans").classList.toggle("active", tab === "ipbans");
+            document.getElementById("admin-pane-muted").classList.toggle("active", tab === "muted");
+            document.getElementById("admin-pane-tickets").classList.toggle("active", tab === "tickets");
+            document.getElementById("admin-pane-appeals").classList.toggle("active", tab === "appeals");
+            if (tab === "ipbans") adminLoadIpBans();
+            if (tab === "muted") adminLoadMutedUsers();
+            if (tab === "tickets") adminLoadTickets();
+            if (tab === "appeals") adminLoadAppeals();
+        }
+
+        function adminRefresh() {
+            if (adminCurrentTab === "users") adminLoadUsers();
+            else if (adminCurrentTab === "ipbans") adminLoadIpBans();
+            else if (adminCurrentTab === "muted") adminLoadMutedUsers();
+            else if (adminCurrentTab === "tickets") adminLoadTickets();
+            else if (adminCurrentTab === "appeals") adminLoadAppeals();
+        }
+
+        async function adminLoadUsers() {
+            const list = document.getElementById("admin-user-list");
+            list.innerHTML = `<div class="admin-empty">Loading users...</div>`;
+            try {
+                const data = await adminApiRequest("/api/admin/users");
+                adminAllUsers = data.users || [];
+                adminRenderUsers(adminAllUsers);
+            } catch (e) {
+                list.innerHTML = `<div class="admin-empty" style="color:tomato;">${e.message}</div>`;
+            }
+        }
+
+        let _adminSearchTimer = null;
+        function adminSearchDebounced(query) {
+            clearTimeout(_adminSearchTimer);
+            _adminSearchTimer = setTimeout(() => adminSearchUsers(query), 300);
+        }
+
+        async function adminSearchUsers(query) {
+            const q = query.trim();
+            const list = document.getElementById("admin-user-list");
+            list.innerHTML = `<div class="admin-empty">Searching...</div>`;
+            try {
+                const url = q ? `/api/admin/users?q=${encodeURIComponent(q)}&page=0` : `/api/admin/users?page=0`;
+                const data = await adminApiRequest(url);
+                adminAllUsers = data.users || [];
+                adminRenderUsers(adminAllUsers);
+            } catch (e) {
+                list.innerHTML = `<div class="admin-empty" style="color:tomato;">${escapeHtml(e.message)}</div>`;
+            }
+        }
+
+        let adminAllTickets = [];
+        const adminTicketMap = new Map();
+
+        async function adminLoadTickets() {
+            const list = document.getElementById("admin-ticket-list");
+            list.innerHTML = `<div class="admin-empty">Loading tickets...</div>`;
+            try {
+                const data = await adminApiRequest("/api/admin/moderation/tickets");
+                const tickets = data.tickets || [];
+                adminAllTickets = tickets;
+                if (!tickets.length) {
+                    list.innerHTML = `<div class="admin-empty">No moderation tickets.</div>`;
+                    return;
+                }
+                list.innerHTML = "";
+                tickets.forEach(ticket => {
+                    const el = document.createElement("div");
+                    el.innerHTML = adminTicketCard(ticket);
+                    list.appendChild(el.firstElementChild);
+                });
+            } catch (e) {
+                list.innerHTML = `<div class="admin-empty" style="color:tomato;">${escapeHtml(e.message)}</div>`;
+            }
+        }
+
+        function adminTicketCard(ticket) {
+            const safeId = ticket.id.replace(/[^a-zA-Z0-9-]/g, "");
+            const reportedUserId = String(ticket.reported_user_id || "").replace(/'/g, "\\'");
+            const reportedUsername = String(ticket.reported_username || ticket.reported_user_id || "").replace(/'/g, "\\'");
+            const messageItems = Array.isArray(ticket.messages) && ticket.messages.length
+                ? ticket.messages.map(msg => `
+                    <div class="ticket-message-row">
+                        <span class="ticket-message-user">${escapeHtml(msg.username)}</span>
+                        <span class="ticket-message-content">${escapeHtml(msg.content)}</span>
+                    </div>
+                `).join("")
+                : `<div class="ticket-message-row"><span class="ticket-message-empty">No attached messages.</span></div>`;
+            return `
+            <div class="admin-ticket-card" id="ticket-${safeId}">
+                <div class="admin-ticket-header">
+                    <div>
+                            <div class="admin-ticket-title">${escapeHtml(ticket.reported_username)} reported by ${escapeHtml(ticket.created_by)}</div>
+                        <div class="admin-ticket-meta">${escapeHtml(ticket.scope)}${ticket.room ? ` • ${escapeHtml(ticket.room)}` : ""}</div>
+                    </div>
+                    <div class="admin-ticket-status">${escapeHtml(ticket.status)}</div>
+                </div>
+                <div class="ticket-messages">${messageItems}</div>
+                <div class="ticket-notes">${escapeHtml(ticket.notes || "No notes provided.")}</div>
+                <div class="ticket-footer">
+                    <span>${escapeHtml(new Date(ticket.created_at).toLocaleString())}</span>
+                    <div class="ticket-actions">
+                            <button class="btn-admin-resolve" onclick="adminResolveTicket('${ticket.id}', '${safeId}')">Resolve</button>
+                            <button class="btn-admin-dismiss" onclick="adminDismissTicket('${ticket.id}', '${safeId}')">Dismiss</button>
+                            <button class="btn-admin-mute" onclick="adminMuteReportedUser('${reportedUserId}', '${ticket.id}', '${safeId}', '${reportedUsername}')">Mute</button>
+                            <button class="btn-admin-ban" onclick="adminBanReportedUser('${reportedUserId}', '${ticket.id}', '${safeId}', '${reportedUsername}')">Ban</button>
+                            <button class="btn-admin-ban" onclick="adminHwBan('${safeId}')">HW Ban</button>
+                            <button class="btn-admin-delete" onclick="adminTerminateReportedUser('${reportedUserId}', '${ticket.id}', '${safeId}', '${reportedUsername}')">Terminate</button>
+                    </div>
+                </div>
+            </div>
+            `;
+        }
+
+        async function adminLoadAppeals() {
+            const list = document.getElementById("admin-appeal-list");
+            list.innerHTML = `<div class="admin-empty">Loading appeals...</div>`;
+            try {
+                const data = await adminApiRequest("/api/admin/ban-appeals");
+                const appeals = data.appeals || [];
+                if (!appeals.length) {
+                    list.innerHTML = `<div class="admin-empty">No appeals.</div>`;
+                    return;
+                }
+                list.innerHTML = "";
+                appeals.forEach(appeal => {
+                    const el = document.createElement("div");
+                    el.innerHTML = adminAppealCard(appeal);
+                    list.appendChild(el.firstElementChild);
+                });
+            } catch (e) {
+                list.innerHTML = `<div class="admin-empty" style="color:tomato;">${escapeHtml(e.message)}</div>`;
+            }
+        }
+
+        function adminAppealCard(appeal) {
+            const safeId = String(appeal.id || "").replace(/[^a-zA-Z0-9-]/g, "");
+            const ip = appeal.ip ? escapeHtml(appeal.ip) : "unknown";
+            const adminResponse = appeal.admin_response ? escapeHtml(appeal.admin_response) : "";
+            const appellant = appeal.username ? `@${escapeHtml(appeal.username)}` : `Appeal ${escapeHtml(appeal.id)}`;
+            return `
+            <div class="admin-ticket-card" id="appeal-${safeId}">
+                <div class="admin-ticket-header">
+                    <div>
+                        <div class="admin-ticket-title">${appellant}</div>
+                        <div class="admin-ticket-meta">${ip} • ${escapeHtml(new Date(appeal.created_at).toLocaleString())}</div>
+                    </div>
+                    <div class="admin-ticket-status">${escapeHtml(appeal.status)}</div>
+                </div>
+                <div class="ticket-messages" style="white-space:pre-wrap;">${escapeHtml(appeal.message)}</div>
+                ${adminResponse ? `<div class="ticket-notes">${adminResponse}</div>` : ""}
+                <div class="ticket-footer">
+                    <span></span>
+                    <div class="ticket-actions">
+                        <button class="btn-admin-resolve" onclick="adminResolveAppeal('${appeal.id}', 'lift')">Lift Ban</button>
+                        <button class="btn-admin-dismiss" onclick="adminResolveAppeal('${appeal.id}', 'dismiss')">Dismiss</button>
+                    </div>
+                </div>
+            </div>
+            `;
+        }
+
+        async function adminResolveAppeal(id, action) {
+            try {
+                await adminApiRequest(`/api/admin/ban-appeals/${encodeURIComponent(id)}/resolve`, {
+                    method: "POST",
+                    body: { action, adminResponse: action === "lift" ? "Ban lifted." : "Dismissed." },
+                });
+                adminLoadAppeals();
+            } catch (e) {
+                alert(e.message || "Failed to resolve appeal.");
+            }
+        }
+
+        async function adminResolveTicket(ticketId, safeId) {
+            try {
+                await adminApiRequest(`/api/admin/moderation/tickets/${encodeURIComponent(ticketId)}/resolve`, { method: "POST" });
+                const card = document.getElementById(`ticket-${safeId}`);
+                if (card) card.querySelector(".admin-ticket-status").textContent = "resolved";
+                adminSetStatus(safeId, "Ticket resolved.", "ok");
+            } catch (e) {
+                adminSetStatus(safeId, e.message, "err");
+            }
+        }
+
+        async function adminDismissTicket(ticketId, safeId) {
+            try {
+                await adminApiRequest(`/api/admin/moderation/tickets/${encodeURIComponent(ticketId)}/dismiss`, { method: "POST" });
+                const card = document.getElementById(`ticket-${safeId}`);
+                if (card) card.querySelector(".admin-ticket-status").textContent = "dismissed";
+                adminSetStatus(safeId, "Ticket dismissed.", "ok");
+            } catch (e) {
+                adminSetStatus(safeId, e.message, "err");
+            }
+        }
+
+        async function adminBanReportedUser(userId, ticketId, safeId, username) {
+            if (!confirm(`BAN @${username}? This terminates their account and bans their last known IP.`)) return;
+            const reason = prompt(`Enter ban reason for @${username}:`);
+            if (reason === null || !reason.trim()) return;
+            try {
+                await adminApiRequest(`/api/admin/users/${userId}/ban`, { method: "POST", body: { reason: reason.trim() } });
+                await adminApiRequest(`/api/admin/moderation/tickets/${encodeURIComponent(ticketId)}/dismiss`, { method: "POST" });
+                adminSetStatus(safeId, "Reported user banned and ticket dismissed.", "ok");
+            } catch (e) {
+                adminSetStatus(safeId, e.message, "err");
+            }
+        }
+
+        async function adminHwBan(safeId) {
+            const u = adminUserMap.get(safeId);
+            if (!u) return;
+            if (!confirm(`HARDWARE BAN @${u.username}?\n\nThis will block them from connecting even if they make a new account.`)) return;
+            const reason = prompt(`Enter a reason for hardware banning @${u.username}:`);
+            if (reason === null) return;
+            if (!reason.trim()) {
+                alert("A reason is required.");
+                return;
+            }
+            try {
+                await adminApiRequest(`/api/admin/users/${u.id}/hw-ban`, { method: "POST", body: { reason: reason.trim() } });
+                adminSetStatus(safeId, "Hardware banned.", "ok");
+            } catch (e) {
+                adminSetStatus(safeId, e.message, "err");
+            }
+        }
+
+        async function adminTerminateReportedUser(userId, ticketId, safeId, username) {
+            if (!confirm(`TERMINATE @${username}? This permanently deletes the account.`)) return;
+            try {
+                await adminApiRequest(`/api/admin/users/${userId}`, { method: "DELETE" });
+                await adminApiRequest(`/api/admin/moderation/tickets/${encodeURIComponent(ticketId)}/dismiss`, { method: "POST" });
+                adminSetStatus(safeId, "Reported user terminated and ticket dismissed.", "ok");
+            } catch (e) {
+                adminSetStatus(safeId, e.message, "err");
+            }
+        }
+
+        async function adminMuteReportedUser(userId, ticketId, safeId, username) {
+            const minsInput = prompt(`Mute @${username} for how many minutes?`, '10');
+            if (minsInput === null) return;
+            const minutes = Number(minsInput);
+            if (!Number.isFinite(minutes) || minutes < 1) {
+                adminSetStatus(safeId, 'Invalid mute duration', 'err');
+                return;
+            }
+            try {
+                await adminApiRequest(`/api/admin/users/${userId}/mute-chat`, { method: 'POST', body: { minutes } });
+                await adminApiRequest(`/api/admin/moderation/tickets/${encodeURIComponent(ticketId)}/dismiss`, { method: 'POST' });
+                adminSetStatus(safeId, `User muted for ${minutes} minute(s) and ticket dismissed.`, 'ok');
+                const card = document.getElementById(`ticket-${safeId}`);
+                if (card) card.querySelector('.admin-ticket-status').textContent = 'dismissed';
+            } catch (e) {
+                adminSetStatus(safeId, e.message, 'err');
+            }
+        }
+
+        const PAGE_SIZE = 50;
+        let allUsers = [];
+        let renderedCount = 0;
+
+        function adminRenderUsers(users) {
+            allUsers = users;
+            renderedCount = 0;
+            const list = document.getElementById("admin-user-list");
+            if (!users.length) {
+                list.innerHTML = `<div class="admin-empty">No users found.</div>`;
+                return;
+            }
+            list.innerHTML = "";
+            adminRenderNextPage();
+
+            list.addEventListener("scroll", () => {
+                if (list.scrollTop + list.clientHeight >= list.scrollHeight - 100) {
+                    adminRenderNextPage();
+                }
+            });
+        }
+
+        function adminRenderNextPage() {
+            const list = document.getElementById("admin-user-list");
+            const slice = allUsers.slice(renderedCount, renderedCount + PAGE_SIZE);
+            if (!slice.length) return;
+            slice.forEach(u => {
+                const el = document.createElement("div");
+                el.innerHTML = adminUserCard(u);
+                const card = el.firstElementChild;
+                list.appendChild(card);
+                adminObserveIp(card, u.id);
+            });
+            renderedCount += slice.length;
+        }
+
+        const ipObserver = new IntersectionObserver((entries) => {
+            for (const entry of entries) {
+                if (!entry.isIntersecting) continue;
+                ipObserver.unobserve(entry.target);
+                const safeId = entry.target.dataset.safeId;
+                const rawId = entry.target.dataset.rawId;
+                adminLoadIp(safeId, rawId);
+            }
+        }, { threshold: 0.1 });
+
+        function adminObserveIp(cardEl, rawId) {
+            const safeId = rawId.replace(/[^a-zA-Z0-9-]/g, "");
+            cardEl.dataset.safeId = safeId;
+            cardEl.dataset.rawId = rawId;
+            ipObserver.observe(cardEl);
+        }
+
+        async function adminLoadIp(safeId, rawId) {
+            const el = document.getElementById(`ip-${safeId}`);
+            if (!el) return;
+            try {
+                const res = await fetch(`/api/admin/users/${encodeURIComponent(rawId)}/ip`);
+                const data = await res.json();
+                if (!data.ips?.length) {
+                    el.textContent = "no ip on record";
+                    return;
+                }
+                const unique = data.ips.map(r => r.ip).filter((v, i, a) => a.indexOf(v) === i).join(", ");
+                el.textContent = unique;
+                if (!data.privileged) {
+                    el.style.filter = "blur(4px)";
+                    el.style.userSelect = "none";
+                    el.title = "You don't have permission to view IPs";
+                }
+            } catch {
+                el.textContent = "failed to load ip";
+            }
+        }
+
+        function adminUserCard(u) {
+            const safeId = u.id.replace(/[^a-zA-Z0-9-]/g, "");
+            adminUserMap.set(safeId, u);
+            return `
+            <div class="admin-user-card" id="card-${safeId}">
+                <div class="admin-user-row">
+            <img class="admin-user-pfp" src="${u.pfp || '/assets/img/fav.png'}" onerror="this.src='/assets/img/fav.png'">
+            <div class="admin-user-info">
+                <div class="admin-user-display">${escapeHtml(u.display)}</div>
+                <div class="admin-user-username">@${escapeHtml(u.username)}</div>
+                <div id="ip-${safeId}" style="font-size:10px; font-family:monospace; opacity:0.5; margin-top:2px;">loading ip...</div>
+            </div>
+        </div>
+                <div class="admin-actions">
+    <button class="btn-admin-rename"   onclick="adminToggleForm('${safeId}', 'rename')">Rename</button>
+    <button class="btn-admin-resetpfp" onclick="adminResetPfp('${safeId}')">Reset PFP</button>
+    <button class="btn-admin-purge"    onclick="adminPurgeMessages('${safeId}')">Purge Msgs</button>
+    <button class="btn-admin-resetpw"  onclick="adminClearSessions('${safeId}')">Clear Sessions</button>
+    <button class="btn-admin-badges"   onclick="adminToggleForm('${safeId}', 'badges')">Badges</button>
+    ${adminCurrentUser === "x8r" ? `<button class="btn-admin-resetpw" onclick="adminToggleForm('${safeId}', 'resetpw')">Reset PW</button>` : ""}
+    <button class="btn-admin-delete"   onclick="adminTerminate('${safeId}')">Terminate</button>
+    <button class="btn-admin-ban"      onclick="adminBan('${safeId}')">Ban</button>
+    <button class="btn-admin-ban" onclick="adminHwBan('${safeId}')">HW Ban</button>
+    <button class="btn-admin-badges"   onclick="navigator.clipboard.writeText('${safeId}')">Copy UID</button>
+</div>
+
+                <div class="admin-inline-form" id="form-rename-${safeId}">
+                    <input type="text" class="rift-input" placeholder="New display name..." id="rename-input-${safeId}">
+                    <div class="form-row">
+                        <button class="btn-confirm" onclick="adminRename('${safeId}')">Save</button>
+                        <button class="btn-cancel"  onclick="adminToggleForm('${safeId}', 'rename')">Cancel</button>
+                    </div>
+                </div>
+
+                <div class="admin-inline-form" id="form-resetpw-${safeId}">
+                    <input type="password" class="rift-input" placeholder="New password..." id="resetpw-input-${safeId}">
+                    <div class="form-row">
+                        <button class="btn-confirm" onclick="adminResetPassword('${safeId}')">Set Password</button>
+                        <button class="btn-cancel"  onclick="adminToggleForm('${safeId}', 'resetpw')">Cancel</button>
+                    </div>
+                </div>
+
+                <div class="admin-inline-form" id="form-badges-${safeId}">
+                    <input type="text" class="rift-input" placeholder='e.g. user,admin,mod (comma separated)' id="badges-input-${safeId}">
+                    <div class="form-row">
+                        <button class="btn-confirm" onclick="adminUpdateBadges('${safeId}')">Save</button>
+                        <button class="btn-cancel"  onclick="adminToggleForm('${safeId}', 'badges')">Cancel</button>
+                    </div>
+                </div>
+
+                <div class="admin-status" id="status-${safeId}"></div>
+            </div>`;
+        }
+
+        function escapeHtml(str) {
+            return String(str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+        }
+
+        function adminSetStatus(safeId, msg, type = "") {
+            const el = document.getElementById(`status-${safeId}`);
+            if (!el) return;
+            el.textContent = msg;
+            el.className = `admin-status ${type}`;
+            if (msg) setTimeout(() => { el.textContent = ""; el.className = "admin-status"; }, 3000);
+        }
+
+        function adminToggleForm(safeId, formName) {
+            const forms = ["rename", "resetpw", "badges"];
+            forms.forEach(name => {
+                const el = document.getElementById(`form-${name}-${safeId}`);
+                if (!el) return;
+                if (name === formName) el.classList.toggle("visible");
+                else el.classList.remove("visible");
+            });
+        }
+
+        async function adminRename(safeId) {
+            const u = adminUserMap.get(safeId);
+            if (!u) return;
+            const val = document.getElementById(`rename-input-${safeId}`)?.value.trim();
+            if (!val) return;
+            try {
+                await adminApiRequest(`/api/admin/users/${u.id}/display`, { method: "PUT", body: { display: val } });
+                const card = document.getElementById(`card-${safeId}`);
+                if (card) card.querySelector(".admin-user-display").textContent = val;
+                adminToggleForm(safeId, "rename");
+                adminSetStatus(safeId, "Display name updated.", "ok");
+                u.display = val;
+            } catch (e) {
+                adminSetStatus(safeId, e.message, "err");
+            }
+        }
+
+        async function adminResetPfp(safeId) {
+            const u = adminUserMap.get(safeId);
+            if (!u) return;
+            try {
+                await adminApiRequest(`/api/admin/users/${u.id}/reset-pfp`, { method: "POST" });
+                const card = document.getElementById(`card-${safeId}`);
+                if (card) card.querySelector(".admin-user-pfp").src = "/assets/img/fav.png";
+                adminSetStatus(safeId, "Avatar reset.", "ok");
+            } catch (e) {
+                adminSetStatus(safeId, e.message, "err");
+            }
+        }
+
+        async function adminClearSessions(safeId) {
+            const u = adminUserMap.get(safeId);
+            if (!u) return;
+            try {
+                await adminApiRequest(`/api/admin/users/${u.id}/clear-sessions`, { method: "POST" });
+                const card = document.getElementById(`card-${safeId}`);
+                adminSetStatus(safeId, "Sessions cleared", "ok");
+            } catch (e) {
+                adminSetStatus(safeId, e.message, "err");
+            }
+        }
+
+        async function adminPurgeMessages(safeId) {
+            const u = adminUserMap.get(safeId);
+            if (!u) return;
+            if (!confirm("Delete all messages from this user?")) return;
+            try {
+                await adminApiRequest(`/api/admin/users/${u.id}/messages`, { method: "DELETE" });
+                adminSetStatus(safeId, "All messages purged.", "ok");
+            } catch (e) {
+                adminSetStatus(safeId, e.message, "err");
+            }
+        }
+
+        async function adminResetPassword(safeId) {
+            const u = adminUserMap.get(safeId);
+            if (!u) return;
+            const val = document.getElementById(`resetpw-input-${safeId}`)?.value.trim();
+            if (!val) return;
+            try {
+                await adminApiRequest(`/api/admin/users/${u.id}/reset-password`, { method: "POST", body: { password: val } });
+                adminToggleForm(safeId, "resetpw");
+                adminSetStatus(safeId, "Password reset. Sessions invalidated.", "ok");
+            } catch (e) {
+                adminSetStatus(safeId, e.message, "err");
+            }
+        }
+
+        async function adminUpdateBadges(safeId) {
+            const u = adminUserMap.get(safeId);
+            if (!u) return;
+            const val = document.getElementById(`badges-input-${safeId}`)?.value.trim();
+            const badges = val ? val.split(",").map(b => b.trim()).filter(Boolean) : ["user"];
+            try {
+                await adminApiRequest(`/api/admin/users/${u.id}/badges`, { method: "PUT", body: { badges } });
+                adminToggleForm(safeId, "badges");
+                adminSetStatus(safeId, `Badges updated: ${badges.join(", ")}`, "ok");
+            } catch (e) {
+                adminSetStatus(safeId, e.message, "err");
+            }
+        }
+
+        async function adminTerminate(safeId) {
+            const u = adminUserMap.get(safeId);
+            if (!u) return;
+            if (!confirm(`TERMINATE @${u.username}?\n\nThis permanently deletes their account, all messages, saves, and sessions.`)) return;
+            try {
+                await adminApiRequest(`/api/admin/users/${u.id}`, { method: "DELETE" });
+                document.getElementById(`card-${safeId}`)?.remove();
+                adminUserMap.delete(safeId);
+                adminAllUsers = adminAllUsers.filter(x => x.id !== u.id);
+            } catch (e) {
+                adminSetStatus(safeId, e.message, "err");
+            }
+        }
+
+        async function adminBan(safeId) {
+            const u = adminUserMap.get(safeId);
+            if (!u) return;
+            if (!confirm(`BAN @${u.username}?\n\nThis terminates their account AND IP bans their last known address.`)) return;
+            const reason = prompt(`Enter a reason for banning @${u.username}:`);
+            if (reason === null) return;
+            if (!reason.trim()) {
+                alert("A reason is required to ban a user.");
+                return;
+            }
+            try {
+                const result = await adminApiRequest(`/api/admin/users/${u.id}/ban`, { method: "POST", body: { reason: reason.trim() } });
+                document.getElementById(`card-${safeId}`)?.remove();
+                adminUserMap.delete(safeId);
+                adminAllUsers = adminAllUsers.filter(x => x.id !== u.id);
+                adminLoadIpBans();
+                if (result.ipBanned) {
+                    const banner = document.createElement("div");
+                    banner.className = "admin-empty";
+                    banner.style.color = "#4caf82";
+                    banner.textContent = `Banned. IP ${result.ipBanned} blocked.`;
+                    document.getElementById("admin-user-list").prepend(banner);
+                    setTimeout(() => banner.remove(), 4000);
+                }
+            } catch (e) {
+                adminSetStatus(safeId, e.message, "err");
+            }
+        }
+
+        async function adminLoadIpBans() {
+            const list = document.getElementById("admin-ipban-list");
+            list.innerHTML = `<div class="admin-empty">Loading...</div>`;
+            try {
+                const data = await adminApiRequest("/api/admin/ip-bans");
+                const bans = data.bans || [];
+                if (!bans.length) {
+                    list.innerHTML = `<div class="admin-empty">No IP bans.</div>`;
+                    return;
+                }
+                list.innerHTML = bans.map(b => `
+                    <div class="admin-ipban-card" id="ipban-${b.id}">
+                        <div class="admin-ipban-info">
+                            <div class="admin-ipban-ip">${escapeHtml(b.ip)}</div>
+                            ${b.bannedUser ? `<div class="admin-ipban-user">User: @${escapeHtml(b.bannedUser)}</div>` : ""}
+                            <div class="admin-ipban-meta">${b.reason ? escapeHtml(b.reason) + " · " : ""}by ${escapeHtml(b.bannedBy)}</div>
+                        </div>
+                        <button class="btn-admin-unban" onclick="adminUnbanIp('${b.id}')">Unban</button>
+                    </div>
+                `).join("");
+                if (!data.privileged) {
+                    list.querySelectorAll(".admin-ipban-ip").forEach(el => {
+                        el.style.filter = "blur(4px)";
+                        el.style.userSelect = "none";
+                        el.title = "You don't have permission to view IPs";
+                    });
+                }
+            } catch (e) {
+                list.innerHTML = `<div class="admin-empty" style="color:tomato;">${e.message}</div>`;
+            }
+        }
+
+        async function adminLoadMutedUsers() {
+            const list = document.getElementById("admin-muted-user-list");
+            list.innerHTML = `<div class="admin-empty">Loading...</div>`;
+            try {
+                const data = await adminApiRequest("/api/admin/muted-users");
+                const mutedUsers = data.users || [];
+                if (!mutedUsers.length) {
+                    list.innerHTML = `<div class="admin-empty">No muted users.</div>`;
+                    return;
+                }
+                list.innerHTML = mutedUsers.map(u => `
+                    <div class="admin-muted-user-card" id="muted-user-${u.id}">
+                        <img class="admin-user-pfp" src="${u.pfp || '/assets/img/fav.png'}" onerror="this.src='/assets/img/fav.png'">
+                        <div class="admin-muted-user-info">
+                            <div class="admin-muted-user-name">${escapeHtml(u.display || u.username)} <span style="opacity:0.55; font-weight:500;">@${escapeHtml(u.username)}</span></div>
+                            <div class="admin-muted-user-meta">Muted until ${escapeHtml(new Date(u.muted_until).toLocaleString())}</div>
+                        </div>
+                        <button class="btn-admin-unban" onclick="adminUnmuteUser('${u.id}', '${escapeHtml(u.username)}')">Unmute</button>
+                    </div>
+                `).join("");
+            } catch (e) {
+                list.innerHTML = `<div class="admin-empty" style="color:tomato;">${e.message}</div>`;
+            }
+        }
+
+        async function adminAddIpBan() {
+            const ip = document.getElementById("ipban-ip-input")?.value.trim();
+            const reason = document.getElementById("ipban-reason-input")?.value.trim() || null;
+            if (!ip) return;
+            try {
+                await adminApiRequest("/api/admin/ip-bans", { method: "POST", body: { ip, reason } });
+                document.getElementById("ipban-ip-input").value = "";
+                document.getElementById("ipban-reason-input").value = "";
+                adminLoadIpBans();
+            } catch (e) {
+                alert(e.message);
+            }
+        }
+
+        async function adminUnbanIp(banId) {
+            try {
+                await adminApiRequest(`/api/admin/ip-bans/${banId}`, { method: "DELETE" });
+                document.getElementById(`ipban-${banId}`)?.remove();
+                const list = document.getElementById("admin-ipban-list");
+                if (!list.children.length) {
+                    list.innerHTML = `<div class="admin-empty">No IP bans.</div>`;
+                }
+            } catch (e) {
+                alert(e.message);
+            }
+        }
+
+        async function adminUnmuteUser(userId, username) {
+            if (!confirm(`Unmute @${username}?`)) return;
+            try {
+                await adminApiRequest(`/api/admin/users/${userId}/mute-chat`, { method: "DELETE" });
+                document.getElementById(`muted-user-${userId}`)?.remove();
+                const list = document.getElementById("admin-muted-user-list");
+                if (!list.children.length) {
+                    list.innerHTML = `<div class="admin-empty">No muted users.</div>`;
+                }
+            } catch (e) {
+                alert(e.message);
+            }
+        }
+
+        let adminCurrentUser = "";
+
+        function switchProfileTab(tab, btn) {
+            document.querySelectorAll('.profile-tab').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.profile-pane').forEach(p => p.style.display = 'none');
+            btn.classList.add('active');
+            document.getElementById('profile-pane-' + tab).style.display = '';
+        }
+
+        async function ui(user) {
+            const loggedIn = document.getElementById("logged-in");
+            const form = document.getElementById("sign-in");
+            const displayLabel = document.getElementById("display-label");
+            const userLabel = document.getElementById("username-label");
+            const pfp = document.getElementById("pfp");
+
+            if (!user) {
+                form.style.display = "block";
+                loggedIn.style.display = "none";
+                setSignedInUserId(null);
+                return;
+            }
+
+            setSignedInUserId(user);
+            displayLabel.textContent = user.display || user.username;
+            userLabel.textContent = `@${user.username}`;
+            pfp.src = user.pfp || "/assets/img/fav.png";
+            const bioInput = document.getElementById("bio-input");
+            if (bioInput) bioInput.value = user.bio || "";
+            // highlight which preset pfp is active (if any)
+            const presetMatch = (user.pfp || "").match(/\/assets\/img\/pfps\/(\d+)\.png$/);
+            const activePreset = presetMatch ? parseInt(presetMatch[1], 10) : null;
+            document.querySelectorAll(".preset-pfp").forEach((el, i) => {
+                el.classList.toggle("selected", activePreset === i + 1);
+            });
+            form.style.display = "none";
+            loggedIn.style.display = "block";
+
+            const adminPanel = document.getElementById("admin-panel");
+            if (ADMIN_USERNAMES.has(user.username?.toLowerCase())) {
+                adminPanel.style.display = "block";
+                adminLoadUsers();
+            } else {
+                adminPanel.style.display = "none";
+            }
+
+            if (ADMIN_USERNAMES.has(user.username?.toLowerCase())) {
+                adminCurrentUser = user.username.toLowerCase();
+                adminPanel.style.display = "block";
+                adminLoadUsers();
+            }
+        }
+    </script>
+
+    <script>
+        async function openStandingModal() {
+            const backdrop = document.getElementById("standing-backdrop");
+            const statusIcon = document.getElementById("standing-status-icon");
+            const statusLabel = document.getElementById("standing-status-label");
+            const statusSub = document.getElementById("standing-status-sub");
+            const muteBanner = document.getElementById("standing-mute-banner");
+            const statsGrid = document.getElementById("standing-stats-grid");
+            const list = document.getElementById("standing-list");
+
+            backdrop.classList.add("open");
+            statusIcon.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i>`;
+            statusLabel.textContent = "Loading...";
+            statusLabel.style.color = "";
+            statusSub.textContent = "";
+            muteBanner.classList.remove("visible");
+            statsGrid.innerHTML = "";
+            list.innerHTML = "";
+
+            try {
+                const res = await fetch("/api/users/me/standing", { credentials: "same-origin" });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data?.error || "Failed to load standing");
+
+                const infractions = data.infractions || [];
+                const stats = data.stats || {};
+                const mutedUntil = data.chatMutedUntil;
+
+                // Mute banner
+                if (mutedUntil) {
+                    const muteDate = new Date(mutedUntil);
+                    if (muteDate > new Date()) {
+                        muteBanner.innerHTML = `<i class="fa-solid fa-volume-slash" style="margin-right: 7px;"></i>Chat muted until ${muteDate.toLocaleString()}`;
+                        muteBanner.classList.add("visible");
+                    }
+                }
+
+                // Status
+                const hasBan  = infractions.some(i => i.type === "ban");
+                const hasWarn = infractions.some(i => i.type === "warn" || i.type === "mute");
+                if (hasBan) {
+                    statusIcon.innerHTML = `<i class="fa-solid fa-circle-xmark" style="color:#ff4747;"></i>`;
+                    statusLabel.textContent = "Restricted";
+                    statusLabel.style.color = "#ff4747";
+                    statusSub.textContent = "Your account has received a ban infraction.";
+                } else if (hasWarn) {
+                    statusIcon.innerHTML = `<i class="fa-solid fa-circle-exclamation" style="color:#ffb84d;"></i>`;
+                    statusLabel.textContent = "Warning";
+                    statusLabel.style.color = "#ffb84d";
+                    statusSub.textContent = "Your account has active warnings or mutes.";
+                } else {
+                    statusIcon.innerHTML = `<i class="fa-solid fa-circle-check" style="color:#4caf82;"></i>`;
+                    statusLabel.textContent = "Good Standing";
+                    statusLabel.style.color = "#4caf82";
+                    statusSub.textContent = "No infractions on record. Keep it up!";
+                }
+
+                // Stats
+                const memberSince = stats.memberSince
+                    ? new Date(stats.memberSince).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })
+                    : "—";
+                const statCards = [
+                    { icon: "fa-message", label: "Messages Sent", value: (stats.totalMessages ?? 0).toLocaleString() },
+                    { icon: "fa-comments", label: "Room Messages", value: (stats.roomMessages ?? 0).toLocaleString() },
+                    { icon: "fa-envelope", label: "DMs Sent", value: (stats.dmMessages ?? 0).toLocaleString() },
+                    { icon: "fa-calendar-days", label: "Member Since", value: memberSince },
+                ];
+                statsGrid.innerHTML = statCards.map(s => `
+                    <div class="standing-stat-card">
+                        <div class="standing-stat-icon"><i class="fa-solid ${s.icon}"></i></div>
+                        <div>
+                            <div class="standing-stat-value">${escapeHtml(s.value)}</div>
+                            <div class="standing-stat-label">${s.label}</div>
+                        </div>
+                    </div>
+                `).join("");
+
+                // Infractions list
+                if (infractions.length === 0) {
+                    list.innerHTML = `<div class="standing-empty"><i class="fa-regular fa-circle-check" style="margin-right: 6px;"></i>No infractions on record.</div>`;
+                } else {
+                    list.innerHTML = infractions.map(inf => {
+                        const badgeClass = inf.type === "ban" ? "badge-ban" : inf.type === "mute" ? "badge-mute" : "badge-warn";
+                        const typeIcon = inf.type === "ban" ? "fa-ban" : inf.type === "mute" ? "fa-volume-slash" : "fa-triangle-exclamation";
+                        const reason = inf.reason ? escapeHtml(inf.reason) : `<span style="opacity:0.45;">No reason given</span>`;
+                        const date = new Date(inf.createdAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+                        return `
+                            <div class="standing-infraction-row">
+                                <span class="standing-type-badge ${badgeClass}"><i class="fa-solid ${typeIcon}" style="margin-right:4px;"></i>${escapeHtml(inf.type)}</span>
+                                <div class="standing-infraction-info">
+                                    <div class="standing-infraction-reason">${reason}</div>
+                                    <div class="standing-infraction-date"><i class="fa-regular fa-clock" style="margin-right:4px;"></i>${date}</div>
+                                </div>
+                            </div>
+                        `;
+                    }).join("");
+                }
+            } catch (e) {
+                statusIcon.innerHTML = `<i class="fa-solid fa-triangle-exclamation" style="color:tomato;"></i>`;
+                statusLabel.textContent = "Error";
+                statusLabel.style.color = "tomato";
+                statusSub.textContent = e.message;
+                statsGrid.innerHTML = "";
+                list.innerHTML = "";
+            }
+        }
+
+        function closeStandingModal(e) {
+            if (e && e.target !== document.getElementById("standing-backdrop")) return;
+            document.getElementById("standing-backdrop").classList.remove("open");
+        }
+    </script>
+
+</body>
+
+</html>

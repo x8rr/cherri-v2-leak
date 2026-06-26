@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cherri | play</title>
+    <link rel="shortcut icon" href="/assets/img/fav.png" type="image/x-icon" id="tabIcon">
+    <link rel="stylesheet" href="/assets/css/colors/default.css" id="csslink">
+    <link rel="stylesheet" href="/assets/css/font.css?v=2">
+    <link rel="stylesheet" href="/assets/icons/fonts/remixicon.css">
+    <link rel="stylesheet" href="/assets/css/overlay.css">
+    <link rel="stylesheet" href="/assets/icons/css/all-pro.css">
+</head>
+
+<body class="obfuscate" style="background: none !important;">
+    <style>
+        html {
+            background: black;
+            overflow: hidden;
+        }
+
+        #particles-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        #gameframe {
+            width: 95vw;
+            height: 80vh;
+            background: var(--bg-3);
+            border: 1px solid var(--border-4);
+            border-radius: 20px;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .gamecontrols {
+            background: var(--bg-2);
+            height: 60px;
+            width: 95vw;
+            position: relative;
+            top: -6px;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            border: 1px solid var(--border-4);
+            overflow: hidden;
+            display: flex;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gamestuff {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            left: 50%;
+            top: 50%;
+            width: fit-content;
+        }
+
+        .gamestuff button {
+            width: 33.35%;
+            border-radius: 0;
+            border: 0;
+            background: transparent;
+            color: white;
+            font-size: 25px;
+            cursor: pointer;
+            text-align: center;
+            height: 100%;
+            transition: 0.2s;
+            margin-right: -2px;
+            margin-left: -2px;
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .gamestuff button:hover {
+            background: var(--bg-4);
+        }
+
+        #bottom-tip {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 5px;
+            font-size: 14px;
+            font-weight: 500;
+            font-style: italic;
+            opacity: .5;
+        }
+
+        .overlay-notice {
+            background: var(--bg);
+            color: var(--text);
+            padding: 10px;
+            border: 1px solid var(--border-4);
+            border-radius: 15px;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: 0.4s;
+            z-index: 3298746986;
+        }
+
+        .invite-widget {
+            background: var(--bg-2);
+            border: 1px solid var(--border-4);
+            border-radius: 25px;
+            position: absolute;
+            left: 10px;
+            top: 160px;
+            padding: 15px;
+            min-width: 111px;
+            font-family: 'figtree normal', sans-serif;
+        }
+
+        .invite-widget h1 {
+            font-size: 24px;
+            color: var(--bright-text);
+            margin: 5px;
+            margin-left: 0;
+            margin-bottom: 7px;
+        }
+
+        .invite-widget > button {
+            height: 50px;
+            width: 50px;
+            padding: 10px;
+            border-radius: 15px;
+            aspect-ratio: 1;
+            background: var(--bg-3);
+            border: 1px solid var(--border-4);
+            transition: 0.2s;
+            color: var(--text);
+            cursor: pointer;
+            font-size: 20px;
+            margin: 3px;
+        }
+
+        .invite-widget > button:hover { background: var(--bg-4); }
+
+        #invite-panel {
+            margin-top: 10px;
+            max-height: 260px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            min-width: 200px;
+        }
+
+        .invite-friend-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 6px;
+            border-radius: 12px;
+            background: var(--bg-3);
+        }
+
+        .invite-friend-row img {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .invite-friend-name {
+            flex: 1;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .invite-friend-btn {
+            padding: 4px 10px;
+            border-radius: 8px;
+            border: none;
+            background: var(--accent);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .15s;
+            white-space: nowrap;
+            font-family: inherit;
+        }
+
+        .invite-friend-btn:hover { filter: brightness(1.1); }
+        .invite-friend-btn:disabled { opacity: .5; pointer-events: none; }
+
+        .invite-empty {
+            font-size: 13px;
+            opacity: .5;
+            text-align: center;
+            padding: 10px 0;
+        }
+    </style>
+
+    <div id="particles-container"></div>
+
+    <div class="gamestuff">
+        <iframe frameborder="0" id="gameframe" allowfullscreen allow="autoplay; fullscreen; pointer-lock; gamepad"></iframe>
+        <div class="gamecontrols">
+            <button onclick="refreshGame()">
+                <i class="far fa-refresh"></i>
+            </button>
+            <button onclick="fullscreenGame()">
+                <i class="far fa-expand"></i>
+            </button>
+            <button onclick="popoutGame()">
+                <i class="far fa-external-link"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="overlay-notice" style="text-align: center; padding: 15px;">
+        <strong style="font-size: 19px; font-weight: 700;">Press Alt + G to open the Game Overlay</strong><br>
+        <small style="color: var(--border);">If your game does not load, please open the overlay and pop it out.</small>
+    </div>
+
+    <div id="gameOverlay">
+        <div class="cherri-info">
+            <span id="currentTime">Loading time...</span>
+            <span class="divider"></span>
+            <span id="temperature">Loading temp...</span>
+            <span class="divider"></span>
+            <span id="sessionTime">Loading session time...</span>
+        </div>
+        <div class="record-widget">
+            <h1>Record</h1>
+            <button id="startRecording" style="margin-left: 0;" onclick="startRecording()">
+                <i class="far fa-circle-dot"></i>
+            </button>
+            <button id="stopRecording" disabled style="margin-right: 0;" onclick="stopRecording()">
+                <i class="fas fa-stop"></i>
+            </button>
+        </div>
+        <div class="game-controls">
+            <h1>Game Controls</h1>
+            <button style="margin-left: 0;" onclick="refreshGame()">
+                <i class="far fa-refresh"></i>
+            </button>
+            <button onclick="popoutGame()">
+                <i class="far fa-external-link"></i>
+            </button>
+            <button onclick="downloadGame()" id="downloadBtn">
+                <i class="far fa-download"></i>
+            </button>
+            <button style="margin-right: 0;" onclick="window.parent.location.href = '/'">
+                <i class="far fa-arrow-right-from-bracket"></i>
+            </button>
+        </div>
+        <div class="invite-widget">
+            <h1>Invite</h1>
+            <button onclick="toggleInvitePanel(this)" title="Invite friends">
+                <i class="far fa-user-plus"></i>
+            </button>
+            <div id="invite-panel" style="display:none;"></div>
+        </div>
+
+        <iframe src="/pages/minibrowse.html" frameborder="0" class="proxy-widget"></iframe>
+        <iframe src="/pages/embed.html?link=https://main.monochrome-507.pages.dev/"
+            style="left: 10px; width: 450px; height: 450px; background: var(--bg);" frameborder="0"
+            class="proxy-widget"></iframe>
+    </div>
+
+    <p id="bottom-tip" style="color: var(--text);">If a game doesn't work, try popping it out!</p>
+
+    <script src="https://cdn.jsdelivr.net/gh/luminsdk/script@latest/lumin.min.js"></script>
+    <script>
+        const gameframe = document.getElementById("gameframe");
+        const urlParams = new URLSearchParams(window.location.search);
+        const gameurl = urlParams.get("launch");
+
+        let networkDetailsPromise;
+        let luminReady;
+
+        function isLuminLaunch(raw) {
+            return typeof raw === "string" && raw.startsWith("lumin:");
+        }
+
+        function getLuminGameId(raw) {
+            return isLuminLaunch(raw) ? raw.slice("lumin:".length) : null;
+        }
+
+        async function ensureLumin() {
+            if (!window.Lumin) {
+                throw new Error("Lumin SDK is unavailable");
+            }
+
+            if (!luminReady) {
+                luminReady = window.Lumin.init({
+                    headless: true,
+                    onError: (err) => console.error("Lumin error:", err)
+                });
+            }
+
+            return luminReady;
+        }
+
+        function sanitizeGameUrl(raw) {
+            if (!raw) return null;
+
+            let url;
+            const decoded = decodeURIComponent(raw);
+
+            try {
+                url = new URL(decoded, window.location.origin);
+            } catch {
+                return null;
+            }
+
+            if (url.protocol !== "https:" && url.protocol !== "http:") {
+                return null;
+            }
+
+            return url.href;
+        }
+
+        async function getNetworkDetails() {
+            if (!networkDetailsPromise) {
+                networkDetailsPromise = fetch("/api/system/network", {
+                    headers: {
+                        Accept: "application/json"
+                    }
+                })
+                    .then((r) => {
+                        if (!r.ok) {
+                            throw new Error("Failed to load network details");
+                        }
+                        return r.json();
+                    })
+                    .catch(() => null);
+            }
+
+            return networkDetailsPromise;
+        }
+
+        async function getNowggPrefix() {
+            const details = await getNetworkDetails();
+            return details?.nowggPrefix ?? null;
+        }
+
+        async function resolveLaunchUrl(raw) {
+            if (isLuminLaunch(raw)) {
+                await ensureLumin();
+                const gameId = getLuminGameId(raw);
+                if (!gameId) return null;
+
+                const result = await window.Lumin.getGameUrl(gameId);
+                return result?.url ?? null;
+            }
+
+            const safe = sanitizeGameUrl(raw);
+            if (!safe) return null;
+
+            const url = new URL(safe);
+
+            if (url.pathname === "/pages/embed.html") {
+                const embedded = url.searchParams.get("link");
+                if (!embedded) return url.href;
+
+                let embeddedUrl;
+                try {
+                    embeddedUrl = new URL(embedded);
+                } catch {
+                    return url.href;
+                }
+
+                if (embeddedUrl.hostname === "75.ip.nowgg.fun") {
+                    const prefix = await getNowggPrefix();
+                    if (prefix) {
+                        embeddedUrl.hostname = `${prefix}.ip.nowgg.fun`;
+                        url.searchParams.set("link", embeddedUrl.href);
+                    }
+                }
+            } else if (url.hostname === "75.ip.nowgg.fun") {
+                const prefix = await getNowggPrefix();
+                if (prefix) {
+                    url.hostname = `${prefix}.ip.nowgg.fun`;
+                }
+            }
+
+            return url.href;
+        }
+
+        function attachOverlayShortcut() {
+            try {
+                const doc = gameframe.contentDocument;
+                if (!doc?.head) return;
+
+                const script = doc.createElement("script");
+                script.textContent = `
+                    window.addEventListener("keydown", (e) => {
+                        if (e.altKey && e.code === "KeyG") {
+                            parent.postMessage({ type: "alt-g" }, "*");
+                        }
+                    });
+                `;
+                doc.head.appendChild(script);
+            } catch {
+                // Cross-origin games cannot be modified directly.
+            }
+        }
+
+        async function loadGame() {
+            if (!gameurl) return;
+
+            try {
+                const resolved = await resolveLaunchUrl(gameurl);
+                if (resolved) {
+                    gameframe.onload = attachOverlayShortcut;
+                    gameframe.src = resolved;
+                    gameframe.focus();
+                    return;
+                }
+            } catch (error) {
+                console.error("Failed to resolve game launch URL", error);
+            }
+
+            if (!gameframe.src || gameframe.src !== "/pages/unsafegame.html") {
+                gameframe.src = "/pages/unsafegame.html";
+            }
+        }
+
+        if (gameurl) {
+            loadGame();
+        }
+
+        async function refreshGame() {
+            if (gameurl) {
+                await loadGame();
+                return;
+            }
+
+            gameframe.src = gameframe.src;
+            gameframe.focus();
+        }
+
+        function fullscreenGame() {
+            const requestFullscreen =
+                gameframe.requestFullscreen ||
+                gameframe.mozRequestFullScreen ||
+                gameframe.webkitRequestFullscreen ||
+                gameframe.msRequestFullscreen;
+
+            if (requestFullscreen) {
+                requestFullscreen.call(gameframe);
+            }
+
+            gameframe.focus();
+        }
+
+        function popoutGame() {
+            window.open(gameframe.src, "_blank");
+            gameframe.focus();
+        }
+
+        const useOverlay = localStorage.getItem("cherri_useOverlay") ?? "yes";
+
+        if (useOverlay === "yes") {
+            initOverlay();
+        }
+
+        function toggleOverlay() {
+            const overlay = document.getElementById("gameOverlay");
+            overlay.classList.toggle("active");
+        }
+
+        function initOverlay() {
+            const controls = document.querySelector(".gamecontrols");
+            const overlayNotice = document.querySelector(".overlay-notice");
+            document.querySelector("#bottom-tip").style.display = "none";
+            controls.style.display = "none";
+            gameframe.style.height = "100vh";
+            gameframe.style.width = "100vw";
+            gameframe.style.border = "none";
+            gameframe.style.borderRadius = "0";
+
+            setTimeout(() => {
+                overlayNotice.style.opacity = 1;
+            }, 500);
+            setTimeout(() => {
+                overlayNotice.style.opacity = 0;
+            }, 4700);
+            setTimeout(() => {
+                overlayNotice.style.display = "none";
+            }, 5002);
+
+            window.addEventListener("message", (ev) => {
+                if (ev.data?.type === "alt-g") {
+                    toggleOverlay();
+                }
+            });
+
+            document.addEventListener("keydown", (e) => {
+                if (e.altKey && e.key.toLowerCase() === "g") {
+                    toggleOverlay();
+                }
+            });
+        }
+
+        async function getTemp() {
+            const position = await new Promise((resolve, reject) => {
+                if (!navigator.geolocation) {
+                    reject(new Error("Geolocation is unavailable"));
+                    return;
+                }
+
+                navigator.geolocation.getCurrentPosition(resolve, reject, {
+                    enableHighAccuracy: false,
+                    timeout: 5000,
+                    maximumAge: 1000 * 60 * 10
+                });
+            });
+
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`;
+            const weather = await fetch(url).then((r) => r.json());
+            return weather.current_weather.temperature;
+        }
+
+        getTemp()
+            .then((t) => {
+                document.getElementById("temperature").textContent = Math.trunc((t * 1.8) + 32) + "°F";
+            })
+            .catch(() => {
+                document.getElementById("temperature").textContent = "--°F";
+            });
+
+        function getOSTime() {
+            const now = new Date();
+            return now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+        }
+
+        function updateTime() {
+            document.getElementById("currentTime").textContent = getOSTime();
+        }
+
+        updateTime();
+        setInterval(updateTime, 60000);
+
+        let recorder;
+        let chunks = [];
+
+        async function startRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getDisplayMedia({
+                    video: {
+                        width: { ideal: 1920 },
+                        height: { ideal: 1080 },
+                        frameRate: { ideal: 60 }
+                    },
+                    audio: true
+                });
+
+                document.getElementById("stopRecording").disabled = false;
+                document.getElementById("startRecording").style.background = "var(--accent)";
+                document.getElementById("startRecording").style.pointerEvents = "none";
+
+                recorder = new MediaRecorder(stream);
+                recorder.ondataavailable = (e) => chunks.push(e.data);
+
+                recorder.onstop = async () => {
+                    const blob = new Blob(chunks, { type: "video/mp4" });
+                    chunks = [];
+                    stream.getTracks().forEach((track) => track.stop());
+
+                    try {
+                        const handle = await window.showSaveFilePicker({
+                            suggestedName: "Cherri_Game_Recording" + Date.now() + ".mp4",
+                            types: [{
+                                description: "Video Files",
+                                accept: { "video/mp4": [".mp4"] }
+                            }]
+                        });
+
+                        const writable = await handle.createWritable();
+                        await writable.write(blob);
+                        await writable.close();
+                    } catch (err) {
+                        if (err.name !== "AbortError") {
+                            console.error(err);
+                        }
+                    }
+                };
+
+                recorder.start();
+            } catch {
+            }
+        }
+
+        function stopRecording() {
+            if (!recorder) return;
+
+            recorder.stop();
+            document.getElementById("stopRecording").disabled = true;
+            document.getElementById("startRecording").style.background = "var(--bg-2)";
+            document.getElementById("startRecording").style.pointerEvents = "auto";
+        }
+
+        const sessionTime = document.getElementById("sessionTime");
+        window.addEventListener("DOMContentLoaded", () => {
+            let elapsed = 0;
+
+            function format(ms) {
+                let totalSeconds = Math.floor(ms / 1000);
+                let hours = Math.floor(totalSeconds / 3600);
+                let minutes = Math.floor((totalSeconds % 3600) / 60);
+                let seconds = totalSeconds % 60;
+
+                hours = hours < 10 ? "0" + hours : hours;
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                return `${hours}:${minutes}:${seconds}`;
+            }
+
+            setInterval(() => {
+                elapsed += 1000;
+                sessionTime.textContent = format(elapsed);
+            }, 1000);
+        });
+
+        if (!gameurl || isLuminLaunch(gameurl)) {
+            document.getElementById("downloadBtn").style.display = "none";
+        } else if (!gameurl.includes("gn-math") && !gameurl.includes("ugs")) {
+            document.getElementById("downloadBtn").style.display = "none";
+        }
+
+        function downloadGame() {
+            const src = gameframe.src;
+            const download = document.createElement("a");
+            download.href = src;
+            download.download = src.replace(`${window.location.origin}/stores/gn-math/`, "");
+            document.body.appendChild(download);
+            download.click();
+            download.remove();
+        }
+
+        document.getElementById("csslink").href = `/assets/css/colors/${localStorage.getItem("cherri_theme") ?? "default"}.css`;
+
+        function getGameName() {
+            const nameParam = new URLSearchParams(window.location.search).get("name");
+            if (nameParam) return nameParam;
+            try {
+                const u = new URL(gameurl || "", window.location.origin);
+                const host = u.hostname.replace(/^www\./, "");
+                return host || "a game";
+            } catch {
+                return "a game";
+            }
+        }
+
+        let invitePanelOpen = false;
+
+        async function toggleInvitePanel(btn) {
+            const panel = document.getElementById("invite-panel");
+            invitePanelOpen = !invitePanelOpen;
+            panel.style.display = invitePanelOpen ? "" : "none";
+            btn.querySelector("i").className = invitePanelOpen ? "far fa-xmark" : "far fa-user-plus";
+            if (invitePanelOpen) await loadInviteFriends();
+        }
+
+        async function loadInviteFriends() {
+            const panel = document.getElementById("invite-panel");
+            panel.innerHTML = `<div class="invite-empty"><i class="far fa-spinner fa-spin"></i></div>`;
+            try {
+                const res = await fetch("/api/friends", { credentials: "same-origin" });
+                const data = await res.json();
+                const friends = data.friends || [];
+                if (!friends.length) {
+                    panel.innerHTML = `<div class="invite-empty">No friends yet.</div>`;
+                    return;
+                }
+                panel.innerHTML = friends.map(f => `
+                    <div class="invite-friend-row">
+                        <img src="${escapeAttr(f.pfp || "/assets/img/fav.png")}" onerror="this.src='/assets/img/fav.png'" alt="">
+                        <span class="invite-friend-name">${escapeHtml(f.display || f.username)}</span>
+                        <button class="invite-friend-btn" onclick="sendGameInvite('${escapeAttr(f.id)}', this)">Invite</button>
+                    </div>`).join("");
+            } catch {
+                panel.innerHTML = `<div class="invite-empty">Failed to load friends.</div>`;
+            }
+        }
+
+        async function sendGameInvite(friendId, btn) {
+            btn.disabled = true;
+            btn.textContent = "Sent!";
+            try {
+                await fetch(`/api/friends/invite/${encodeURIComponent(friendId)}`, {
+                    method: "POST",
+                    credentials: "same-origin",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ gameName: getGameName(), gameUrl: window.location.href }),
+                });
+            } catch {
+                btn.textContent = "Failed";
+            }
+        }
+
+        function escapeHtml(s) { return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+        function escapeAttr(s) { return String(s).replace(/"/g,"&quot;").replace(/'/g,"&#39;"); }
+    </script>
+</body>
+
+</html>

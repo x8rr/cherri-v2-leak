@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en" class="obfuscate">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cherri | settings</title>
+    <link rel="shortcut icon" href="/assets/img/fav.png" type="image/x-icon">
+    <link rel="stylesheet" href="/assets/css/font.css?v=2">
+    <link rel="stylesheet" href="/assets/css/colors/default.css" id="csslink" id="csslink">
+    <link rel="stylesheet" href="/assets/css/index.css">
+    <link rel="stylesheet" href="/assets/css/dropdowns.css">
+    <link rel="stylesheet" href="/assets/icons/css/all-pro.css">
+</head>
+<style>
+    html {
+        scroll-behavior: smooth;
+    }
+
+    .settings-container {
+        display: flex;
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 20px;
+        gap: 40px;
+    }
+
+    .settings-sidebar {
+        width: 250px;
+        position: sticky;
+        top: 40px;
+        height: max-content;
+    }
+
+    .sidebar-title {
+        font-size: 32px;
+        color: var(--accent);
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+
+    .sidebar-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .nav-item {
+        padding: 12px 20px;
+        border-radius: 15px;
+        color: var(--text);
+        transition: 0.2s;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .nav-item:hover {
+        background: var(--bg-2);
+    }
+
+    .nav-item.active {
+        background: var(--bg-3);
+        color: var(--bright-text);
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .settings-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 60px;
+    }
+
+    .section-header {
+        font-size: 40px;
+        margin-bottom: 30px;
+        border-bottom: 1px solid var(--border-4);
+        padding-bottom: 10px;
+    }
+
+    .setting-card {
+        background: var(--bg-2);
+        border: 1px solid var(--border-4);
+        border-radius: 20px;
+        padding: 25px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .setting-info h3 {
+        margin: 0;
+        font-size: 20px;
+        color: var(--bright-text);
+    }
+
+    .setting-info p {
+        margin: 5px 0 0 0;
+        color: var(--text);
+        font-size: 14px;
+        opacity: 0.8;
+    }
+
+    .setting-options {
+        display: flex;
+        gap: 8px;
+    }
+
+    .setting-options.row {
+        flex-direction: row;
+    }
+
+    .setting-options.grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .opt-btn {
+        background: var(--bg-3);
+        border: 1px solid transparent;
+        color: var(--text);
+        padding: 10px 18px;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: 0.2s;
+        font-size: 14px;
+        white-space: nowrap;
+        display: flex;
+        width: 24.2%;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .flex-row {
+        flex-wrap: wrap;
+    }
+
+    .opt-btn:hover {
+        background: var(--bg-4);
+    }
+
+    .opt-btn.active {
+        background: var(--accent);
+        color: var(--bright-text);
+        filter: drop-shadow(0 0 10px var(--accent-glow));
+    }
+
+    @media (max-width: 900px) {
+        .settings-container {
+            flex-direction: column;
+        }
+
+        .settings-sidebar {
+            width: 100%;
+            position: relative;
+            top: 0;
+        }
+
+        .setting-card {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+
+    .button-cloak {
+        height: 20px;
+        margin-right: 5px;
+    }
+
+    input {
+        border: 1px solid var(--border-2);
+        width: 100%;
+        box-sizing: border-box;
+        color: var(--text);
+    }
+
+    ul {
+        color: var(--text) !important;
+        font-size: 14px;
+    }
+
+    ul li {
+        color: var(--text);
+    }
+
+    strong {
+        font-weight: 700;
+    }
+
+    button {
+        background: none;
+        border: 1px solid var(--border-4);
+        color: var(--text);
+        padding: 10px;
+        border-radius: 15px;
+        transition: 0.2s;
+        font-size: 17px;
+    }
+
+    button:hover {
+        background: var(--bg-3);
+    }
+
+    .theme-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
+        gap: 15px;
+        width: 100%;
+    }
+
+    .theme-card {
+        background: var(--bg-3);
+        border: 2px solid var(--border-4);
+        border-radius: 15px;
+        padding: 15px;
+        cursor: pointer;
+        transition: 0.2s;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        align-items: center;
+    }
+
+    .theme-card:hover {
+        background: var(--bg-4);
+        transform: translateY(-2px);
+    }
+
+    .theme-card.active {
+        border-color: var(--accent);
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .theme-preview {
+        width: 100%;
+        height: 50px;
+        border-radius: 10px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--border-4);
+        position: relative;
+        font-size: 19px;
+        font-weight: 700;
+    }
+
+    .preview-text {
+        font-size: 25px;
+        font-weight: 700;
+    }
+
+    .theme-name {
+        font-size: 14px;
+        font-weight: 500;
+        z-index: 1;
+        position: relative;
+    }
+
+    h4 {
+        font-size: 17px;
+        font-weight: 600;
+        color: var(--bright-text);
+        margin: 0;
+    }
+
+    .transport-btn {
+        width: 49.25%;
+        height: 100px;
+        box-sizing: border-box;
+        padding: 20px;
+        border: 1px solid var(--border-4);
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        text-align: left;
+        justify-content: center;
+    }
+
+    .transport-btn.selected {
+        background: var(--accent-glow);
+        border-color: var(--accent);
+    }
+
+    .transport-btn .title {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--bright-text);
+        filter: none;
+    }
+
+    .transport-btn .desc {
+        font-size: 13px;
+        color: var(--text);
+        font-weight: 500;
+    }
+
+    .container-disabled {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+</style>
+
+<body>
+    <div class="settings-container">
+        <aside class="settings-sidebar">
+            <h2 class="sidebar-title">Settings</h2>
+            <nav class="sidebar-nav">
+                <a href="#appearance" class="nav-item active"><i class="fa-regular fa-palette"></i> Appearance</a>
+                <a href="#cloaking" class="nav-item"><i class="fa-regular fa-ghost"></i> Privacy</a>
+                <a href="#ads" class="nav-item"><i class="fa-regular fa-ad"></i> Ads</aa>
+                    <a href="#advanced" class="nav-item"><i class="fa-regular fa-sliders"></i> Advanced</a>
+                    <a href="#information" class="nav-item"><i class="fa-regular fa-info-circle"></i> Information</a>
+            </nav>
+        </aside>
+
+        <main class="settings-content">
+            <section id="appearance" class="settings-section">
+                <h1 class="section-header">Appearance</h1>
+
+                <div class="setting-card flex-col" style="justify-content: left; align-items:flex-start;">
+                    <div class="setting-info">
+                        <h3>Theme</h3>
+                        <p>Customize the colors on the site.</p>
+                    </div>
+                    <hr
+                        style="width: 100%; border: 0; margin: 0; border-bottom: 1px solid var(--border-4); height: 0px;">
+                    <div class="theme-grid">
+                        <button class="theme-card active" onclick="setTheme('default')" data-bg="#000000"
+                            data-bg4="#1a1a1a" data-accent="#ff4da6">
+                            <div class="theme-preview">
+                                <span class="preview-text">Aa</span>
+                            </div>
+                            <span class="theme-name">Default</span>
+                        </button>
+                        <button class="theme-card active" onclick="setTheme('light')" data-bg="#ffffff"
+                            data-bg4="#e8e8e8" data-accent="#ff4da6">
+                            <div class="theme-preview">
+                                <span class="preview-text">Aa</span>
+                            </div>
+                            <span class="theme-name">Light</span>
+                        </button>
+                        <button class="theme-card" onclick="setTheme('ocean')" data-bg="#0a1628" data-bg4="#1a3354"
+                            data-accent="#00d4ff">
+                            <div class="theme-preview">
+                                <span class="preview-text">Aa</span>
+                            </div>
+                            <span class="theme-name">Ocean</span>
+                        </button>
+                        <button class="theme-card" onclick="setTheme('lavendar')" data-bg="#120a1a" data-bg4="#2d1f42"
+                            data-accent="#a855f7">
+                            <div class="theme-preview">
+                                <span class="preview-text">Aa</span>
+                            </div>
+                            <span class="theme-name">Lavendar</span>
+                        </button>
+                        <button class="theme-card" onclick="setTheme('midnight')" data-bg="#0a0a14" data-bg4="#1f1f3a"
+                            data-accent="#6b7eff">
+                            <div class="theme-preview">
+                                <span class="preview-text">Aa</span>
+                            </div>
+                            <span class="theme-name">Midnight</span>
+                        </button>
+                        <button class="theme-card" onclick="setTheme('forest')" data-bg="#0f1a0f" data-bg4="#243324"
+                            data-accent="#4eff7a">
+                            <div class="theme-preview">
+                                <span class="preview-text">Aa</span>
+                            </div>
+                            <span class="theme-name">Forest</span>
+                        </button>
+                        <button class="theme-card" onclick="setTheme('sunset')" data-bg="#1a0f0a" data-bg4="#3d2622"
+                            data-accent="#ff7b3d">
+                            <div class="theme-preview">
+                                <span class="preview-text">Aa</span>
+                            </div>
+                            <span class="theme-name">Sunset</span>
+                        </button>
+                        <button class="theme-card" onclick="setTheme('crimson')" data-bg="#1a0a0a" data-bg4="#421f1f"
+                            data-accent="#ef4444">
+                            <div class="theme-preview">
+                                <span class="preview-text">Aa</span>
+                            </div>
+                            <span class="theme-name">Crimson</span>
+                        </button>
+                        <button class="theme-card" onclick="setTheme('monochrome')" data-bg="#000000" data-bg4="#1a1a1a"
+                            data-accent="#afafaf">
+                            <div class="theme-preview">
+                                <span class="preview-text">Aa</span>
+                            </div>
+                            <span class="theme-name">Monochrome</span>
+                        </button>
+                        <button class="theme-card" onclick="setTheme('catppuccinmacchiato')" data-bg="#24273a"
+                            data-bg4="#494d64" data-accent="#f5bde6">
+                            <div class="theme-preview">
+                                <span class="preview-text">Aa</span>
+                            </div>
+                            <span class="theme-name">C.Macchiato</span>
+                        </button>
+                        <button class="theme-card" onclick="setTheme('catppuccinmocha')" data-bg="#1e1e2e"
+                            data-bg4="#45475a" data-accent="#f5c2e7">
+                            <div class="theme-preview">
+                                <span class="preview-text">Aa</span>
+                            </div>
+                            <span class="theme-name">C.Mocha</span>
+                        </button>
+                        <button class="theme-card" onclick="setTheme('catppuccinlatte')" data-bg="#eff1f5"
+                            data-bg4="#ccd0da" data-accent="#ea76cb">
+                            <div class="theme-preview">
+                                <span class="preview-text">Aa</span>
+                            </div>
+                            <span class="theme-name">C.Latte</span>
+                        </button>
+                        <button class="theme-card" onclick="setTheme('blood')" data-bg="#000000" data-bg4="#1a1a1a"
+                            data-accent="#ff0000">
+                            <div class="theme-preview">
+                                <span class="preview-text">Aa</span>
+                            </div>
+                            <span class="theme-name">Blood</span>
+                        </button>
+                        <button class="theme-card" onclick="setTheme('blossom')" data-bg="#0d080b" data-bg4="#22151d"
+                            data-accent="#e87fa8">
+                            <div class="theme-preview">
+                                <span class="preview-text">Aa</span>
+                            </div>
+                            <span class="theme-name">Blossom</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="setting-card flex-row petalswitchdiv" style="justify-content: left; position: relative;">
+                    <div class="setting-info">
+                        <h3>Falling Petals</h3>
+                        <p>The Blossom theme supports falling petals. Turn them off if you're experiencing lag or not
+                            liking the look.</p>
+                    </div>
+                    <label id="petalswitch" class="switch"
+                        style="justify-self: right; align-self: center; position: absolute; right: 3%;">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="setting-card flex-row" style="justify-content: left; position: relative;">
+                    <div class="setting-info">
+                        <h3>Game Overlay</h3>
+                        <p style="width: 80%;">The game overlay adds quick tools while playing, like a browser, the
+                            time, weather, and recording. Turn it off if games feel slower.</p>
+                    </div>
+                    <label id="overlayswitch" class="switch"
+                        style="justify-self: right; align-self: center; position: absolute; right: 3%;">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="setting-card flex-row" style="justify-content: left; position: relative;">
+                    <div class="setting-info">
+                        <h3>Chat Image Blur</h3>
+                        <p style="width: 80%;">Blurs images in chatrooms until you hover over them.</p>
+                    </div>
+                    <label id="imageblurswitch" class="switch"
+                        style="justify-self: right; align-self: center; position: absolute; right: 3%;">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </section>
+            <section id="cloaking" class="settings-section">
+                <h1 class="section-header">Cloaking and Privacy</h1>
+
+                <div class="setting-card flex-col" style="justify-content: left; align-items:flex-start;">
+                    <div class="setting-info">
+                        <h3>Tab Cloak</h3>
+                        <p>Change how your tab looks in your history, to your teachers, and more.</p>
+                    </div>
+                    <hr
+                        style="width: 100%; border: 0; margin: 0; border-bottom: 1px solid var(--border-4); height: 0px;">
+                    <div class="setting-options flex-row" style="width: 100%;">
+                        <button data-index="0" class="opt-btn cloak active" onclick="setPresetCloak('none')">
+                            None
+                        </button>
+                        <button data-index="1" class="opt-btn cloak" onclick="setPresetCloak('google')">
+                            <img src="/assets/img/cloaks/google.png" alt="" class="button-cloak">
+                            Google
+                        </button>
+                        <button data-index="2" class="opt-btn cloak" onclick="setPresetCloak('classroom')">
+                            <img src="/assets/img/cloaks/gclassroom.png" alt="" class="button-cloak">
+                            Google Classroom
+                        </button>
+                        <button data-index="3" class="opt-btn cloak" onclick="setPresetCloak('drive')">
+                            <img src="/assets/img/cloaks/gdrive.png" alt="" class="button-cloak">
+                            Google Drive
+                        </button>
+                        <button data-index="4" class="opt-btn cloak" onclick="setPresetCloak('blooket')">
+                            <img src="/assets/img/cloaks/blooket.png" alt="" class="button-cloak">
+                            Blooket
+                        </button>
+                        <button data-index="5" class="opt-btn cloak" onclick="setPresetCloak('kahoot')">
+                            <img src="/assets/img/cloaks/kahoot.png" alt="" class="button-cloak">
+                            Kahoot
+                        </button>
+                        <button data-index="6" class="opt-btn cloak" onclick="setPresetCloak('edpuzzle')">
+                            <img src="/assets/img/cloaks/edpuzzle.png" alt="" class="button-cloak">
+                            Edpuzzle
+                        </button>
+                        <button data-index="7" class="opt-btn cloak" onclick="setPresetCloak('iready')">
+                            <img src="/assets/img/cloaks/iready.png" alt="" class="button-cloak">
+                            i-Ready
+                        </button>
+                    </div>
+                    <hr
+                        style="width: 100%; border: 0; margin: 0; border-bottom: 1px solid var(--border-4); height: 0px;">
+                    <input onkeyup="localStorage.setItem('cherri_cloakTitle', this.value.trim())" id="tabtitleinput"
+                        type="text" placeholder="Enter a tab title here...">
+                    <input onkeyup="localStorage.setItem('cherri_cloakIcon', this.value.trim())" id="tabiconinput"
+                        type="text" placeholder="Enter an image URL here...">
+                </div>
+                <div class="setting-card flex-row" style="justify-content: left; position: relative;">
+                    <div class="setting-info">
+                        <h3>Auto Cloaking</h3>
+                        <p>Automatically open in about:blank</p>
+                    </div>
+                    <label id="cloakswitch" class="switch"
+                        style="justify-self: right; align-self: center; position: absolute; right: 3%;">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="setting-card flex-row" style="justify-content: left; position: relative;">
+                    <div class="setting-info">
+                        <h3>Anti Close</h3>
+                        <p>Creates a popup before every tab close, effectively preventing the tab from being closed
+                            unless confirmed.</p>
+                    </div>
+                    <label id="antiswitch" class="switch"
+                        style="justify-self: right; align-self: center; position: absolute; right: 3%;">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </section>
+            <section id="ads" class="settings-section">
+                <h1 class="section-header">Advertisements</h1>
+                <div class="setting-card flex-row" style="justify-content: left; position: relative;">
+                    <div class="setting-info">
+                        <h3>Enable Ads</h3>
+                        <p style="width: 80%;">We ask that you keep this toggle enabled. They only affect the homepage,
+                            and Cherri runs soley on ad revenue. <strong>This switch only affects popunders.</strong>
+                        </p>
+                    </div>
+                    <label id="adswitch" class="switch"
+                        style="justify-self: right; align-self: center; position: absolute; right: 3%;">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </section>
+
+            <section id="advanced" class="settings-section">
+                <h1 class="section-header">Advanced</h1>
+                <div class="setting-card flex-col" style="justify-content: left; align-items:flex-start;">
+                    <div class="setting-info">
+                        <h3>Transport</h3>
+                        <p>How content moves between your computer and the server.<br>
+                        </p>
+                    </div>
+                    <hr
+                        style="width: 100%; border: 0; margin: 0; border-bottom: 1px solid var(--border-4); height: 0px;">
+                    <div class="flex-row" style="gap: 10px;">
+                        <button class="transport-btn" onclick="setTransport('libcurl')">
+                            <span class="title">Libcurl</span>
+                            <span class="desc">While it may not be as fast as Epoxy, it's more secure and more
+                                compatible with Firefox.</span>
+                        </button>
+                        <button class="transport-btn" onclick="setTransport('epoxy')">
+                            <span class="title">Epoxy</span>
+                            <span class="desc">Highly optimized for speed while not compromising security.</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+            <section id="information" class="settings-section">
+                <h1 class="section-header">Information</h1>
+
+                <div class="setting-card flex-col" style="justify-content: left; align-items:flex-start;">
+                    <div class="setting-info">
+                        <h3>Credits</h3>
+                        <p>Thank you to everyone who helped develop Cherri!</p>
+                    </div>
+                    <div style="width: 100%;">
+                        <h3 style="margin: 0 0 7px 0; color: var(--accent);">Core Team</h3>
+                        <hr
+                            style="width: 100%; border: 0; margin: 0; margin-bottom: -10px; border-bottom: 1px solid var(--border-4); height: 0px;">
+                        <br>
+                        <div class="flex-row" style="align-items: center; position: relative;">
+                            <strong style="margin-bottom: 5px;">x8rr</strong>
+                            <p style="position: absolute; right: 0;">Owner/Frontend</p>
+                        </div>
+                        <div class="flex-row" style="align-items: center; position: relative;">
+                            <strong style="margin-bottom: 5px;">ap5z</strong>
+                            <p style="position: absolute; right: 0;">Owner/Backend</p>
+                        </div>
+                    </div>
+                    <div style="width: 100%;">
+                        <h3 style="margin: 0 0 7px 0; color: var(--accent);">Features</h3>
+                        <hr
+                            style="width: 100%; border: 0; margin: 0; margin-bottom: -10px; border-bottom: 1px solid var(--border-4); height: 0px;">
+                        <br>
+                        <div class="flex-row" style="align-items: center; position: relative;">
+                            <strong style="margin-bottom: 5px;">technonyte</strong>
+                            <p style="position: absolute; right: 0;">AI Formatting</p>
+                        </div>
+                        <div class="flex-row" style="align-items: center; position: relative;">
+                            <strong style="margin-bottom: 5px;">Lumin</strong>
+                            <p style="position: absolute; right: 0;">Game library</p>
+                        </div>
+                        <div class="flex-row" style="align-items: center; position: relative;">
+                            <strong style="margin-bottom: 5px;">GN Math</strong>
+                            <p style="position: absolute; right: 0;">Game library</p>
+                        </div>
+                        <div class="flex-row" style="align-items: center; position: relative;">
+                            <strong style="margin-bottom: 5px;">UGS</strong>
+                            <p style="position: absolute; right: 0;">Game library</p>
+                        </div>
+                        <div class="flex-row" style="align-items: center; position: relative;">
+                            <strong style="margin-bottom: 5px;">Truffled/Bog</strong>
+                            <p style="position: absolute; right: 0;">Game library</p>
+                        </div>
+                        <div class="flex-row" style="align-items: center; position: relative;">
+                            <strong style="margin-bottom: 5px;">ambr0sial</strong>
+                            <p style="position: absolute; right: 0;">Movies and TV</p>
+                        </div>
+                        <div class="flex-row" style="align-items: center; position: relative;">
+                            <strong style="margin-bottom: 5px;">Monochrome Music</strong>
+                            <p style="position: absolute; right: 0;">Music source</p>
+                        </div>
+                    </div>
+                    <div style="width: 100%;">
+                        <h3 style="margin: 0 0 7px 0; color: var(--accent);">Suggestions</h3>
+                        <hr
+                            style="width: 100%; border: 0; margin: 0; margin-bottom: -10px; border-bottom: 1px solid var(--border-4); height: 0px;">
+                        <br>
+                        <div class="flex-row" style="align-items: center; position: relative;">
+                            <strong style="margin-bottom: 5px;">goldb9ne</strong>
+                            <p style="position: absolute; right: 0;">Various suggestions</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="setting-card flex-col" style="justify-content: left; align-items:flex-start;">
+                    <div class="setting-info flex-row"
+                        style="position: relative; width: 100%; box-sizing: border-box; align-items: center;">
+                        <h3>Links</h3>
+                        <div style="position: absolute; right: -10px; gap: 10px; display: flex;">
+                            <a href="/legal/tos.html" target="_blank">
+                                <button>
+                                    <i class="fas fa-file"></i>&nbsp;
+                                    <span style="font-size: 15px;">Terms of Service</span>
+                                </button>
+                            </a>
+                            <a href="/legal/privacy.html" target="_blank">
+                                <button>
+                                    <i class="fas fa-lock"></i>&nbsp;
+                                    <span style="font-size: 15px;">Privacy Policy</span>
+                                </button>
+                            </a>
+                            <a href="https://discord.gg/hUYzETaQ9U" target="_blank">
+                                <button>
+                                    <i class="fab fa-discord"></i>&nbsp;
+                                    <span style="font-size: 15px;">Discord</span>
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="setting-card flex-col" style="justify-content: left; align-items:flex-start;">
+                    <div class="setting-info">
+                        <h3>Legal</h3>
+                        <br>
+                        <h4>DMCA</h4>
+                        <p>
+                            This website respects the digital property rights of other and complies with the DMCA
+                            Act
+                            and other copyright laws. All media assets and game files are sourced from public third
+                            party websites and platforms.
+                            <br><br>
+
+                            If you found content on this website that you would like taken down, please send an
+                            email to
+                            <strong>me@x8r.dev</strong> and fill out the following:
+                            <br>
+                        <ul>
+                            <li>Do you own the content?</li>
+                            <li>Is the content copyrighted/licensed?</li>
+                            <li>What is the name of the content?</li>
+                            <li>Where is the content located? (URLs)</li>
+                            <li>Do you have authorization to act on behalf of whoever/whatever owns this content?
+                            </li>
+                        </ul>
+                        </p>
+                        <p>
+                            Finally, please include contact information such as email or phone numbers.
+                            <br><br>
+                            We take DMCA requests seriously, and will make a strong attempt to respond and dispute
+                            as
+                            fast as possible.
+                            <br><br>
+                            If your DMCA takedown request is fake or a joke, it will be blocked and ignored.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script>
+        const themeCards = document.querySelectorAll('.theme-card');
+        const transportCards = document.querySelectorAll(".transport-btn")
+        themeCards.forEach(card => {
+            const bgColor = card.dataset.bg;
+            const bg4Color = card.dataset.bg4;
+            const accentColor = card.dataset.accent;
+
+            const preview = card.querySelector('.theme-preview');
+            const previewText = card.querySelector('.preview-text');
+
+            preview.style.background = `${bgColor}`;
+            previewText.style.color = accentColor;
+
+            card.addEventListener('click', () => {
+                themeCards.forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+            });
+        });
+        transportCards.forEach(card => {
+            card.addEventListener('click', () => {
+                transportCards.forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+            });
+        })
+
+        function setTransport(t) {
+            localStorage.setItem("cherri_transport", t)
+        }
+
+        let savedTheme = localStorage.getItem("cherri_theme") ?? "default";
+        themeCards.forEach(card => {
+            const themeName = card.querySelector('.theme-name').textContent.toLowerCase().replace(" ", "");
+            savedTheme = savedTheme.includes("catppuccin") ? savedTheme.replace("catppuccin", "c.") : savedTheme;
+            console.log(savedTheme)
+            card.classList.remove("active");
+            if (themeName === savedTheme) {
+                card.classList.add("active");
+            }
+        });
+        if (savedTheme !== "blossom") {
+            document.querySelector(".petalswitchdiv").classList.add("container-disabled")
+        }
+        const cloakbuttons = document.querySelectorAll(".opt-btn.cloak")
+        cloakbuttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const parent = btn.parentElement;
+                parent.querySelectorAll('.opt-btn.cloak').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                navItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+            });
+        });
+
+        function setTheme(theme) {
+            const csslink = document.getElementById("csslink")
+            csslink.href = `/assets/css/colors/${theme}.css`
+            localStorage.setItem("cherri_theme", theme)
+            theme === "blossom" ? document.querySelector(".petalswitchdiv").classList.remove("container-disabled") : document.querySelector(".petalswitchdiv").classList.add("container-disabled")
+        }
+
+        function setPresetCloak(cloak) {
+            let cloakTitle
+            let cloakIcon
+            let cloakIndex
+            const inputTitle = document.getElementById("tabtitleinput")
+            const inputIcon = document.getElementById("tabiconinput")
+            switch (cloak) {
+                case "none":
+                    cloakTitle = "cherri"
+                    cloakIcon = "/assets/img/fav.png"
+                    cloakIndex = 0
+                    break
+                case "google":
+                    cloakTitle = "Google"
+                    cloakIcon = "/assets/img/cloaks/google.png"
+                    cloakIndex = 1
+                    break
+                case "classroom":
+                    cloakTitle = "Home"
+                    cloakIcon = "/assets/img/cloaks/gclassroom.png"
+                    cloakIndex = 2
+                    break
+                case "drive":
+                    cloakTitle = "Home - Google Drive"
+                    cloakIcon = "/assets/img/cloaks/gdrive.png"
+                    cloakIndex = 3
+                    break
+                case "blooket":
+                    cloakTitle = "Blooket - Fun, Free, Educational Games for Everyone"
+                    cloakIcon = "/assets/img/cloaks/blooket.png"
+                    cloakIndex = 4
+                    break
+                case "kahoot":
+                    cloakTitle = "Enter Game PIN - Kahoot!"
+                    cloakIcon = "/assets/img/cloaks/kahoot.png"
+                    cloakIndex = 5
+                    break
+                case "edpuzzle":
+                    cloakTitle = "Edpuzzle"
+                    cloakIcon = "/assets/img/cloaks/edpuzzle.png"
+                    cloakIndex = 6
+                    break
+                case "iready":
+                    cloakTitle = "Choose a subject, i-Ready"
+                    cloakIcon = "/assets/img/cloaks/iready.png"
+                    cloakIndex = 7
+                    break
+            }
+            inputTitle.value = cloakTitle
+            inputIcon.value = cloakIcon
+            localStorage.setItem("cherri_cloakTitle", cloakTitle)
+            localStorage.setItem("cherri_cloakIcon", cloakIcon)
+            localStorage.setItem("cherri_cloakIndex", cloakIndex)
+        }
+
+        document.getElementById("cloakswitch").addEventListener("change", () => {
+            if (document.getElementById("cloakswitch").querySelector("input").checked) {
+                localStorage.setItem("cherri_autoCloak", "yes")
+            } else {
+                localStorage.setItem("cherri_autoCloak", "no")
+            }
+        })
+
+        document.getElementById("antiswitch").addEventListener("change", () => {
+            if (document.getElementById("antiswitch").querySelector("input").checked) {
+                localStorage.setItem("cherri_antiClose", "yes")
+            } else {
+                localStorage.setItem("cherri_antiClose", "no")
+            }
+        })
+
+        document.getElementById("overlayswitch").addEventListener("change", () => {
+            if (document.getElementById("overlayswitch").querySelector("input").checked) {
+                localStorage.setItem("cherri_useOverlay", "yes")
+            } else {
+                localStorage.setItem("cherri_useOverlay", "no")
+            }
+        })
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.5
+        };
+
+        const observerCallback = (entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+
+                    navItems.forEach(item => {
+                        item.classList.remove('active');
+                        if (item.getAttribute('href') === `#${id}`) {
+                            item.classList.add('active');
+                        }
+                    });
+                }
+            });
+        };
+
+        const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+        document.querySelectorAll('section.settings-section').forEach(section => {
+            observer.observe(section);
+        });
+
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                navItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+            });
+        });
+
+        document.getElementById("adswitch").addEventListener("change", () => {
+            if (document.getElementById("adswitch").querySelector("input").checked) {
+                localStorage.setItem("cherri_enableAds", "yes")
+            } else {
+                localStorage.setItem("cherri_enableAds", "no")
+            }
+        })
+        document.getElementById("imageblurswitch").addEventListener("change", () => {
+            if (document.getElementById("imageblurswitch").querySelector("input").checked) {
+                localStorage.setItem("cherri_imageBlur", "yes")
+            } else {
+                localStorage.setItem("cherri_imageBlur", "no")
+            }
+        })
+
+        document.getElementById("petalswitch").addEventListener("change", () => {
+            if (document.getElementById("petalswitch").querySelector("input").checked) {
+                localStorage.setItem("cherri_usePetals", "yes")
+                const container = window.top.document.createElement("div")
+                container.id = "falling-petals"
+                window.top.document.body.appendChild(container)
+                const script = window.top.document.createElement("script")
+                script.src = "/assets/js/cherri.petals.js"
+                script.id = "petalscript"
+                window.top.document.body.appendChild(script)
+            } else {
+                localStorage.setItem("cherri_usePetals", "no")
+                window.top.document.getElementById("falling-petals").remove()
+                window.top.document.getElementById("petalscript").remove()
+            }
+        })
+
+    </script>
+    <script>
+        const inputTitle = document.getElementById("tabtitleinput")
+        const inputIcon = document.getElementById("tabiconinput")
+        document.getElementById("csslink").href = `/assets/css/colors/${localStorage.getItem("cherri_theme") ?? "default"}.css`
+        themeCards.forEach(card => {
+            const accentColor = card.dataset.accent;
+            const bgColor = card.dataset.bg;
+            card.addEventListener('click', () => {
+                themeCards.forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+            });
+        });
+        transportCards.forEach(card => {
+            const title = card.querySelector("span.title")
+            if ((localStorage.getItem("cherri_transport") ?? "libcurl") === title.textContent.toLowerCase()) {
+                card.classList.add("selected")
+            }
+        })
+        const savedIndex = localStorage.getItem("cherri_cloakIndex") ?? "0"
+        document.querySelectorAll(".cloak").forEach(btn => {
+            btn.classList.remove("active")
+            if (btn.dataset.index === savedIndex) {
+                btn.classList.add("active")
+            }
+        })
+        inputTitle.value = localStorage.getItem("cherri_cloakTitle") ?? "cherri"
+        inputIcon.value = localStorage.getItem("cherri_cloakIcon") ?? "/assets/img/fav.png"
+        if ((localStorage.getItem("cherri_usePetals") ?? "yes") === "yes") {
+            document.getElementById("petalswitch").querySelector("input").checked = true
+        } else {
+            document.getElementById("petalswitch").querySelector("input").checked = false
+        }
+
+        if ((localStorage.getItem("cherri_enableAds") ?? "yes") === "yes") {
+            document.getElementById("adswitch").querySelector("input").checked = true
+        } else {
+            document.getElementById("adswitch").querySelector("input").checked = false
+        }
+
+        if ((localStorage.getItem("cherri_antiClose") ?? "no") === "yes") {
+            document.getElementById("antiswitch").querySelector("input").checked = true
+        } else {
+            document.getElementById("antiswitch").querySelector("input").checked = false
+        }
+
+        if ((localStorage.getItem("cherri_useOverlay") ?? "yes") === "yes") {
+            document.getElementById("overlayswitch").querySelector("input").checked = true
+        } else {
+            document.getElementById("overlayswitch").querySelector("input").checked = false
+        }
+
+        if ((localStorage.getItem("cherri_autoCloak") ?? "yes") === "yes") {
+            document.getElementById("cloakswitch").querySelector("input").checked = true
+        } else {
+            document.getElementById("cloakswitch").querySelector("input").checked = false
+        }
+
+        if ((localStorage.getItem("cherri_imageBlur") ?? "yes") === "yes") {
+            document.getElementById("imageblurswitch").querySelector("input").checked = true
+        } else {
+            document.getElementById("imageblurswitch").querySelector("input").checked = false
+        }
+    </script>
+    <script src="/assets/js/cherri.dropdowns.js"></script>
+    <script src="/assets/js/cherri.ads.js"></script>
+
+</body>
+
+</html>

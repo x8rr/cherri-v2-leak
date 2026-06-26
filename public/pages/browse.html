@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Sail - Scramjet</title>
+		<script src="/baremux/index.js"></script>
+		<script src="/scram/scramjet.all.js"></script>
+		<link
+			rel="stylesheet"
+			href="/assets/css/colors/default.css"
+			id="csslink"
+		/>
+		<link rel="stylesheet" href="/assets/css/font.css?v=2" />
+		<script src="/assets/js/cherri.ui.js?v=20260619a"></script>
+		<link rel="stylesheet" href="/assets/icons/css/all-pro.css" />
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/eruda/3.4.3/eruda.min.js"></script>
+		<script>
+			navigator.serviceWorker.register("/sw.js", { scope: "/scramjet/" });
+		</script>
+	</head>
+
+	<body class="obfuscate">
+		<style>
+			:root {
+				--browser-controls-height: 98px;
+				--browser-bookmarks-height: 38px;
+				--browser-toolbar-height: 40px;
+				--browser-button-size: 40px;
+				--browser-tab-height: 40px;
+			}
+
+			html {
+				z-index: 111;
+			}
+
+			iframe.viewframe,
+			iframe.browser-frame {
+				height: calc(
+					100vh - var(--browser-controls-height) -
+						var(--browser-bookmarks-height) - 15px
+				);
+				width: calc(100vw - 10px);
+				background: var(--bg) !important;
+				position: absolute;
+				left: calc(50% - 1px);
+				transform: translateX(-50%);
+				bottom: 7.5px;
+				border: none;
+				pointer-events: none;
+				opacity: 0;
+				border-radius: 20px;
+				z-index: 2;
+			}
+
+			body.bookmarks-collapsed {
+				--browser-bookmarks-height: 0px;
+			}
+
+			iframe.active {
+				opacity: 1;
+				pointer-events: all;
+				background: var(--bg);
+			}
+
+			.controls {
+				height: calc(
+					var(--browser-controls-height) + var(--browser-bookmarks-height)
+				);
+				background: var(--bg);
+				width: 100vw;
+				position: fixed;
+				left: 0;
+				top: 0;
+				padding: 5px;
+				box-sizing: border-box;
+				transition: height 0.2s ease;
+			}
+
+			.tabs {
+				position: absolute;
+				left: 0;
+				top: 2.5px;
+				padding: 4px 10px;
+				width: 100%;
+				height: 44px;
+				display: flex;
+				gap: 5px;
+			}
+
+			.tab {
+				background: var(--bg-2);
+				width: 200px;
+				height: var(--browser-tab-height);
+				border-radius: 16px;
+				padding: 6px 10px;
+				box-sizing: border-box;
+				position: relative;
+				color: white;
+				display: flex;
+				align-items: center;
+				overflow: hidden;
+				white-space: nowrap;
+				cursor: default;
+				transition: 0.2s;
+			}
+
+			.closetab {
+				position: absolute;
+				right: 12px;
+				cursor: pointer;
+				font-size: 13px;
+			}
+
+			.tab.active {
+				background: var(--bg-3);
+			}
+
+			.tab:hover {
+				background: var(--bg-3);
+			}
+
+			.tab span {
+				font-weight: 500;
+				width: max-content;
+				text-wrap: unset;
+				overflow: hidden;
+				width: 100%;
+				mask-image: linear-gradient(to right, black 60%, transparent 85%);
+			}
+
+			.tab img {
+				width: 20px;
+				height: 20px;
+				margin-right: 7px;
+			}
+
+			.toolbar {
+				position: absolute;
+				top: 52px;
+				left: -5px;
+				justify-items: center;
+				justify-content: center;
+				box-sizing: border-box;
+				height: var(--browser-toolbar-height);
+				display: flex;
+				width: 100%;
+				gap: 8px;
+				padding: 0 6px;
+			}
+
+			#bar {
+				flex: 0.97;
+				box-sizing: border-box;
+				border-radius: 16px;
+				border: none;
+				background: var(--bg-2);
+				padding: 8px 16px;
+				outline: none;
+				color: white;
+				font-size: 15px;
+				transition: 0.2s;
+				height: var(--browser-toolbar-height);
+			}
+
+			#bar:focus {
+				background: var(--bg-3);
+			}
+
+			.toolbar button {
+				width: var(--browser-button-size);
+				height: var(--browser-button-size);
+				border-radius: 16px;
+				border: none;
+				background: var(--bg-2);
+				color: white;
+				transition: 0.2s;
+				cursor: pointer;
+				font-size: 15px;
+				flex-shrink: 0;
+			}
+
+			.toolbar button:hover {
+				background: var(--bg-3);
+			}
+
+			#newtab {
+				width: var(--browser-button-size);
+				height: var(--browser-button-size);
+				border-radius: 16px;
+				border: none;
+				background: var(--bg-2);
+				color: white;
+				transition: 0.2s;
+				cursor: default;
+				font-size: 15px;
+			}
+
+			#newtab:hover {
+				background: var(--bg-3);
+			}
+
+			.bookmarks {
+				box-sizing: border-box;
+				display: flex;
+				flex-direction: row;
+				flex-wrap: nowrap;
+				width: 100%;
+				height: var(--browser-bookmarks-height);
+				padding: 0 6px;
+				position: absolute;
+				top: 94px;
+				gap: 5px;
+				overflow: hidden;
+				opacity: 1;
+				transition:
+					height 0.2s ease,
+					opacity 0.2s ease,
+					padding 0.2s ease;
+			}
+
+			body.bookmarks-collapsed .bookmarks {
+				padding-top: 0;
+				padding-bottom: 0;
+				opacity: 0;
+				pointer-events: none;
+			}
+
+			.bookmark {
+				border-radius: 100px;
+				width: auto;
+				height: 100%;
+				padding: 2px 2px;
+				width: 38px;
+				height: 38px;
+				box-sizing: border-box;
+				font-size: 13px;
+				background: var(--bg-2);
+				display: flex;
+				align-items: center;
+				gap: 5px;
+				cursor: pointer;
+				transition: 0.2s;
+				justify-content: center;
+			}
+
+			.bookmark:has(span) {
+				border-radius: 100px;
+				width: auto;
+				height: 100%;
+				padding: 2px 11px;
+				height: 38px;
+				box-sizing: border-box;
+				font-size: 13px;
+				background: var(--bg-2);
+				display: flex;
+				align-items: center;
+				gap: 5px;
+				cursor: pointer;
+				transition: 0.2s;
+				justify-content: center;
+			}
+
+			.bookmark:hover {
+				background: var(--bg-3);
+			}
+
+			.bookmark img {
+				height: 18px;
+				width: 18px;
+			}
+
+			.bookmark span {
+				color: white;
+				font-weight: 500;
+			}
+
+			#toggle-bookmarks.collapsed i {
+				transform: rotate(180deg);
+			}
+
+			#toggle-bookmarks i {
+				transition: transform 0.2s ease;
+			}
+		</style>
+
+		<div class="controls">
+			<div class="tabs">
+				<button id="newtab" onclick="newTab()">
+					<i class="far fa-plus"></i>
+				</button>
+			</div>
+			<div class="toolbar">
+				<button onclick="back()">
+					<i class="far fa-arrow-left"></i>
+				</button>
+				<button onclick="forward()">
+					<i class="far fa-arrow-right"></i>
+				</button>
+				<button onclick="refresh()">
+					<i class="far fa-rotate"></i>
+				</button>
+				<input
+					class="obfuscate"
+					type="text"
+					placeholder="Search for something or enter a URL here..."
+					id="bar"
+				/>
+				<button onclick="popout()">
+					<i class="far fa-external-link"></i>
+				</button>
+				<button onclick="fullscreen()">
+					<i class="far fa-expand"></i>
+				</button>
+				<button onclick="doEruda()">
+					<i class="far fa-square-code"></i>
+				</button>
+				<button id="toggle-bookmarks" title="Toggle bookmarks bar">
+					<i class="far fa-chevron-up"></i>
+				</button>
+			</div>
+			<div class="bookmarks" style="margin-top: 2px;">
+				<div class="bookmark" onclick="BookmarkManager.addBookmark()">
+					<i class="fas fa-plus" style="color: white"></i>
+					<span>New Bookmark</span>
+				</div>
+			</div>
+		</div>
+		<div id="browserframecontainer"></div>
+		<script src="/assets/js/cherri.data.js"></script>
+		<script src="/assets/js/cherri.browse.js"></script>
+		<script>
+			const params = new URLSearchParams(window.location.search);
+			if (params.has("url")) {
+				(async function () {
+					await connection.setTransport("/libcurl/index.mjs", [
+						{
+							websocket:
+								`${window.location.protocol === "https:" ? "wss://" : "ws://"}${window.location.host}/socket/`
+						},
+					]);
+					nav(params.get("url"));
+				})();
+			}
+		</script>
+		<script>
+			document.getElementById("csslink").href =
+				`/assets/css/colors/${localStorage.getItem("cherri_theme") ?? "default"}.css`;
+		</script>
+		<script>
+			function doEruda() {
+				const frame = document.querySelector(
+					`.viewframe[data-frame-id="${activeTab}"]`,
+				);
+				const frameWindow = frame.contentWindow;
+				const frameDocument = frame.contentDocument || frameWindow.document;
+				const script = frameDocument.createElement("script");
+				script.src = "https://cdn.jsdelivr.net/npm/eruda";
+				script.onload = () => {
+					frameWindow.eruda.init();
+				};
+				frameDocument.head.appendChild(script);
+			}
+		</script>
+
+		<script src="/assets/js/cherri.ads.js"></script>
+		
+	</body>
+</html>

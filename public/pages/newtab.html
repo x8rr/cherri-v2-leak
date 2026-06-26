@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>NEW TAB CHERRI LOLOLOL</title>
+		<link rel="stylesheet" href="/assets/css/font.css?v=2" />
+		<link
+			rel="stylesheet"
+			href="/assets/css/colors/default.css"
+			id="csslink"
+		/>
+		<link rel="stylesheet" href="/assets/css/index.css" />
+		<link rel="stylesheet" href="/assets/icons/css/all-pro.css" />
+	</head>
+	<body class="obfuscate">
+		<center>
+			<div
+				style="
+					left: 50%;
+					top: 50%;
+					transform: translate(-50%, -50%);
+					position: fixed;
+				"
+			>
+				<h1 class="hometitle">Cherri</h1>
+				<p id="splash"></p>
+				<div class="inputcontainer">
+					<i class="far fa-search"></i>
+					<input
+						type="text"
+						id="homesearchlol"
+						placeholder="Search for anything!"
+					/>
+				</div>
+				<br />
+				<div class="flex-row" style="gap: 10px">
+					<a onclick="shortcut('https://play.geforcenow.com/mall/')">
+						<div class="shortcut-home">
+							<img src="/assets/img/shortcuts/nvidia.png" alt="" />
+							<h3>GeForce NOW</h3>
+						</div>
+					</a>
+					<a onclick="shortcut('https://invidious.nerdvpn.de/')">
+						<div class="shortcut-home">
+							<img src="/assets/img/shortcuts/youtube.png" alt="" />
+							<h3>Youtube</h3>
+						</div>
+					</a>
+					<a onclick="shortcut('https://github.com')">
+						<div class="shortcut-home">
+							<img src="/assets/img/shortcuts/github.png" alt="" />
+							<h3>Github</h3>
+						</div>
+					</a>
+					<a onclick="shortcut('https://75.ip.nowgg.fun')">
+						<div class="shortcut-home">
+							<img src="/assets/img/shortcuts/nowgg.png" alt="" />
+							<h3>nowgg.fun</h3>
+						</div>
+					</a>
+					<a onclick="shortcut('https://google.com')">
+						<div class="shortcut-home">
+							<img src="/assets/img/cloaks/google.png" alt="" />
+							<h3>Google</h3>
+						</div>
+					</a>
+				</div>
+			</div>
+		</center>
+		<script>
+			document.getElementById("csslink").href =
+				`/assets/css/colors/${localStorage.getItem("cherri_theme") ?? "default"}.css`;
+		</script>
+		<script>
+			document
+				.getElementById("homesearchlol")
+				.addEventListener("keydown", (e) => {
+					if (e.key === "Enter") {
+						let url = document
+							.getElementById("homesearchlol")
+							.value.trim();
+						if (!url.includes(".")) {
+							url =
+								"https://duckduckgo.com/?q=" + encodeURIComponent(url);
+						} else if (
+							!url.includes("https://") &&
+							!url.includes("http://")
+						) {
+							url = "https://" + url;
+						}
+						window.location.href = "/scramjet/" + encodeURIComponent(url);
+					}
+				});
+
+			function shortcut(url) {
+				window.location.href = "/scramjet/" + encodeURIComponent(url);
+			}
+		</script>
+		
+	<script src="/assets/js/cherri.ads.js"></script>
+	
+</body>
+</html>

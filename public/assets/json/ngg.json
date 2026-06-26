@@ -1,0 +1,57 @@
+[
+	{
+		"name": "Roblox",
+		"img": "/assets/img/g/ngg/roblox.png",
+		"url": "/pages/embed.html?link=https://nowgg.fun/apps/a/19900/b.html&type=uv"
+	},
+	{
+		"name": "Stumble Guys",
+		"img": "/assets/img/g/ngg/stumble.png",
+		"url": "/pages/embed.html?link=https://nowgg.fun/apps/a/10011/b.html&type=uv"
+	},
+	{
+		"name": "Fortnite Mobile",
+		"img": "/assets/img/g/ngg/f.png",
+		"url": "/pages/embed.html?link=https://nowgg.fun/apps/a/19900/b.html&type=uv"
+	},
+	{
+		"name": "COD Mobile",
+		"img": "/assets/img/g/ngg/cod.png",
+		"url": "/pages/embed.html?link=https://nowgg.fun/apps/a/19900/b.html&type=uv"
+	},
+	{
+		"name": "Melon Sandbox",
+		"img": "/assets/img/g/ngg/ms.png",
+		"url": "/pages/embed.html?link=https://nowgg.fun/apps/a/19900/b.html&type=uv"
+	},
+	{
+		"name": "Apptoid",
+		"img": "/assets/img/g/ngg/ap.png",
+		"url": "/pages/embed.html?link=https://nowgg.fun/apps/a/19900/b.html&type=uv"
+	},
+	{
+		"name": "Android",
+		"img": "/assets/img/g/ngg/a.png",
+		"url": "/pages/embed.html?link=https://nowgg.fun/apps/a/19900/b.html&type=uv"
+	},
+	{
+		"name": "Cookie Run Kingdom",
+		"img": "/assets/img/g/ngg/crk.png",
+		"url": "/pages/embed.html?link=https://nowgg.fun/apps/a/19900/b.html&type=uv"
+	},
+	{
+		"name": "Geometry Dash Lite",
+		"img": "/assets/img/g/ngg/gd.png",
+		"url": "/pages/embed.html?link=https://nowgg.fun/apps/a/19900/b.html&type=uv"
+	},
+	{
+		"name": "Rocket League Sideswipe",
+		"img": "/assets/img/g/ngg/rl.png",
+		"url": "/pages/embed.html?link=https://nowgg.fun/apps/a/19900/b.html&type=uv"
+	},
+	{
+		"name": "Minecraft Trial",
+		"img": "/assets/img/g/ngg/mc.png",
+		"url": "/pages/embed.html?link=https://nowgg.fun/apps/a/19900/b.html&type=uv"
+	}
+]

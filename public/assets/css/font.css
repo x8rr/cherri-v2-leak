@@ -1,0 +1,358 @@
+@font-face {
+    font-family: space grotesk;
+    src: url(../font/spacegrotesk.ttf);
+}
+
+@font-face {
+    font-family: figtree;
+    src: url(../font/figtree-obfuscated.ttf);
+    font-display: block;
+}
+
+@font-face {
+    font-family: lexend;
+    src: url(../font/lexend.ttf);
+}
+
+@font-face {
+    font-family: lexend deca;
+    src: url(../font/lexenddeca.ttf);
+}
+
+@font-face {
+    font-family: inter;
+    src: url(../font/inter.ttf);
+}
+
+@font-face {
+    font-family: merriweather;
+    src: url(../font/merriweather.ttf);
+}
+
+@font-face {
+    font-family: manrope;
+    src: url(../font/manrope.ttf);
+}
+
+@font-face {
+    font-family: 'kh teka';
+    src: url('../font/khteka/KHTekaSite-Light-1.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'kh teka';
+    src: url('../font/khteka/KHTekaSite-LightItalic-1.woff2') format('woff2');
+    font-weight: 300;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'kh teka';
+    src: url('../font/khteka/KHTekaSite-Regular-1.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'kh teka';
+    src: url('../font/khteka/KHTekaSite-RegularItalic-1.woff2') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'kh teka';
+    src: url('../font/khteka/KHTekaSite-Medium-1.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'kh teka';
+    src: url('../font/khteka/KHTekaSite-MediumItalic-1.woff2') format('woff2');
+    font-weight: 500;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'kh teka';
+    src: url('../font/khteka/KHTekaSite-Bold-1.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'kh teka';
+    src: url('../font/khteka/KHTekaSite-BoldItalic-1.woff2') format('woff2');
+    font-weight: 700;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'kh teka';
+    src: url('../font/khteka/KHTekaSite-Black-1.woff2') format('woff2');
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'kh teka';
+    src: url('../font/khteka/KHTekaSite-BlackItalic-1.woff2') format('woff2');
+    font-weight: 900;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'sf pro display';
+    src: url('../font/sfpro/SFPRODISPLAYULTRALIGHTITALIC.OTF') format('opentype');
+    font-weight: 100;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'sf pro display';
+    src: url('../font/sfpro/SFPRODISPLAYTHINITALIC.OTF') format('opentype');
+    font-weight: 200;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'sf pro display';
+    src: url('../font/sfpro/SFPRODISPLAYLIGHTITALIC.OTF') format('opentype');
+    font-weight: 300;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'sf pro display';
+    src: url('../font/sfpro/SFPRODISPLAYREGULAR.OTF') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'sf pro display';
+    src: url('../font/sfpro/SFPRODISPLAYMEDIUM.OTF') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'sf pro display';
+    src: url('../font/sfpro/SFPRODISPLAYSEMIBOLDITALIC.OTF') format('opentype');
+    font-weight: 600;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'sf pro display';
+    src: url('../font/sfpro/SFPRODISPLAYBOLD.OTF') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'sf pro display';
+    src: url('../font/sfpro/SFPRODISPLAYHEAVYITALIC.OTF') format('opentype');
+    font-weight: 800;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'sf pro display';
+    src: url('../font/sfpro/SFPRODISPLAYBLACKITALIC.OTF') format('opentype');
+    font-weight: 900;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'axiforma';
+    src: url('../font/axiforma/Axiforma Thin.otf') format('opentype');
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'axiforma';
+    src: url('../font/axiforma/Axiforma Light.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'axiforma';
+    src: url('../font/axiforma/Axiforma Book.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'axiforma';
+    src: url('../font/axiforma/Axiforma Italic.otf') format('opentype');
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'axiforma';
+    src: url('../font/axiforma/Axiforma Medium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'axiforma';
+    src: url('../font/axiforma/Axiforma SemiBold.otf') format('opentype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'axiforma';
+    src: url('../font/axiforma/Axiforma Bold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'axiforma';
+    src: url('../font/axiforma/Axiforma Heavy.otf') format('opentype');
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'axiforma';
+    src: url('../font/axiforma/Axiforma Black.otf') format('opentype');
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'nvidia sans';
+    src: url(../font/nvidia/NVIDIA\ Sans\ Light.ttf);
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: 'nvidia sans';
+    src: url(../font/nvidia/NVIDIA\ Sans\ Regular.ttf);
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'nvidia sans';
+    src: url(../font/nvidia/NVIDIA\ Sans\ Medium.ttf);
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: 'nvidia sans';
+    src: url(../font/nvidia/NVIDIA\ Sans\ Bold.ttf);
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: sora;
+    src: url(../font/sora.ttf);
+}
+
+@font-face {
+    font-family: pjs;
+    src: url(../font/pjs.ttf);
+}
+
+@font-face {
+    font-family: outfit;
+    src: url(../font/outfit.ttf);
+}
+
+@font-face {
+    font-family: run;
+    src: url(../font/run.ttf);
+}
+
+@font-face {
+    font-family: 'host grotesk';
+    src: url(../font/hostgrotesk/normal.ttf);
+}
+
+@font-face {
+    font-family: 'host grotesk';
+    src: url(../font/hostgrotesk/italic.ttf);
+    font-style: italic;
+}
+
+@font-face {
+    font-family: satoshi;
+    src: url(../font/satoshi/Satoshi-Light.otf);
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: satoshi;
+    src: url(../font/satoshi/Satoshi-Regular.otf);
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: satoshi;
+    src: url(../font/satoshi/Satoshi-Medium.otf);
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: satoshi;
+    src: url(../font/satoshi/Satoshi-Bold.otf);
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: satoshi;
+    src: url(../font/satoshi/Satoshi-ExtraBold.otf);
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: satoshi;
+    src: url(../font/satoshi/Satoshi-Black.otf);
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: gsans;
+    src: url(../font/gsans/normal.ttf);
+}
+
+@font-face {
+    font-family: gsans;
+    src: url(../font/gsans/italic.ttf);
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'figtree normal';
+    src: url(../font/figtree.ttf);
+}
+
+* {
+    font-family: 'figtree normal';
+    font-weight: 500;
+}
+
+h1,
+h2,
+h3 {
+    font-weight: 600;
+}
+
+span,
+p {
+    font-weight: 400;
+}

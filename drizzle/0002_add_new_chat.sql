@@ -1,0 +1,2 @@
+ALTER TABLE messages ADD COLUMN room TEXT;
+ALTER TABLE messages ADD COLUMN to_user_id TEXT;
