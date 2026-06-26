@@ -1,0 +1,14 @@
+.vercel
+node_modules/
+bun.lockb
+.env
+logs/
+*.log
+data/
+uploads/
+public/uploads/
+*.sqlite-wal
+*.sqlite-shm
+obfuscate.py
+.DS_Store
+migration/exports/

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cherri | Appeal Ban</title>
+    <link rel="shortcut icon" href="/assets/img/fav.png" type="image/x-icon">
+    <link rel="stylesheet" href="/assets/css/font.css?v=2">
+    <link rel="stylesheet" href="/assets/css/colors/default.css" id="csslink">
+    <link rel="stylesheet" href="/assets/css/index.css">
+    <link rel="stylesheet" href="/assets/icons/css/all-pro.css">
+    <style>
+        .page-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background: var(--bg);
+        }
+
+        .appeal-card {
+            width: 100%;
+            max-width: 700px;
+            padding: 28px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            height: auto;
+        }
+
+        .rift-input,
+        textarea.rift-input {
+            background: var(--bg-3);
+            border: 1px solid var(--border-4);
+            border-radius: 15px;
+            padding: 12px 15px;
+            width: 100%;
+            box-sizing: border-box;
+            color: var(--text);
+            font-family: inherit;
+            transition: 0.2s;
+        }
+
+        .rift-input:focus,
+        textarea.rift-input:focus {
+            background: var(--bg-4);
+            border-color: var(--accent);
+            outline: none;
+        }
+
+        textarea.rift-input {
+            min-height: 220px;
+            resize: none;
+        }
+
+        .appeal-footer {
+            margin: 0;
+            font-size: 13px;
+            color: var(--text-2);
+        }
+
+        .btn-pink-main {
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            filter: drop-shadow(0 0 10px var(--accent-glow));
+            transition: 0.2s;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <div class="bento-card appeal-card">
+            <h1 style="margin-top:0;">Ban Appeal</h1>
+            <p style="margin-bottom:24px; color:var(--text-2);">If your IP has been banned and you believe it was
+                unfair, submit an appeal below. Admins can review and lift bans from the appeal dashboard.</p>
+            <div style="display:flex; flex-direction:column; gap:16px;">
+                <label class="setting-label">Appeal Message</label>
+                <textarea id="appeal-message" class="rift-input" rows="8"
+                    placeholder="Explain your situation clearly. Include any relevant context or why the ban should be reviewed."></textarea>
+                <button id="appeal-submit" class="btn-pink-main" style="width:fit-content;">Submit Appeal</button>
+                <p id="appeal-feedback" style="margin:0; color:var(--text-2);"></p>
+                <p class="appeal-footer">This appeal is public and logged for review. If your IP ban is lifted, you will
+                    be able to reconnect.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("csslink").href = `/assets/css/colors/${localStorage.getItem("cherri_theme") ?? "default"}.css`;
+        const feedback = document.getElementById("appeal-feedback");
+        document.getElementById("appeal-submit").addEventListener("click", async () => {
+            feedback.style.color = "var(--text-2)";
+            feedback.textContent = "Submitting appeal...";
+            const message = document.getElementById("appeal-message").value.trim();
+            if (!message) {
+                feedback.style.color = "tomato";
+                feedback.textContent = "Please provide a message for your appeal.";
+                return;
+            }
+            try {
+                const response = await fetch("/api/appeals", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ message }),
+                });
+                const data = await response.json().catch(() => null);
+                if (!response.ok) {
+                    throw new Error(data?.error || "Unable to submit appeal.");
+                }
+                feedback.style.color = "limegreen";
+                feedback.textContent = "Appeal submitted. Admins will review it shortly.";
+                document.getElementById("appeal-message").value = "";
+            } catch (error) {
+                feedback.style.color = "tomato";
+                feedback.textContent = error.message || "Failed to submit appeal.";
+            }
+        });
+    </script>
+</body>
+
+</html>

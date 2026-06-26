@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>breeze | watch</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.10.3/cdn.min.js" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="preconnect" href="https://fdn.fontcdn.ir">
+    <link rel="stylesheet" href="/assets/css/font.css?v=2">
+    <link rel="preconnect" href="https://v1.fontapi.ir">
+    <link href="https://v1.fontapi.ir/css/SFProDisplay" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/icons/css/all-pro.css">
+    <link rel="shortcut icon" href="/assets/fav.png" type="image/x-icon">
+    <link rel="stylesheet" href="/assets/css/colors/default.css" id="csslink" id="csslink">
+    <link rel="stylesheet" href="/assets/css/dropdowns.css">
+</head>
+
+<style>
+    button {
+        font-family: 'figtree normal' !important;
+    }
+
+    body,
+    html {
+        background: none;
+    }
+
+    input {
+        background: var(--bg-2) !important;
+        font-size: 14px !important;
+        font-family: 'figtree normal' !important;
+        padding: 10px 20px !important;
+    }
+
+    input:focus {
+        outline: none;
+        background: var(--bg-3) !important;
+    }
+
+    .switcher {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: 'figtree normal' !important;
+    }
+
+    span {
+        font-family: 'figtree normal' !important;
+    }
+</style>
+
+<body class=" text-[var(--text)] min-h-screen p-8 obfuscate" x-data="app()">
+    <div class="container mx-auto max-w-6xl">
+        <br><br>
+        <p class="absolute left-1/2 -translate-x-1/2 opacity-50 top-7">Please close any popups opened by the player!</p>
+        <a href="/pages/watch.html"
+            class="inline-block mb-6 text-[var(--text)]-400 transition-all hover:text-gray-300">← Back to
+            Browse</a>
+        <div x-show="content">
+            <h1 class="text-4xl font-bold mb-4" x-text="content?.title || content?.name"></h1>
+
+            <div class="mb-6 flex items-center space-x-4 text-gray-300">
+                <i class="fas fa-calendar"></i>
+                <span x-show="content?.release_date" x-text="new Date(content.release_date).getFullYear()"></span>
+                <span x-show="content?.first_air_date" x-text="new Date(content.first_air_date).getFullYear()"></span>
+                <span x-show="content?.vote_average"><i class="fas fa-star"></i> <span
+                        x-text="content.vote_average.toFixed(1)"></span></span><br>
+            </div>
+
+            <div class="bg-[#1d1d1d] rounded-3xl overflow-hidden mb-6">
+                <div class="relative pt-[56.25%]">
+                    <iframe :src="currentVideoUrl" class="absolute top-0 left-0 w-full h-full" frameborder="0"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+
+            <template x-if="isShow">
+                <div class="bg-[var(--bg-2)] rounded-3xl p-6 mb-6">
+                    <h3 class="text-xl font-semibold mb-4">Episodes</h3>
+
+                    <div class="flex items-center space-x-2 mb-4 flex-wrap">
+                        <template x-for="season in seasons" :key="season">
+                            <button @click="selectedSeason = season; updateEpisodes()"
+                                class="px-4 py-2 m-1 rounded-2xl whitespace-nowrap"
+                                :class="selectedSeason === season ? 'bg-[var(--accent)] text-[var(--text)]' : 'bg-[var(--bg-3)]'">
+                                Season <span x-text="season"></span>
+                            </button>
+                        </template>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                        <template x-for="episode in seasonData?.episodes" :key="episode.episode_number">
+                            <div @click="selectedEpisode = episode.episode_number; loadEpisode()"
+                                class="bg-[var(--bg-3)] rounded-3xl overflow-hidden transition-all cursor-pointer hover:bg-[var(--bg-4)]"
+                                :class="selectedEpisode === episode.episode_number ? 'ring-2 ring-[var(--accent)]' : ''">
+                                <div class="relative aspect-video">
+                                    <img :src="episode.still_path 
+                                              ? 'https://image.tmdb.org/t/p/w300' + episode.still_path
+                                              : 'https://via.placeholder.com/300x169'"
+                                        class="w-full h-full aspect-3/2 object-cover">
+                                    <div
+                                        class="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black to-transparent">
+                                        <span class="text-sm font-medium">Episode <span
+                                                x-text="episode.episode_number"></span></span>
+                                    </div>
+                                </div>
+                                <div class="p-3">
+                                    <h4 class="font-medium text-sm" x-text="episode.name"></h4>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </template>
+
+            <div class="bg-[var(--bg-2)] rounded-3xl p-6 mb-6">
+                <h3 class="text-xl font-semibold mb-4">Sources</h3>
+                <div id="dropdown" class="game-dropdown" style="width: 100%;">
+                    <div id="d-selected-item" onclick="toggleDropdown('game-dropdown')">
+                        <span style="position: relative; top: -2.5px;">Vidking</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div id="d-item-list" style="max-height: 200px; overflow-y: auto; margin-bottom: 50px;">
+                        <template x-for="source in availableSources" :key="source.id">
+                            <div x-text="source.name" @click="selectedSource = source.id; updateVideoUrl()"></div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-[var(--bg-2)] rounded-3xl p-6">
+                <h3 class="text-xl font-semibold mb-4">Overview</h3>
+                <p class="text-gray-300" style="font-family: 'figtree normal';" x-text="content?.overview"></p>
+            </div>
+            <br><br>
+        </div>
+    </div>
+    <script src="/assets/js/cherri.dropdowns.js"></script>
+    <script>
+
+        const availableSources = [
+            {
+                id: 'spenflix',
+                name: 'Spenflix V4 (Proxied)',
+                isFrench: false,
+                urls: {
+                    movie: '/pages/embed.html?link=https://spencerdevs.xyz/movie/{id}&type=uv',
+                    tv: '/pages/embed.html?link=https://spencerdevs.xyz/tv/{id}/{season}/{episode}&type=uv'
+                }
+            },
+            {
+                id: 'moviesapi',
+                name: 'MoviesAPI (Proxied)',
+                isFrench: false,
+                urls: {
+                    movie: '/pages/embed.html?link=https://moviesapi.club/movie/{id}',
+                    tv: '/pages/embed.html?link=https://moviesapi.club/tv/{id}-{season}-{episode}'
+                }
+            },
+            {
+                id: 'cineby',
+                name: 'Cineby (Proxied)',
+                isFrench: false,
+                urls: {
+                    movie: '/pages/embed.html?link=https://cineby.sc/movie/{id}?play=true',
+                    tv: '/pages/embed.html?link=https://cineby.sc/tv/{id}/{season}/{episode}?play=true'
+                }
+            },
+            {
+                id: 'vidking',
+                name: 'Vidking (Proxied)',
+                isFrench: false,
+                urls: {
+                    movie: '/pages/embed.html?link=https://www.vidking.net/embed/movie/{id}',
+                    tv: '/pages/embed.html?link=https://www.vidking.net/embed/tv/{id}/{season}/{episode}?color=e50914&autoPlay=true&nextEpisode=true&episodeSelector=true'
+                }
+            },
+            {
+                id: 'embedmaster',
+                name: 'EmbedMaster',
+                isFrench: false,
+                urls: {
+                    movie: 'https://embedmaster.link/movie/{id}',
+                    tv: 'https://embedmaster.link/tv/{id}/{season}/{episode}'
+                }
+            },
+            {
+                id: 'vidlink',
+                name: 'VidLink',
+                isFrench: false,
+                urls: {
+                    movie: 'https://vidlink.pro/movie/{id}',
+                    tv: 'https://vidlink.pro/tv/{id}/{season}/{episode}'
+                }
+            },
+            {
+                id: 'vidsrcXyz',
+                name: 'VidSrcXyz',
+                isFrench: false,
+                urls: {
+                    movie: 'https://vidsrc.xyz/embed/movie/{id}',
+                    tv: 'https://vidsrc.xyz/embed/tv/{id}/{season}/{episode}'
+                }
+            },
+            {
+                id: 'vidsrcrip',
+                name: 'VidSrcRIP',
+                isFrench: false,
+                urls: {
+                    movie: 'https://vidsrc.rip/embed/movie/{id}',
+                    tv: 'https://vidsrc.rip/embed/tv/{id}/{season}/{episode}'
+                }
+            },
+            {
+                id: 'vidsrcsu',
+                name: 'VidSrcSU',
+                isFrench: false,
+                urls: {
+                    movie: 'https://vidsrc.su/embed/movie/{id}',
+                    tv: 'https://vidsrc.su/embed/tv/{id}/{season}/{episode}'
+                }
+            },
+            {
+                id: 'vidsrcvip',
+                name: 'VidSrcVIP',
+                isFrench: false,
+                urls: {
+                    movie: 'https://vidsrc.vip/embed/movie/{id}',
+                    tv: 'https://vidsrc.vip/embed/tv/{id}/{season}/{episode}'
+                }
+            },
+            {
+                id: '2embed',
+                name: '2Embed',
+                isFrench: false,
+                urls: {
+                    movie: 'https://www.2embed.cc/embed/{id}',
+                    tv: 'https://www.2embed.cc/embedtv/{id}&s={season}&e={episode}'
+                }
+            },
+            {
+                id: '123embed',
+                name: '123Embed',
+                isFrench: false,
+                urls: {
+                    movie: 'https://play2.123embed.net/movie/{id}',
+                    tv: 'https://play2.123embed.net/tv/{id}/{season}/{episode}'
+                }
+            },
+            {
+                id: '111movies',
+                name: '111Movies',
+                isFrench: false,
+                urls: {
+                    movie: 'https://111movies.com/movie/{id}',
+                    tv: 'https://111movies.com/tv/{id}/{season}/{episode}'
+                }
+            },
+            {
+                id: 'smashystream',
+                name: 'SmashyStream',
+                isFrench: false,
+                urls: {
+                    movie: 'https://player.smashy.stream/movie/{id}',
+                    tv: 'https://player.smashy.stream/tv/{id}?s={season}&e={episode}'
+                }
+            },
+            {
+                id: 'autoembed',
+                name: 'AutoEmbed',
+                isFrench: false,
+                urls: {
+                    movie: 'https://player.autoembed.cc/embed/movie/{id}',
+                    tv: 'https://player.autoembed.cc/embed/tv/{id}/{season}/{episode}'
+                }
+            },
+            {
+                id: 'videasy',
+                name: 'VidEasy (4K)',
+                isFrench: false,
+                urls: {
+                    movie: 'https://player.videasy.net/movie/{id}?color=8834ec',
+                    tv: 'https://player.videasy.net/tv/{id}/{season}/{episode}?color=8834ec'
+                }
+            },
+            {
+                id: 'vidfast',
+                name: 'VidFast (4K)',
+                isFrench: false,
+                urls: {
+                    movie: 'https://vidfast.pro/movie/{id}',
+                    tv: 'https://vidfast.pro/tv/{id}/{season}/{episode}'
+                }
+            },
+            {
+                id: 'vidify',
+                name: 'Vidify',
+                isFrench: false,
+                urls: {
+                    movie: 'https://vidify.top/embed/movie/{id}',
+                    tv: 'https://vidify.top/embed/tv/{id}/{season}/{episode}'
+                }
+            },
+        ];
+        function app() {
+            return {
+                apiKey: '1070730380f5fee0d87cf0382670b255',
+                content: null,
+                contentId: null,
+                contentType: null,
+                isShow: false,
+                selectedSeason: 1,
+                selectedEpisode: 1,
+                seasons: [],
+                seasonData: null,
+                selectedSource: 'vidking',
+                availableSources: availableSources,
+                currentVideoUrl: '',
+
+                async init() {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const rawId = urlParams.get('id');
+                    const rawType = urlParams.get('type');
+                    const safeId = Number.parseInt(rawId, 10);
+                    const safeType = rawType === 'movie' || rawType === 'tv' ? rawType : null;
+                    this.contentId = Number.isFinite(safeId) && safeId > 0 ? String(safeId) : null;
+                    this.contentType = safeType;
+                    this.isShow = this.contentType === 'tv';
+
+                    if (this.contentId && this.contentType) {
+                        await this.fetchContent();
+                        this.updateVideoUrl();
+                    }
+                },
+
+                async fetchContent() {
+                    const url = `https://api.themoviedb.org/3/${this.contentType}/${this.contentId}?api_key=${this.apiKey}`;
+
+                    try {
+                        const response = await fetch(url);
+                        const data = await response.json();
+                        this.content = data;
+
+                        if (this.isShow) {
+                            this.seasons = Array.from({ length: data.number_of_seasons }, (_, i) => i + 1);
+                            await this.updateEpisodes();
+                        }
+					} catch {
+					}
+				},
+
+                async updateEpisodes() {
+                    const url = `https://api.themoviedb.org/3/tv/${this.contentId}/season/${this.selectedSeason}?api_key=${this.apiKey}`;
+                    try {
+                        const response = await fetch(url);
+                        const data = await response.json();
+                        this.seasonData = data;
+                        this.selectedEpisode = 1;
+                        this.updateVideoUrl();
+					} catch {
+					}
+				},
+
+                loadEpisode() {
+                    this.updateVideoUrl();
+                },
+
+                updateVideoUrl() {
+                    const source = this.availableSources.find(s => s.id === this.selectedSource);
+                    if (!source) return;
+
+                    const params = this.isShow
+                        ? { id: this.contentId, season: this.selectedSeason, episode: this.selectedEpisode }
+                        : { id: this.contentId };
+
+                    let url = source.urls[this.isShow ? 'tv' : 'movie'];
+                    Object.entries(params).forEach(([key, value]) => {
+                        url = url.replace(`{${key}}`, value);
+                    });
+                    this.currentVideoUrl = url;
+                    const selectedItem = document.querySelector('#source-dropdown #d-selected-item span');
+                    if (selectedItem) selectedItem.textContent = source.name;
+                }
+            }
+        }
+    </script>
+    <script>
+        document.getElementById("csslink").href = `/assets/css/colors/${localStorage.getItem("cherri_theme") ?? "default"}.css`
+    </script>
+    
+<script src="/assets/js/cherri.ads.js"></script>
+
+</body>
+
+</html>
+

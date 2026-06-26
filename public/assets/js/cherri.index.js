@@ -1,0 +1,52 @@
+
+const texts = [
+	"the ai bubble just inflated again :(",
+	"partnered with everyone",
+	"best game site ever?",
+	"now with its own wisp server!",
+	'"SHUT UP DEKUUUU"',
+	"error: could not load splash",
+	"chatrooms work...right?",
+	"create an account for cool stuff",
+	"lights please!",
+	"in the spectacular '26",
+	"gn-math isn't the best game site, cherri is!",
+	"join the discord",
+	"fill out a partner request please.",
+	"you can hide the sidebar!",
+	"very customizable",
+	"what does gms stand for?",
+	"taste the spaghetti code",
+	"AAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+	"beuh no bing",
+	"techno night",
+	"ggs",
+	'"WHAM WHAM WHAM WHAM ZZZAPPP YEOUCHHHH" -dinguschan, 2025',
+	'"i\'d settle for a blender too" -dinguschan, 2025',
+	"always remember, you are the chosen chromebook kid",
+	"7 8",
+	"now in the files",
+	"star on github!",
+	"YES YES YES YES YES YES YES",
+	"NO NO NO NO NO NO NO",
+	"ummm well you shouldn't say that",
+	"testing testing 1 2 3",
+	"must have been the wind...",
+	"yummy!",
+	"extra flavor included",
+	"more account features are coming soon, trust me",
+	"check out the partners",
+	"why do people even use gn-math?",
+	"this domain costed $5.94",
+	"w o w",
+	"i sentence you to boobawamba practice run with default music",
+	"people with windows chromebooks are so lucky :sob:",
+	'"We need to bomb Venezuela"',
+	"i'll make an actual music player soon",
+];
+
+
+const random = texts[Math.floor(Math.random() * texts.length)];
+random.includes("<a href='https://vapor.my/'")
+	? (document.getElementById("splash").innerHTML = random)
+	: (document.getElementById("splash").textContent = random);

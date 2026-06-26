@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cherri | admin</title>
+    <link rel="shortcut icon" href="/assets/img/fav.png" type="image/x-icon">
+    <link rel="stylesheet" href="/assets/css/font.css?v=2348">
+    <link rel="stylesheet" href="/assets/css/colors/default.css" id="csslink">
+    <link rel="stylesheet" href="/assets/css/index.css">
+    <link rel="stylesheet" href="/assets/icons/css/all-pro.css">
+    <script src="/assets/js/cherri.devicetag.js"></script>
+</head>
+<style>
+    * { font-family: 'figtree normal'; box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; background: var(--bg); }
+
+    .admin-layout {
+        display: flex;
+        min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .admin-sidebar {
+        width: 220px;
+        min-height: 100vh;
+        background: var(--bg);
+        border-right: 1px solid var(--border-3);
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow-y: auto;
+    }
+    .admin-sidebar-header {
+        padding: 18px 16px 14px;
+        border-bottom: 1px solid var(--border-3);
+    }
+    .admin-sidebar-header a {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--text-2);
+        text-decoration: none;
+        font-size: 0.82rem;
+        opacity: 0.6;
+        margin-bottom: 10px;
+        transition: opacity 0.15s;
+    }
+    .admin-sidebar-header a:hover { opacity: 1; }
+    .admin-sidebar-header h2 {
+        margin: 0;
+        font-size: 1.05rem;
+        font-weight: 800;
+        color: var(--bright-text);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .admin-sidebar-header h2 i { color: #f04747; font-size: 14px; }
+    .admin-nav { padding: 8px 8px; display: flex; flex-direction: column; gap: 2px; flex: 1; }
+    .admin-nav-item {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 8px 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        color: var(--text-2);
+        font-size: 0.87rem;
+        font-weight: 500;
+        transition: background 0.1s, color 0.1s;
+        border: none;
+        background: none;
+        text-align: left;
+        width: 100%;
+    }
+    .admin-nav-item i { font-size: 12px; width: 14px; text-align: center; opacity: 0.65; }
+    .admin-nav-item:hover { background: rgba(255,255,255,0.06); color: var(--text); }
+    .admin-nav-item.active { background: rgba(255,255,255,0.09); color: var(--bright-text); }
+    .admin-nav-item.active i { opacity: 1; }
+    .admin-badge {
+        margin-left: auto;
+        background: #f04747;
+        color: white;
+        font-size: 10px;
+        font-weight: 700;
+        border-radius: 10px;
+        padding: 1px 6px;
+        min-width: 18px;
+        text-align: center;
+    }
+
+    /* Main content */
+    .admin-main {
+        flex: 1;
+        padding: 24px 28px;
+        max-width: 1000px;
+        overflow-x: hidden;
+    }
+    .admin-tab { display: none; }
+    .admin-tab.active { display: block; }
+
+    .admin-section-title {
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: var(--bright-text);
+        margin: 0 0 4px;
+    }
+    .admin-section-sub {
+        font-size: 0.82rem;
+        color: var(--text-2);
+        opacity: 0.6;
+        margin: 0 0 18px;
+    }
+
+    /* Search bar */
+    .admin-search {
+        display: flex;
+        align-items: center;
+        background: var(--bg-2);
+        border: 1px solid var(--border-4);
+        border-radius: 10px;
+        padding: 0 12px;
+        gap: 8px;
+        margin-bottom: 14px;
+        max-width: 380px;
+    }
+    .admin-search i { font-size: 12px; opacity: 0.4; }
+    .admin-search input {
+        all: unset;
+        flex: 1;
+        padding: 9px 0;
+        font-size: 0.87rem;
+        color: var(--text);
+    }
+    .admin-search input::placeholder { color: var(--text-2); opacity: 0.45; }
+
+    /* Table */
+    .admin-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+    }
+    .admin-table th {
+        text-align: left;
+        padding: 6px 10px;
+        font-size: 10.5px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--text-2);
+        opacity: 0.6;
+        border-bottom: 1px solid var(--border-3);
+    }
+    .admin-table td {
+        padding: 9px 10px;
+        border-bottom: 1px solid rgba(255,255,255,0.04);
+        color: var(--text);
+        vertical-align: middle;
+    }
+    .admin-table tr:hover td { background: rgba(255,255,255,0.025); }
+    .admin-table .user-cell {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+    }
+    .admin-table .user-cell img {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        object-fit: cover;
+        background: var(--bg-3);
+        flex-shrink: 0;
+    }
+    .admin-table .user-cell .uname { font-weight: 600; color: var(--bright-text); }
+    .admin-table .user-cell .udisplay { font-size: 0.75rem; color: var(--text-2); opacity: 0.65; }
+    .admin-table .actions { display: flex; gap: 4px; flex-wrap: wrap; }
+
+    /* Buttons */
+    .abtn {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 10px;
+        border-radius: 7px;
+        border: 1px solid var(--border-4);
+        background: var(--bg-3);
+        color: var(--text-2);
+        font-size: 0.78rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.12s, color 0.12s, border-color 0.12s;
+        font-family: 'figtree normal';
+        white-space: nowrap;
+    }
+    .abtn:hover { background: rgba(255,255,255,0.08); color: var(--bright-text); }
+    .abtn-danger { border-color: rgba(240,71,71,0.35); color: #f04747; }
+    .abtn-danger:hover { background: rgba(240,71,71,0.12); border-color: rgba(240,71,71,0.6); }
+    .abtn-warn { border-color: rgba(250,173,20,0.35); color: #faad14; }
+    .abtn-warn:hover { background: rgba(250,173,20,0.1); border-color: rgba(250,173,20,0.6); }
+    .abtn-success { border-color: rgba(61,213,109,0.35); color: #3dd56d; }
+    .abtn-success:hover { background: rgba(61,213,109,0.1); border-color: rgba(61,213,109,0.6); }
+
+    /* Status badges */
+    .status-badge {
+        display: inline-block;
+        padding: 2px 7px;
+        border-radius: 6px;
+        font-size: 10.5px;
+        font-weight: 700;
+    }
+    .status-open { background: rgba(240,71,71,0.15); color: #f04747; }
+    .status-resolved { background: rgba(61,213,109,0.12); color: #3dd56d; }
+    .status-dismissed { background: rgba(255,255,255,0.07); color: var(--text-2); }
+    .status-muted { background: rgba(250,173,20,0.12); color: #faad14; }
+
+    /* Empty state */
+    .admin-empty {
+        padding: 40px 20px;
+        text-align: center;
+        color: var(--text-2);
+        opacity: 0.5;
+        font-size: 0.88rem;
+    }
+    .admin-empty i { font-size: 28px; display: block; margin-bottom: 10px; opacity: 0.4; }
+
+    /* Loading */
+    .admin-loading {
+        padding: 30px 20px;
+        text-align: center;
+        color: var(--text-2);
+        opacity: 0.5;
+        font-size: 0.85rem;
+    }
+
+    /* Info box */
+    .admin-info-box {
+        background: var(--bg-2);
+        border: 1px solid var(--border-4);
+        border-radius: 10px;
+        padding: 12px 16px;
+        font-size: 0.84rem;
+        color: var(--text-2);
+        margin-bottom: 16px;
+    }
+
+    /* Modal (reuse chatrooms style) */
+    .modal-backdrop {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.55);
+        z-index: 100;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(4px);
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+        background: var(--bg-2);
+        border: 1px solid var(--border-4);
+        border-radius: 16px;
+        padding: 22px;
+        width: 380px;
+        max-width: calc(100vw - 32px);
+        box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+        animation: modal-in 0.18s ease;
+    }
+    @keyframes modal-in { from { opacity:0; transform:scale(0.97) translateY(4px) } to { opacity:1; transform:none } }
+    .modal h3 { margin: 0 0 14px; font-size: 1.05rem; font-weight: 700; color: var(--bright-text); }
+    .modal label { display:block; font-size:10.5px; font-weight:500; color:var(--text-2); opacity:0.65; margin-bottom:5px; margin-top:13px; }
+    .modal label:first-of-type { margin-top:0; }
+    .modal input, .modal textarea, .modal select {
+        width: 100%;
+        background: var(--bg-3);
+        border: 1px solid var(--border-4);
+        border-radius: 9px;
+        padding: 9px 13px;
+        color: var(--bright-text);
+        font-size: 0.88rem;
+        outline: none;
+        box-sizing: border-box;
+        transition: border-color 0.15s;
+        font-family: 'figtree normal';
+    }
+    .modal input:focus, .modal textarea:focus, .modal select:focus { border-color: rgba(255,255,255,0.2); }
+    .modal textarea { resize: vertical; min-height: 72px; }
+    .modal select { appearance: none; cursor: pointer; }
+    .modal-error { font-size:11.5px; color:#f04747; margin-top:7px; min-height:15px; }
+    .modal-actions { display:flex; gap:7px; margin-top:18px; justify-content:flex-end; }
+    .btn { padding:8px 16px; border-radius:9px; border:none; font-size:0.85rem; font-weight:600; cursor:pointer; transition:opacity 0.15s; font-family:'figtree normal'; }
+    .btn:hover { opacity: 0.85; }
+    .btn-ghost { background:transparent; color:var(--text-2); border:1px solid var(--border-4); }
+    .btn-primary { background:var(--accent); color:var(--bright-text); }
+    .btn-danger { background: #f04747; color: white; }
+    .btn-warn { background: #faad14; color: #1a1000; }
+
+    /* Stats row */
+    .admin-stats {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+    .stat-card {
+        background: var(--bg-2);
+        border: 1px solid var(--border-4);
+        border-radius: 12px;
+        padding: 14px 20px;
+        min-width: 120px;
+        flex: 1;
+    }
+    .stat-card .stat-val {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: var(--bright-text);
+        line-height: 1;
+    }
+    .stat-card .stat-label {
+        font-size: 0.75rem;
+        color: var(--text-2);
+        opacity: 0.6;
+        margin-top: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        font-weight: 700;
+    }
+
+    /* IP list popup */
+    .ip-list { font-size:0.8rem; color:var(--text-2); margin-top:6px; display:flex; flex-direction:column; gap:3px; }
+    .ip-list span { font-family: monospace; background: var(--bg-3); padding: 2px 6px; border-radius: 4px; display: inline-block; }
+</style>
+
+<body>
+<div class="admin-layout">
+    <!-- Sidebar -->
+    <div class="admin-sidebar">
+        <div class="admin-sidebar-header">
+            <a href="/pages/chatrooms.html"><i class="fas fa-arrow-left"></i> Back to Chat</a>
+            <h2><i class="fas fa-shield-halved"></i> Admin Panel</h2>
+        </div>
+        <nav class="admin-nav">
+            <button class="admin-nav-item active" onclick="showTab('users')" id="tab-btn-users">
+                <i class="fas fa-users"></i> Users
+                <span class="admin-badge" id="badge-users" style="display:none"></span>
+            </button>
+            <button class="admin-nav-item" onclick="showTab('tickets')" id="tab-btn-tickets">
+                <i class="fas fa-flag"></i> Mod Tickets
+                <span class="admin-badge" id="badge-tickets" style="display:none"></span>
+            </button>
+            <button class="admin-nav-item" onclick="showTab('muted')" id="tab-btn-muted">
+                <i class="fas fa-microphone-slash"></i> Muted
+            </button>
+            <button class="admin-nav-item" onclick="showTab('ip-bans')" id="tab-btn-ip-bans">
+                <i class="fas fa-ban"></i> IP Bans
+            </button>
+            <button class="admin-nav-item" onclick="showTab('hw-bans')" id="tab-btn-hw-bans">
+                <i class="fas fa-fingerprint"></i> HW Bans
+            </button>
+            <button class="admin-nav-item" onclick="showTab('infractions')" id="tab-btn-infractions">
+                <i class="fas fa-gavel"></i> Infractions
+                <span class="admin-badge" id="badge-infractions" style="display:none"></span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- Main -->
+    <div class="admin-main">
+
+        <!-- Users Tab -->
+        <div class="admin-tab active" id="tab-users">
+            <p class="admin-section-title">Users</p>
+            <p class="admin-section-sub">Manage all registered accounts.</p>
+            <div class="admin-stats">
+                <div class="stat-card"><div class="stat-val" id="stat-total-users">—</div><div class="stat-label">Total users</div></div>
+                <div class="stat-card"><div class="stat-val" id="stat-new-users">—</div><div class="stat-label">New this week</div></div>
+            </div>
+            <div class="admin-search">
+                <i class="fas fa-magnifying-glass"></i>
+                <input type="text" id="user-search" placeholder="Search by username or display name…" oninput="onUserSearchInput()">
+            </div>
+            <div id="users-table-wrap">
+                <div class="admin-loading"><i class="fas fa-spinner fa-spin"></i> Loading users…</div>
+            </div>
+            <div id="users-pagination" style="display:flex;align-items:center;gap:8px;margin-top:12px;justify-content:center;font-size:0.85rem;"></div>
+        </div>
+
+        <!-- Tickets Tab -->
+        <div class="admin-tab" id="tab-tickets">
+            <p class="admin-section-title">Moderation Tickets</p>
+            <p class="admin-section-sub">User-submitted reports awaiting review.</p>
+            <div style="display:flex;gap:8px;margin-bottom:14px;">
+                <button class="abtn ticket-filter active" data-filter="open" onclick="setTicketFilter('open',this)">Open</button>
+                <button class="abtn ticket-filter" data-filter="resolved" onclick="setTicketFilter('resolved',this)">Resolved</button>
+                <button class="abtn ticket-filter" data-filter="dismissed" onclick="setTicketFilter('dismissed',this)">Dismissed</button>
+                <button class="abtn ticket-filter" data-filter="all" onclick="setTicketFilter('all',this)">All</button>
+            </div>
+            <div id="tickets-table-wrap">
+                <div class="admin-loading"><i class="fas fa-spinner fa-spin"></i> Loading tickets…</div>
+            </div>
+        </div>
+
+        <!-- Muted Tab -->
+        <div class="admin-tab" id="tab-muted">
+            <p class="admin-section-title">Chat-Muted Users</p>
+            <p class="admin-section-sub">Users currently muted from all chatrooms.</p>
+            <div id="muted-table-wrap">
+                <div class="admin-loading"><i class="fas fa-spinner fa-spin"></i> Loading…</div>
+            </div>
+        </div>
+
+        <!-- IP Bans Tab -->
+        <div class="admin-tab" id="tab-ip-bans">
+            <p class="admin-section-title">IP Bans</p>
+            <p class="admin-section-sub">Banned IP addresses.</p>
+            <button class="abtn abtn-danger" style="margin-bottom:14px;" onclick="openModal('modal-add-ip-ban')">
+                <i class="fas fa-plus"></i> Add IP Ban
+            </button>
+            <div id="ip-bans-table-wrap">
+                <div class="admin-loading"><i class="fas fa-spinner fa-spin"></i> Loading…</div>
+            </div>
+        </div>
+
+        <!-- HW Bans Tab -->
+        <div class="admin-tab" id="tab-hw-bans">
+            <p class="admin-section-title">Hardware Bans</p>
+            <p class="admin-section-sub">Banned hardware fingerprints.</p>
+            <div id="hw-bans-table-wrap">
+                <div class="admin-loading"><i class="fas fa-spinner fa-spin"></i> Loading…</div>
+            </div>
+        </div>
+
+        <!-- Infractions Tab -->
+        <div class="admin-tab" id="tab-infractions">
+            <p class="admin-section-title">Infractions</p>
+            <p class="admin-section-sub">All warnings, mutes, and bans issued across the platform.</p>
+            <div class="admin-info-box" style="margin-bottom:14px;border-color:rgba(250,173,20,0.3);">
+                <strong style="color:#faad14;"><i class="fas fa-robot"></i> Auto-Punishment Thresholds</strong><br>
+                <span style="font-size:0.8rem;opacity:0.8;">These apply automatically when a user's warning count hits the threshold. Only <em>warn</em>-type infractions are counted.</span>
+                <div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap;">
+                    <span style="background:rgba(250,173,20,0.12);color:#faad14;padding:3px 10px;border-radius:7px;font-size:0.78rem;font-weight:600;">3 warns → 1h mute</span>
+                    <span style="background:rgba(250,173,20,0.12);color:#faad14;padding:3px 10px;border-radius:7px;font-size:0.78rem;font-weight:600;">5 warns → 24h mute</span>
+                    <span style="background:rgba(240,71,71,0.12);color:#f04747;padding:3px 10px;border-radius:7px;font-size:0.78rem;font-weight:600;">7 warns → permanent ban</span>
+                </div>
+            </div>
+            <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+                <button class="abtn infraction-filter active" data-type="" onclick="setInfractionFilter('',this)">All</button>
+                <button class="abtn infraction-filter" data-type="warn" onclick="setInfractionFilter('warn',this)">Warnings</button>
+                <button class="abtn infraction-filter" data-type="mute" onclick="setInfractionFilter('mute',this)">Mutes</button>
+                <button class="abtn infraction-filter" data-type="ban" onclick="setInfractionFilter('ban',this)">Bans</button>
+                <button class="abtn infraction-filter" data-type="auto_mute" onclick="setInfractionFilter('auto_mute',this)">Auto-Mutes</button>
+                <button class="abtn infraction-filter" data-type="auto_ban" onclick="setInfractionFilter('auto_ban',this)">Auto-Bans</button>
+            </div>
+            <div id="infractions-table-wrap">
+                <div class="admin-loading"><i class="fas fa-spinner fa-spin"></i> Loading…</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal: User actions -->
+<div class="modal-backdrop" id="modal-user-action">
+    <div class="modal" style="width:420px">
+        <h3 id="modal-user-action-title">User Actions</h3>
+        <div id="modal-user-action-body"></div>
+        <div class="modal-actions">
+            <button class="btn btn-ghost" onclick="closeModal('modal-user-action')">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Ban user -->
+<div class="modal-backdrop" id="modal-ban-user">
+    <div class="modal">
+        <h3>Ban User</h3>
+        <label>Reason (optional)</label>
+        <input type="text" id="ban-reason" placeholder="Reason for ban…" maxlength="200">
+        <label>Duration (leave blank for permanent)</label>
+        <input type="number" id="ban-minutes" placeholder="Minutes (optional)" min="1">
+        <div class="modal-error" id="ban-error"></div>
+        <div class="modal-actions">
+            <button class="btn btn-ghost" onclick="closeModal('modal-ban-user')">Cancel</button>
+            <button class="btn btn-danger" onclick="submitBan()">Ban</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Mute user -->
+<div class="modal-backdrop" id="modal-mute-admin">
+    <div class="modal">
+        <h3>Mute from Chat</h3>
+        <label>Duration (minutes)</label>
+        <input type="number" id="mute-minutes-admin" placeholder="e.g. 60" min="1" value="60">
+        <div class="modal-error" id="mute-admin-error"></div>
+        <div class="modal-actions">
+            <button class="btn btn-ghost" onclick="closeModal('modal-mute-admin')">Cancel</button>
+            <button class="btn btn-warn" onclick="submitAdminMute()">Mute</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Reset password -->
+<div class="modal-backdrop" id="modal-reset-pw">
+    <div class="modal">
+        <h3>Reset Password</h3>
+        <label>New Password</label>
+        <input type="text" id="new-password" placeholder="New password">
+        <div class="modal-error" id="reset-pw-error"></div>
+        <div class="modal-actions">
+            <button class="btn btn-ghost" onclick="closeModal('modal-reset-pw')">Cancel</button>
+            <button class="btn btn-primary" onclick="submitResetPassword()">Reset</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Rename user -->
+<div class="modal-backdrop" id="modal-rename-user">
+    <div class="modal">
+        <h3 id="modal-rename-title">Rename User</h3>
+        <label>New Display Name</label>
+        <input type="text" id="rename-display-input" placeholder="New display name…" maxlength="32">
+        <div class="modal-error" id="rename-error"></div>
+        <div class="modal-actions">
+            <button class="btn btn-ghost" onclick="closeModal('modal-rename-user')">Cancel</button>
+            <button class="btn btn-primary" onclick="submitRename()">Save</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Add IP ban -->
+<div class="modal-backdrop" id="modal-add-ip-ban">
+    <div class="modal">
+        <h3>Add IP Ban</h3>
+        <label>IP Address</label>
+        <input type="text" id="new-ip-ban-ip" placeholder="e.g. 1.2.3.4" maxlength="64">
+        <label>Reason (optional)</label>
+        <input type="text" id="new-ip-ban-reason" placeholder="Reason…" maxlength="200">
+        <label>Duration (leave blank for permanent)</label>
+        <input type="number" id="new-ip-ban-minutes" placeholder="Minutes (optional)" min="1">
+        <div class="modal-error" id="new-ip-ban-error"></div>
+        <div class="modal-actions">
+            <button class="btn btn-ghost" onclick="closeModal('modal-add-ip-ban')">Cancel</button>
+            <button class="btn btn-danger" onclick="submitAddIpBan()">Add Ban</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: View IPs -->
+<div class="modal-backdrop" id="modal-view-ips">
+    <div class="modal">
+        <h3>Recent IPs</h3>
+        <div id="modal-ips-body"><div class="admin-loading">Loading…</div></div>
+        <div class="modal-actions">
+            <button class="btn btn-ghost" onclick="closeModal('modal-view-ips')">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Warn user -->
+<div class="modal-backdrop" id="modal-warn-user">
+    <div class="modal">
+        <h3 id="modal-warn-title">Warn User</h3>
+        <label>Reason</label>
+        <textarea id="warn-reason" placeholder="Describe the reason for this warning…" maxlength="500" rows="3"></textarea>
+        <div class="modal-error" id="warn-error"></div>
+        <div class="modal-actions">
+            <button class="btn btn-ghost" onclick="closeModal('modal-warn-user')">Cancel</button>
+            <button class="btn btn-warn" onclick="submitWarn()">Issue Warning</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Infraction history -->
+<div class="modal-backdrop" id="modal-infractions">
+    <div class="modal" style="width:520px">
+        <h3 id="modal-infractions-title">Infractions</h3>
+        <div id="modal-infractions-body"><div class="admin-loading">Loading…</div></div>
+        <div class="modal-actions">
+            <button class="btn btn-ghost" onclick="closeModal('modal-infractions')">Close</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("csslink").href = `/assets/css/colors/${localStorage.getItem("cherri_theme") ?? "default"}.css`;
+
+    function escapeHtml(t) {
+        return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+    }
+    function openModal(id) { document.getElementById(id).classList.add("open"); }
+    function closeModal(id) { document.getElementById(id).classList.remove("open"); }
+    document.querySelectorAll(".modal-backdrop").forEach(el => {
+        el.addEventListener("click", e => { if (e.target === el) el.classList.remove("open"); });
+    });
+    document.addEventListener("keydown", e => {
+        if (e.key === "Escape") document.querySelectorAll(".modal-backdrop.open").forEach(el => el.classList.remove("open"));
+    });
+
+    function showTab(name) {
+        document.querySelectorAll(".admin-tab").forEach(el => el.classList.remove("active"));
+        document.querySelectorAll(".admin-nav-item").forEach(el => el.classList.remove("active"));
+        document.getElementById("tab-" + name)?.classList.add("active");
+        document.getElementById("tab-btn-" + name)?.classList.add("active");
+        if (name === "users" && !window._usersLoaded) loadUsers();
+        if (name === "tickets" && !window._ticketsLoaded) loadTickets();
+        if (name === "muted" && !window._mutedLoaded) loadMuted();
+        if (name === "ip-bans" && !window._ipBansLoaded) loadIpBans();
+        if (name === "hw-bans" && !window._hwBansLoaded) loadHwBans();
+        if (name === "infractions" && !window._infractionsLoaded) loadInfractions();
+    }
+
+    function toast(msg, type = "info") {
+        const colors = { success: "#3dd56d", error: "#f04747", info: "var(--text-2)", warn: "#faad14" };
+        const t = document.createElement("div");
+        t.style.cssText = `position:fixed;bottom:20px;right:20px;background:var(--bg-2);border:1px solid var(--border-4);border-radius:10px;padding:10px 16px;font-size:0.84rem;color:${colors[type]||colors.info};box-shadow:0 4px 16px rgba(0,0,0,0.4);z-index:9999;opacity:0;transform:translateY(6px);transition:opacity 0.2s,transform 0.2s;`;
+        t.textContent = msg;
+        document.body.appendChild(t);
+        requestAnimationFrame(() => { t.style.opacity = "1"; t.style.transform = "none"; });
+        setTimeout(() => { t.style.opacity = "0"; setTimeout(() => t.remove(), 300); }, 3500);
+    }
+
+    /* ─────────── Users ─────────── */
+    let allUsers = [];
+
+    let _userPage = 0;
+    let _userTotal = 0;
+    let _userSearchTimeout = null;
+    const USER_PAGE_SIZE = 50;
+
+    async function loadUsers(page = 0) {
+        window._usersLoaded = true;
+        _userPage = page;
+        const q = document.getElementById("user-search")?.value.trim() || "";
+        const url = `/api/admin/users?page=${page}${q ? `&q=${encodeURIComponent(q)}` : ""}`;
+        document.getElementById("users-table-wrap").innerHTML = `<div class="admin-loading"><i class="fas fa-spinner fa-spin"></i> Loading users…</div>`;
+        try {
+            const res = await fetch(url, { credentials: "same-origin" });
+            if (!res.ok) { document.getElementById("users-table-wrap").innerHTML = `<div class="admin-empty"><i class="fas fa-lock"></i>Access denied.</div>`; return; }
+            const data = await res.json();
+            const pageUsers = data.users || [];
+            _userTotal = data.total ?? pageUsers.length;
+
+            if (page === 0) {
+                const weekAgo = Date.now() - 7 * 86400000;
+                document.getElementById("stat-total-users").textContent = _userTotal.toLocaleString();
+                document.getElementById("badge-users").textContent = _userTotal;
+                document.getElementById("badge-users").style.display = _userTotal ? "inline" : "none";
+                // new-this-week needs a separate count — just skip updating it if paginated
+            }
+
+            renderUsersTable(pageUsers);
+            renderUsersPagination();
+        } catch(e) {
+            document.getElementById("users-table-wrap").innerHTML = `<div class="admin-empty"><i class="fas fa-exclamation-triangle"></i>Failed to load users.</div>`;
+        }
+    }
+
+    function onUserSearchInput() {
+        clearTimeout(_userSearchTimeout);
+        _userSearchTimeout = setTimeout(() => loadUsers(0), 350);
+    }
+
+    function renderUsersPagination() {
+        const totalPages = Math.ceil(_userTotal / USER_PAGE_SIZE);
+        const el = document.getElementById("users-pagination");
+        if (!el) return;
+        if (totalPages <= 1) { el.innerHTML = ""; return; }
+        const start = _userPage * USER_PAGE_SIZE + 1;
+        const end = Math.min((_userPage + 1) * USER_PAGE_SIZE, _userTotal);
+        el.innerHTML = `
+            <button class="abtn" onclick="loadUsers(${_userPage - 1})" ${_userPage === 0 ? "disabled" : ""}><i class="fas fa-chevron-left"></i></button>
+            <span style="opacity:0.7">${start}–${end} of ${_userTotal.toLocaleString()}</span>
+            <button class="abtn" onclick="loadUsers(${_userPage + 1})" ${_userPage >= totalPages - 1 ? "disabled" : ""}><i class="fas fa-chevron-right"></i></button>
+        `;
+    }
+
+    function renderUsersTable(users) {
+        if (!users.length) {
+            document.getElementById("users-table-wrap").innerHTML = `<div class="admin-empty"><i class="fas fa-users-slash"></i>No users found.</div>`;
+            return;
+        }
+        const rows = users.map(u => {
+            const count = u.infraction_count ?? 0;
+            const infrBadge = count > 0
+                ? `<span title="${count} infraction${count===1?'':'s'}" style="display:inline-flex;align-items:center;gap:3px;background:rgba(240,71,71,0.15);color:#f04747;font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;margin-left:4px;cursor:pointer;" onclick="viewInfractions('${escapeHtml(u.id)}','${escapeHtml(u.username)}')">${count} <i class="fas fa-gavel" style="font-size:9px"></i></span>`
+                : "";
+            return `
+            <tr data-uid="${escapeHtml(u.id)}">
+                <td>
+                    <div class="user-cell">
+                        <img src="${escapeHtml(u.pfp || "/assets/img/fav.png")}" onerror="this.src='/assets/img/fav.png'" alt="">
+                        <div>
+                            <div class="uname">@${escapeHtml(u.username)}${infrBadge}</div>
+                            <div class="udisplay">${escapeHtml(u.display || "")}</div>
+                        </div>
+                    </div>
+                </td>
+                <td style="font-size:0.78rem;opacity:0.55;white-space:nowrap;">${new Date(u.created_at || u.createdAt || 0).toLocaleDateString()}</td>
+                <td>
+                    <div class="actions">
+                        <button class="abtn" onclick="viewIPs('${escapeHtml(u.id)}','${escapeHtml(u.username)}')"><i class="fas fa-network-wired"></i> IPs</button>
+                        <button class="abtn abtn-warn" onclick="openWarn('${escapeHtml(u.id)}','${escapeHtml(u.username)}')"><i class="fas fa-triangle-exclamation"></i> Warn</button>
+                        <button class="abtn abtn-warn" onclick="openMuteAdmin('${escapeHtml(u.id)}','${escapeHtml(u.username)}')"><i class="fas fa-microphone-slash"></i> Mute</button>
+                        <button class="abtn abtn-danger" onclick="openBan('${escapeHtml(u.id)}','${escapeHtml(u.username)}')"><i class="fas fa-ban"></i> Ban</button>
+                        <button class="abtn" onclick="openUserActions('${escapeHtml(u.id)}','${escapeHtml(u.username)}',${u.trusted===true})"><i class="fas fa-ellipsis"></i></button>
+                    </div>
+                </td>
+            </tr>`;
+        }).join("");
+        document.getElementById("users-table-wrap").innerHTML = `
+            <table class="admin-table">
+                <thead><tr><th>User</th><th>Joined</th><th>Actions</th></tr></thead>
+                <tbody>${rows}</tbody>
+            </table>`;
+    }
+
+    let _actionTarget = null;
+
+    function openUserActions(userId, username, trusted = false) {
+        _actionTarget = { userId, username };
+        document.getElementById("modal-user-action-title").textContent = `Actions — @${username}`;
+        const isOwner = _meUsername === "x8r";
+        document.getElementById("modal-user-action-body").innerHTML = `
+            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:4px;">
+                <button class="abtn" onclick="viewInfractions('${userId}','${username}');closeModal('modal-user-action')"><i class="fas fa-gavel"></i> View infraction history</button>
+                <button class="abtn" onclick="adminResetPfp('${userId}','${username}')"><i class="fas fa-image"></i> Reset profile picture</button>
+                <button class="abtn" onclick="adminClearSessions('${userId}','${username}')"><i class="fas fa-right-from-bracket"></i> Clear sessions (force logout)</button>
+                <button class="abtn abtn-danger" onclick="adminDeleteMessages('${userId}','${username}')"><i class="fas fa-trash"></i> Purge all messages</button>
+                <button class="abtn abtn-danger" onclick="adminHwBanUser('${userId}','${username}')"><i class="fas fa-microchip"></i> Hardware ban</button>
+                <button class="abtn abtn-danger" onclick="adminTerminate('${userId}','${username}')"><i class="fas fa-user-slash"></i> Terminate account</button>
+                ${isOwner ? `
+                <div style="border-top:1px solid rgba(255,255,255,0.08);margin:2px 0;padding-top:6px;display:flex;flex-direction:column;gap:8px;">
+                    <button class="abtn" onclick="adminResetNickname('${userId}','${username}')"><i class="fas fa-rotate-left"></i> Reset nickname</button>
+                    <button class="abtn" onclick="openRename();closeModal('modal-user-action')"><i class="fas fa-pen"></i> Rename (display name)</button>
+                    <button class="abtn" onclick="openModal('modal-reset-pw');closeModal('modal-user-action')"><i class="fas fa-key"></i> Reset password</button>
+                    ${trusted
+                        ? `<button class="abtn abtn-danger" onclick="adminRevokeTrusted('${userId}','${username}')"><i class="fas fa-shield-xmark"></i> Revoke trusted status</button>`
+                        : `<button class="abtn" style="border-color:rgba(61,213,109,0.35);color:#3dd56d;" onclick="adminGrantTrusted('${userId}','${username}')"><i class="fas fa-shield-check"></i> Grant trusted status</button>`
+                    }
+                </div>` : ""}
+            </div>`;
+        openModal("modal-user-action");
+    }
+
+    async function adminGrantTrusted(userId, username) {
+        try {
+            const res = await fetch(`/api/admin/users/${userId}/grant-trusted`, {
+                method: "POST", credentials: "same-origin",
+                headers: { "content-type": "application/json" },
+            });
+            const data = await res.json();
+            if (!res.ok) { toast(data.error || "Failed to grant trusted.", "error"); return; }
+            toast(`@${username} is now a trusted user.`, "success");
+            closeModal("modal-user-action");
+            loadUsers();
+        } catch { toast("Something went wrong.", "error"); }
+    }
+
+    async function adminRevokeTrusted(userId, username) {
+        try {
+            const res = await fetch(`/api/admin/users/${userId}/revoke-trusted`, {
+                method: "POST", credentials: "same-origin",
+                headers: { "content-type": "application/json" },
+            });
+            const data = await res.json();
+            if (!res.ok) { toast(data.error || "Failed to revoke trusted.", "error"); return; }
+            toast(`@${username}'s trusted status revoked.`, "success");
+            closeModal("modal-user-action");
+            loadUsers();
+        } catch { toast("Something went wrong.", "error"); }
+    }
+
+    function openBan(userId, username) {
+        _actionTarget = { userId, username };
+        document.getElementById("ban-reason").value = "";
+        document.getElementById("ban-minutes").value = "";
+        document.getElementById("ban-error").textContent = "";
+        openModal("modal-ban-user");
+    }
+
+    async function submitBan() {
+        if (!_actionTarget) return;
+        document.getElementById("ban-error").textContent = "";
+        const reason = document.getElementById("ban-reason").value.trim() || null;
+        const mins = document.getElementById("ban-minutes").value.trim();
+        const body = { reason };
+        if (mins) body.minutes = Number(mins);
+        try {
+            const res = await fetch(`/api/admin/users/${_actionTarget.userId}/ban`, {
+                method: "POST", headers: { "content-type": "application/json" },
+                credentials: "same-origin", body: JSON.stringify(body),
+            });
+            const data = await res.json();
+            if (!res.ok) { document.getElementById("ban-error").textContent = data.error || "Failed to ban."; return; }
+            closeModal("modal-ban-user");
+            toast(`@${_actionTarget.username} banned.`, "success");
+        } catch { document.getElementById("ban-error").textContent = "Something went wrong."; }
+    }
+
+    function openMuteAdmin(userId, username) {
+        _actionTarget = { userId, username };
+        document.getElementById("mute-minutes-admin").value = "60";
+        document.getElementById("mute-admin-error").textContent = "";
+        openModal("modal-mute-admin");
+    }
+
+    async function submitAdminMute() {
+        if (!_actionTarget) return;
+        document.getElementById("mute-admin-error").textContent = "";
+        const minutes = parseInt(document.getElementById("mute-minutes-admin").value);
+        if (!minutes || minutes < 1) { document.getElementById("mute-admin-error").textContent = "Enter a valid duration."; return; }
+        try {
+            const res = await fetch(`/api/admin/users/${_actionTarget.userId}/mute-chat`, {
+                method: "POST", headers: { "content-type": "application/json" },
+                credentials: "same-origin", body: JSON.stringify({ minutes }),
+            });
+            const data = await res.json();
+            if (!res.ok) { document.getElementById("mute-admin-error").textContent = data.error || "Failed to mute."; return; }
+            closeModal("modal-mute-admin");
+            toast(`@${_actionTarget.username} muted for ${minutes} minutes.`, "success");
+        } catch { document.getElementById("mute-admin-error").textContent = "Something went wrong."; }
+    }
+
+    async function adminResetPfp(userId, username) {
+        if (!confirm(`Reset @${username}'s profile picture?`)) return;
+        try {
+            const res = await fetch(`/api/admin/users/${userId}/reset-pfp`, { method: "POST", credentials: "same-origin" });
+            if (!res.ok) { toast("Failed to reset pfp.", "error"); return; }
+            toast(`@${username}'s pfp reset.`, "success");
+            closeModal("modal-user-action");
+        } catch { toast("Failed.", "error"); }
+    }
+
+    async function adminClearSessions(userId, username) {
+        if (!confirm(`Force-logout all sessions for @${username}?`)) return;
+        try {
+            const res = await fetch(`/api/admin/users/${userId}/clear-sessions`, { method: "POST", credentials: "same-origin" });
+            if (!res.ok) { toast("Failed.", "error"); return; }
+            toast(`@${username}'s sessions cleared.`, "success");
+            closeModal("modal-user-action");
+        } catch { toast("Failed.", "error"); }
+    }
+
+    async function adminDeleteMessages(userId, username) {
+        if (!confirm(`Delete ALL messages from @${username}? This cannot be undone.`)) return;
+        try {
+            const res = await fetch(`/api/admin/users/${userId}/messages`, { method: "DELETE", credentials: "same-origin" });
+            if (!res.ok) { toast("Failed.", "error"); return; }
+            toast(`All messages from @${username} deleted.`, "success");
+            closeModal("modal-user-action");
+        } catch { toast("Failed.", "error"); }
+    }
+
+    async function adminResetNickname(userId, username) {
+        if (!confirm(`Reset @${username}'s display name back to their username?`)) return;
+        try {
+            const res = await fetch(`/api/admin/users/${userId}/display`, {
+                method: "PUT", headers: { "content-type": "application/json" },
+                credentials: "same-origin", body: JSON.stringify({ display: username }),
+            });
+            const data = await res.json();
+            if (!res.ok) { toast(data.error || "Failed to reset nickname.", "error"); return; }
+            toast(`@${username}'s display name reset.`, "success");
+            closeModal("modal-user-action");
+            loadUsers(_userPage);
+        } catch { toast("Failed.", "error"); }
+    }
+
+    function openRename() {
+        if (!_actionTarget) return;
+        document.getElementById("modal-rename-title").textContent = `Rename @${_actionTarget.username}`;
+        document.getElementById("rename-display-input").value = "";
+        document.getElementById("rename-error").textContent = "";
+        openModal("modal-rename-user");
+    }
+
+    async function submitRename() {
+        if (!_actionTarget) return;
+        document.getElementById("rename-error").textContent = "";
+        const display = document.getElementById("rename-display-input").value.trim();
+        if (!display || display.length < 2) { document.getElementById("rename-error").textContent = "Name must be at least 2 characters."; return; }
+        try {
+            const res = await fetch(`/api/admin/users/${_actionTarget.userId}/display`, {
+                method: "PUT", headers: { "content-type": "application/json" },
+                credentials: "same-origin", body: JSON.stringify({ display }),
+            });
+            const data = await res.json();
+            if (!res.ok) { document.getElementById("rename-error").textContent = data.error || "Failed."; return; }
+            closeModal("modal-rename-user");
+            toast(`@${_actionTarget.username} renamed to "${display}".`, "success");
+            loadUsers(_userPage);
+        } catch { document.getElementById("rename-error").textContent = "Something went wrong."; }
+    }
+
+    async function adminHwBanUser(userId, username) {
+        if (!confirm(`HARDWARE BAN @${username}?\n\nThis blocks them from connecting even on a new account.`)) return;
+        const reason = prompt(`Reason for hardware banning @${username}:`);
+        if (reason === null) return;
+        if (!reason.trim()) { toast("A reason is required.", "error"); return; }
+        try {
+            const res = await fetch(`/api/admin/users/${userId}/hw-ban`, {
+                method: "POST", headers: { "content-type": "application/json" },
+                credentials: "same-origin", body: JSON.stringify({ reason: reason.trim() }),
+            });
+            const data = await res.json();
+            if (!res.ok) { toast(data.error || "Failed to hardware ban.", "error"); return; }
+            toast(`@${username} hardware banned.`, "success");
+            closeModal("modal-user-action");
+        } catch { toast("Failed.", "error"); }
+    }
+
+    async function adminTerminate(userId, username) {
+        if (!confirm(`TERMINATE @${username}? This deletes their account permanently.`)) return;
+        if (!confirm("Are you absolutely sure? This is irreversible.")) return;
+        try {
+            const res = await fetch(`/api/admin/users/${userId}`, { method: "DELETE", credentials: "same-origin" });
+            if (!res.ok) { toast("Failed.", "error"); return; }
+            toast(`@${username} terminated.`, "success");
+            closeModal("modal-user-action");
+            allUsers = allUsers.filter(u => u.id !== userId);
+            renderUsersTable(allUsers);
+        } catch { toast("Failed.", "error"); }
+    }
+
+    async function submitResetPassword() {
+        if (!_actionTarget) return;
+        document.getElementById("reset-pw-error").textContent = "";
+        const password = document.getElementById("new-password").value.trim();
+        if (!password || password.length < 6) { document.getElementById("reset-pw-error").textContent = "Password too short."; return; }
+        try {
+            const res = await fetch(`/api/admin/users/${_actionTarget.userId}/reset-password`, {
+                method: "POST", headers: { "content-type": "application/json" },
+                credentials: "same-origin", body: JSON.stringify({ password }),
+            });
+            const data = await res.json();
+            if (!res.ok) { document.getElementById("reset-pw-error").textContent = data.error || "Failed."; return; }
+            toast(`Password reset for @${_actionTarget.username}.`, "success");
+            closeModal("modal-reset-pw");
+        } catch { document.getElementById("reset-pw-error").textContent = "Something went wrong."; }
+    }
+
+    async function viewIPs(userId, username) {
+        openModal("modal-view-ips");
+        document.querySelector("#modal-view-ips h3").textContent = `Recent IPs — @${username}`;
+        document.getElementById("modal-ips-body").innerHTML = `<div class="admin-loading">Loading…</div>`;
+        try {
+            const res = await fetch(`/api/admin/users/${userId}/ip`, { credentials: "same-origin" });
+            const data = await res.json();
+            if (!res.ok || !data.ips?.length) {
+                document.getElementById("modal-ips-body").innerHTML = `<p style="opacity:0.5;font-size:0.85rem;">No IP records found.</p>`;
+                return;
+            }
+            document.getElementById("modal-ips-body").innerHTML = `
+                <div class="ip-list">
+                    ${data.ips.map(r => `<div><span>${escapeHtml(r.ip || "hidden")}</span> <small style="opacity:0.5">${new Date(r.at).toLocaleString()}</small></div>`).join("")}
+                </div>
+                ${data.privileged ? '' : '<p style="font-size:0.75rem;opacity:0.4;margin-top:10px;">Full IPs visible to superadmin only.</p>'}
+            `;
+        } catch {
+            document.getElementById("modal-ips-body").innerHTML = `<p style="color:#f04747;font-size:0.85rem;">Failed to load IPs.</p>`;
+        }
+    }
+
+    /* ─────────── Tickets ─────────── */
+    let allTickets = [];
+    let currentTicketFilter = "open";
+
+    async function loadTickets() {
+        window._ticketsLoaded = true;
+        try {
+            const res = await fetch("/api/admin/moderation/tickets", { credentials: "same-origin" });
+            if (!res.ok) { document.getElementById("tickets-table-wrap").innerHTML = `<div class="admin-empty"><i class="fas fa-lock"></i>Access denied.</div>`; return; }
+            const data = await res.json();
+            allTickets = data.tickets || [];
+            const openCount = allTickets.filter(t => t.status === "open").length;
+            document.getElementById("badge-tickets").textContent = openCount;
+            document.getElementById("badge-tickets").style.display = openCount ? "inline" : "none";
+            renderTickets();
+        } catch {
+            document.getElementById("tickets-table-wrap").innerHTML = `<div class="admin-empty"><i class="fas fa-exclamation-triangle"></i>Failed to load tickets.</div>`;
+        }
+    }
+
+    function setTicketFilter(filter, btn) {
+        currentTicketFilter = filter;
+        document.querySelectorAll(".ticket-filter").forEach(b => b.classList.remove("active", "abtn-success"));
+        btn.classList.add("active");
+        renderTickets();
+    }
+
+    function renderTickets() {
+        const filtered = currentTicketFilter === "all" ? allTickets : allTickets.filter(t => t.status === currentTicketFilter);
+        if (!filtered.length) {
+            document.getElementById("tickets-table-wrap").innerHTML = `<div class="admin-empty"><i class="fas fa-check-circle"></i>No tickets in this category.</div>`;
+            return;
+        }
+        const rows = filtered.map(t => `
+            <tr>
+                <td style="font-size:0.75rem;opacity:0.5;white-space:nowrap;">${new Date(t.created_at||t.createdAt||0).toLocaleDateString()}</td>
+                <td><strong>@${escapeHtml(t.created_by_username||t.createdByUsername||"?")}</strong></td>
+                <td><span style="color:#f04747;font-weight:600;">@${escapeHtml(t.reported_username||t.reportedUsername||"?")}</span></td>
+                <td style="font-size:0.8rem;max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(t.notes||"—")}</td>
+                <td><span class="status-badge status-${t.status}">${t.status}</span></td>
+                <td>
+                    <div class="actions">
+                        ${t.status === "open" ? `
+                            <button class="abtn abtn-success" onclick="resolveTicket('${escapeHtml(t.id)}')"><i class="fas fa-check"></i> Resolve</button>
+                            <button class="abtn" onclick="dismissTicket('${escapeHtml(t.id)}')"><i class="fas fa-times"></i> Dismiss</button>
+                        ` : ""}
+                    </div>
+                </td>
+            </tr>
+        `).join("");
+        document.getElementById("tickets-table-wrap").innerHTML = `
+            <table class="admin-table">
+                <thead><tr><th>Date</th><th>Reporter</th><th>Reported</th><th>Notes</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody>${rows}</tbody>
+            </table>`;
+    }
+
+    async function resolveTicket(id) {
+        try {
+            const res = await fetch(`/api/admin/moderation/tickets/${id}/resolve`, { method: "POST", credentials: "same-origin" });
+            if (!res.ok) { toast("Failed.", "error"); return; }
+            const t = allTickets.find(x => x.id === id);
+            if (t) t.status = "resolved";
+            renderTickets();
+            toast("Ticket resolved.", "success");
+        } catch { toast("Failed.", "error"); }
+    }
+
+    async function dismissTicket(id) {
+        try {
+            const res = await fetch(`/api/admin/moderation/tickets/${id}/dismiss`, { method: "POST", credentials: "same-origin" });
+            if (!res.ok) { toast("Failed.", "error"); return; }
+            const t = allTickets.find(x => x.id === id);
+            if (t) t.status = "dismissed";
+            renderTickets();
+            toast("Ticket dismissed.", "success");
+        } catch { toast("Failed.", "error"); }
+    }
+
+    /* ─────────── Muted ─────────── */
+    async function loadMuted() {
+        window._mutedLoaded = true;
+        try {
+            const res = await fetch("/api/admin/muted-users", { credentials: "same-origin" });
+            if (!res.ok) { document.getElementById("muted-table-wrap").innerHTML = `<div class="admin-empty"><i class="fas fa-lock"></i>Access denied.</div>`; return; }
+            const data = await res.json();
+            const users = data.users || [];
+            if (!users.length) {
+                document.getElementById("muted-table-wrap").innerHTML = `<div class="admin-empty"><i class="fas fa-check"></i>No users currently muted.</div>`;
+                return;
+            }
+            const rows = users.map(u => `
+                <tr>
+                    <td><div class="user-cell"><img src="${escapeHtml(u.pfp||"/assets/img/fav.png")}" onerror="this.src='/assets/img/fav.png'" alt=""><div><div class="uname">@${escapeHtml(u.username)}</div></div></div></td>
+                    <td style="font-size:0.8rem;opacity:0.65;">${u.chat_muted_until||u.chatMutedUntil ? new Date(u.chat_muted_until||u.chatMutedUntil).toLocaleString() : "—"}</td>
+                    <td><button class="abtn abtn-success" onclick="unmuteChatUser('${escapeHtml(u.id)}','${escapeHtml(u.username)}')"><i class="fas fa-microphone"></i> Unmute</button></td>
+                </tr>
+            `).join("");
+            document.getElementById("muted-table-wrap").innerHTML = `
+                <table class="admin-table">
+                    <thead><tr><th>User</th><th>Muted Until</th><th>Actions</th></tr></thead>
+                    <tbody>${rows}</tbody>
+                </table>`;
+        } catch {
+            document.getElementById("muted-table-wrap").innerHTML = `<div class="admin-empty"><i class="fas fa-exclamation-triangle"></i>Failed to load.</div>`;
+        }
+    }
+
+    async function unmuteChatUser(userId, username) {
+        try {
+            const res = await fetch(`/api/admin/users/${userId}/mute-chat`, { method: "DELETE", credentials: "same-origin" });
+            if (!res.ok) { toast("Failed.", "error"); return; }
+            toast(`@${username} unmuted.`, "success");
+            window._mutedLoaded = false;
+            loadMuted();
+        } catch { toast("Failed.", "error"); }
+    }
+
+    /* ─────────── IP Bans ─────────── */
+    async function loadIpBans() {
+        window._ipBansLoaded = true;
+        try {
+            const res = await fetch("/api/admin/ip-bans", { credentials: "same-origin" });
+            if (!res.ok) { document.getElementById("ip-bans-table-wrap").innerHTML = `<div class="admin-empty"><i class="fas fa-lock"></i>Access denied.</div>`; return; }
+            const data = await res.json();
+            const bans = data.bans || [];
+            if (!bans.length) {
+                document.getElementById("ip-bans-table-wrap").innerHTML = `<div class="admin-empty"><i class="fas fa-check"></i>No active IP bans.</div>`;
+                return;
+            }
+            const rows = bans.map(b => `
+                <tr>
+                    <td style="font-family:monospace;font-size:0.82rem;">${escapeHtml(b.ip)}</td>
+                    <td style="font-size:0.8rem;opacity:0.6;">${escapeHtml(b.reason||"—")}</td>
+                    <td style="font-size:0.78rem;opacity:0.5;">${b.expires_at||b.expiresAt ? new Date(b.expires_at||b.expiresAt).toLocaleDateString() : "Permanent"}</td>
+                    <td style="font-size:0.75rem;opacity:0.45;">${escapeHtml(b.banned_by||b.bannedBy||"—")}</td>
+                    <td><button class="abtn abtn-danger" onclick="deleteIpBan('${escapeHtml(b.id)}','${escapeHtml(b.ip)}')"><i class="fas fa-trash"></i> Remove</button></td>
+                </tr>
+            `).join("");
+            document.getElementById("ip-bans-table-wrap").innerHTML = `
+                <table class="admin-table">
+                    <thead><tr><th>IP</th><th>Reason</th><th>Expires</th><th>Banned By</th><th>Actions</th></tr></thead>
+                    <tbody>${rows}</tbody>
+                </table>`;
+        } catch {
+            document.getElementById("ip-bans-table-wrap").innerHTML = `<div class="admin-empty"><i class="fas fa-exclamation-triangle"></i>Failed to load.</div>`;
+        }
+    }
+
+    async function submitAddIpBan() {
+        document.getElementById("new-ip-ban-error").textContent = "";
+        const ip = document.getElementById("new-ip-ban-ip").value.trim();
+        const reason = document.getElementById("new-ip-ban-reason").value.trim() || null;
+        const minsRaw = document.getElementById("new-ip-ban-minutes").value.trim();
+        if (!ip) { document.getElementById("new-ip-ban-error").textContent = "IP address is required."; return; }
+        const body = { ip, reason };
+        if (minsRaw) body.minutes = Number(minsRaw);
+        try {
+            const res = await fetch("/api/admin/ip-bans", {
+                method: "POST", headers: { "content-type": "application/json" },
+                credentials: "same-origin", body: JSON.stringify(body),
+            });
+            const data = await res.json();
+            if (!res.ok) { document.getElementById("new-ip-ban-error").textContent = data.error || "Failed."; return; }
+            closeModal("modal-add-ip-ban");
+            toast(`IP ${ip} banned.`, "success");
+            window._ipBansLoaded = false;
+            loadIpBans();
+        } catch { document.getElementById("new-ip-ban-error").textContent = "Something went wrong."; }
+    }
+
+    async function deleteIpBan(id, ip) {
+        if (!confirm(`Remove IP ban for ${ip}?`)) return;
+        try {
+            const res = await fetch(`/api/admin/ip-bans/${id}`, { method: "DELETE", credentials: "same-origin" });
+            if (!res.ok) { toast("Failed.", "error"); return; }
+            toast(`IP ban for ${ip} removed.`, "success");
+            window._ipBansLoaded = false;
+            loadIpBans();
+        } catch { toast("Failed.", "error"); }
+    }
+
+    /* ─────────── HW Bans ─────────── */
+    async function loadHwBans() {
+        window._hwBansLoaded = true;
+        try {
+            const res = await fetch("/api/admin/hw-bans", { credentials: "same-origin" });
+            if (!res.ok) { document.getElementById("hw-bans-table-wrap").innerHTML = `<div class="admin-empty"><i class="fas fa-lock"></i>Access denied.</div>`; return; }
+            const data = await res.json();
+            const bans = data.bans || [];
+            if (!bans.length) {
+                document.getElementById("hw-bans-table-wrap").innerHTML = `<div class="admin-empty"><i class="fas fa-check"></i>No hardware bans.</div>`;
+                return;
+            }
+            const rows = bans.map(b => `
+                <tr>
+                    <td style="font-family:monospace;font-size:0.78rem;max-width:180px;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(b.hwid)}</td>
+                    <td style="font-size:0.85rem;">${b.username ? `<a href="/u/${escapeHtml(b.username)}" style="color:var(--accent);">@${escapeHtml(b.username)}</a>` : '<span style="opacity:0.4;">Unknown</span>'}</td>
+                    <td style="font-size:0.8rem;opacity:0.6;">${escapeHtml(b.reason||"—")}</td>
+                    <td style="font-size:0.78rem;opacity:0.5;">${b.expires_at||b.expiresAt ? new Date(b.expires_at||b.expiresAt).toLocaleDateString() : "Permanent"}</td>
+                    <td style="font-size:0.75rem;opacity:0.45;">${escapeHtml(b.banned_by||b.bannedBy||"—")}</td>
+                    <td><button class="abtn abtn-danger" onclick="deleteHwBan('${escapeHtml(b.id)}')"><i class="fas fa-trash"></i> Remove</button></td>
+                </tr>
+            `).join("");
+            document.getElementById("hw-bans-table-wrap").innerHTML = `
+                <table class="admin-table">
+                    <thead><tr><th>HWID</th><th>User</th><th>Reason</th><th>Expires</th><th>Banned By</th><th>Actions</th></tr></thead>
+                    <tbody>${rows}</tbody>
+                </table>`;
+        } catch {
+            document.getElementById("hw-bans-table-wrap").innerHTML = `<div class="admin-empty"><i class="fas fa-exclamation-triangle"></i>Failed to load.</div>`;
+        }
+    }
+
+    async function deleteHwBan(id) {
+        if (!confirm("Remove this hardware ban?")) return;
+        try {
+            const res = await fetch(`/api/admin/hw-bans/${id}`, { method: "DELETE", credentials: "same-origin" });
+            if (!res.ok) { toast("Failed.", "error"); return; }
+            toast("HW ban removed.", "success");
+            window._hwBansLoaded = false;
+            loadHwBans();
+        } catch { toast("Failed.", "error"); }
+    }
+
+    /* ─────────── Warn ─────────── */
+    function openWarn(userId, username) {
+        _actionTarget = { userId, username };
+        document.getElementById("modal-warn-title").textContent = `Warn @${username}`;
+        document.getElementById("warn-reason").value = "";
+        document.getElementById("warn-error").textContent = "";
+        openModal("modal-warn-user");
+    }
+
+    async function submitWarn() {
+        if (!_actionTarget) return;
+        document.getElementById("warn-error").textContent = "";
+        const reason = document.getElementById("warn-reason").value.trim();
+        if (!reason) { document.getElementById("warn-error").textContent = "Reason is required."; return; }
+        try {
+            const res = await fetch(`/api/admin/users/${_actionTarget.userId}/warn`, {
+                method: "POST", headers: { "content-type": "application/json" },
+                credentials: "same-origin", body: JSON.stringify({ reason }),
+            });
+            const data = await res.json();
+            if (!res.ok) { document.getElementById("warn-error").textContent = data.error || "Failed to warn."; return; }
+            closeModal("modal-warn-user");
+            toast(`Warning issued to @${_actionTarget.username}.`, "warn");
+            if (data.auto_punishment?.fired) {
+                setTimeout(() => toast(`Auto-punishment triggered: ${data.auto_punishment.label} applied to @${_actionTarget.username}.`, "error"), 600);
+            }
+            // refresh users so infraction count updates
+            window._usersLoaded = false;
+            loadUsers(_userPage);
+        } catch { document.getElementById("warn-error").textContent = "Something went wrong."; }
+    }
+
+    /* ─────────── Infraction history ─────────── */
+    async function viewInfractions(userId, username) {
+        document.getElementById("modal-infractions-title").textContent = `Infractions — @${username}`;
+        document.getElementById("modal-infractions-body").innerHTML = `<div class="admin-loading">Loading…</div>`;
+        openModal("modal-infractions");
+        try {
+            const res = await fetch(`/api/admin/users/${userId}/infractions`, { credentials: "same-origin" });
+            const data = await res.json();
+            const list = data.infractions || [];
+            if (!list.length) {
+                document.getElementById("modal-infractions-body").innerHTML = `<p style="opacity:0.5;font-size:0.85rem;text-align:center;padding:16px 0;">No infractions on record.</p>`;
+                return;
+            }
+            const typeColor = { warn: "#faad14", mute: "#faad14", ban: "#f04747", auto_mute: "#a855f7", auto_ban: "#f04747" };
+            const typeIcon = { warn: "fa-triangle-exclamation", mute: "fa-microphone-slash", ban: "fa-ban", auto_mute: "fa-robot", auto_ban: "fa-robot" };
+            document.getElementById("modal-infractions-body").innerHTML = `
+                <div style="display:flex;flex-direction:column;gap:8px;max-height:340px;overflow-y:auto;">
+                    ${list.map(inf => `
+                        <div style="background:var(--bg-3);border-radius:9px;padding:10px 12px;display:flex;align-items:flex-start;gap:10px;">
+                            <i class="fas ${typeIcon[inf.type]||'fa-gavel'}" style="color:${typeColor[inf.type]||'var(--text-2)'};margin-top:2px;font-size:13px;flex-shrink:0;"></i>
+                            <div style="flex:1;min-width:0;">
+                                <div style="font-size:0.82rem;font-weight:700;color:var(--bright-text);text-transform:capitalize;">${escapeHtml(inf.type)}</div>
+                                <div style="font-size:0.8rem;color:var(--text);margin-top:2px;word-break:break-word;">${escapeHtml(inf.reason || "No reason provided")}</div>
+                                <div style="font-size:0.72rem;color:var(--text-2);opacity:0.55;margin-top:4px;">by ${escapeHtml(inf.issued_by||inf.issuedBy||"?")} · ${new Date(inf.created_at||inf.createdAt||0).toLocaleString()}</div>
+                            </div>
+                            <button class="abtn abtn-danger" style="padding:3px 7px;font-size:0.72rem;flex-shrink:0;" onclick="deleteInfraction('${escapeHtml(inf.id)}','${escapeHtml(userId)}','${escapeHtml(username)}')"><i class="fas fa-trash"></i></button>
+                        </div>
+                    `).join("")}
+                </div>`;
+        } catch {
+            document.getElementById("modal-infractions-body").innerHTML = `<p style="color:#f04747;font-size:0.85rem;">Failed to load infractions.</p>`;
+        }
+    }
+
+    async function deleteInfraction(id, userId, username) {
+        if (!confirm("Remove this infraction record?")) return;
+        try {
+            const res = await fetch(`/api/admin/infractions/${id}`, { method: "DELETE", credentials: "same-origin" });
+            if (!res.ok) { toast("Failed to delete infraction.", "error"); return; }
+            toast("Infraction removed.", "success");
+            viewInfractions(userId, username);
+            window._usersLoaded = false;
+            loadUsers(_userPage);
+        } catch { toast("Failed.", "error"); }
+    }
+
+    /* ─────────── Infractions tab ─────────── */
+    let _allInfractions = [];
+    let _infractionType = "";
+
+    async function loadInfractions() {
+        window._infractionsLoaded = true;
+        document.getElementById("infractions-table-wrap").innerHTML = `<div class="admin-loading"><i class="fas fa-spinner fa-spin"></i> Loading…</div>`;
+        try {
+            const url = `/api/admin/infractions?limit=100${_infractionType ? `&type=${_infractionType}` : ""}`;
+            const res = await fetch(url, { credentials: "same-origin" });
+            if (!res.ok) { document.getElementById("infractions-table-wrap").innerHTML = `<div class="admin-empty"><i class="fas fa-lock"></i>Access denied.</div>`; return; }
+            const data = await res.json();
+            _allInfractions = data.infractions || [];
+            const total = _allInfractions.length;
+            document.getElementById("badge-infractions").textContent = total;
+            document.getElementById("badge-infractions").style.display = total ? "inline" : "none";
+            renderInfractionsTable();
+        } catch {
+            document.getElementById("infractions-table-wrap").innerHTML = `<div class="admin-empty"><i class="fas fa-exclamation-triangle"></i>Failed to load.</div>`;
+        }
+    }
+
+    function setInfractionFilter(type, btn) {
+        _infractionType = type;
+        document.querySelectorAll(".infraction-filter").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        window._infractionsLoaded = false;
+        loadInfractions();
+    }
+
+    function renderInfractionsTable() {
+        if (!_allInfractions.length) {
+            document.getElementById("infractions-table-wrap").innerHTML = `<div class="admin-empty"><i class="fas fa-check-circle"></i>No infractions found.</div>`;
+            return;
+        }
+        const typeColor = { warn: "#faad14", mute: "#faad14", ban: "#f04747", auto_mute: "#a855f7", auto_ban: "#f04747" };
+        const rows = _allInfractions.map(inf => `
+            <tr>
+                <td style="font-size:0.75rem;opacity:0.5;white-space:nowrap;">${new Date(inf.created_at||inf.createdAt||0).toLocaleDateString()}</td>
+                <td><span style="color:${typeColor[inf.type]||'var(--text-2)'};font-weight:700;font-size:0.8rem;text-transform:capitalize;">${escapeHtml(inf.type)}</span></td>
+                <td><span style="color:var(--bright-text);font-weight:600;">@${escapeHtml(inf.username||"?")}</span></td>
+                <td style="font-size:0.8rem;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${escapeHtml(inf.reason||'')}">${escapeHtml(inf.reason||"—")}</td>
+                <td style="font-size:0.75rem;opacity:0.55;">${escapeHtml(inf.issued_by||inf.issuedBy||"—")}</td>
+                <td>
+                    <button class="abtn abtn-danger" onclick="deleteInfractionGlobal('${escapeHtml(inf.id)}')"><i class="fas fa-trash"></i></button>
+                </td>
+            </tr>
+        `).join("");
+        document.getElementById("infractions-table-wrap").innerHTML = `
+            <table class="admin-table">
+                <thead><tr><th>Date</th><th>Type</th><th>User</th><th>Reason</th><th>Issued By</th><th></th></tr></thead>
+                <tbody>${rows}</tbody>
+            </table>`;
+    }
+
+    async function deleteInfractionGlobal(id) {
+        if (!confirm("Remove this infraction?")) return;
+        try {
+            const res = await fetch(`/api/admin/infractions/${id}`, { method: "DELETE", credentials: "same-origin" });
+            if (!res.ok) { toast("Failed.", "error"); return; }
+            _allInfractions = _allInfractions.filter(i => i.id !== id);
+            renderInfractionsTable();
+            toast("Infraction removed.", "success");
+        } catch { toast("Failed.", "error"); }
+    }
+
+    /* ─────────── Init ─────────── */
+    let _meUsername = "";
+    (async () => {
+        try {
+            const res = await fetch("/api/auth/me", { credentials: "same-origin" });
+            if (res.ok) { const d = await res.json(); _meUsername = (d.user?.username || "").toLowerCase(); }
+        } catch {}
+    })();
+    loadUsers();
+</script>
+</body>
+</html>

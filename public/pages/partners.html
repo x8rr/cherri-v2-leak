@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cherri | settings</title>
+    <link rel="shortcut icon" href="/assets/img/fav.png" type="image/x-icon">
+    <link rel="stylesheet" href="/assets/css/font.css?v=2">
+    <link rel="stylesheet" href="/assets/css/colors/default.css" id="csslink" id="csslink">
+    <link rel="stylesheet" href="/assets/css/index.css">
+    <link rel="stylesheet" href="/assets/icons/css/all-pro.css">
+</head>
+<style>
+    .partner-card {
+        height: 220px;
+        padding: 15px;
+        box-sizing: border-box;
+        border-radius: 20px;
+        background: var(--bg-2);
+        width: 365px;
+        border: 1px solid var(--border-4);
+        transition: 0.3s cubic-bezier(.34, 1.5, .84, 1);
+        text-decoration: none;
+        color: var(--text);
+        margin: 0;
+        position: relative;
+    }
+
+    .partner-card:hover {
+        scale: 1.02;
+        transform: translateY(-5px);
+        cursor: pointer;
+    }
+
+    .partner-card img {
+        height: 75px;
+        border-radius: 15px;
+        margin-right: 10px;
+        font-weight: 900;
+    }
+
+    .partner-card h1 {
+        margin: 0;
+        margin-left: 10px;
+        font-size: 28px;
+    }
+
+    .goldpartner {
+        position: relative;
+        z-index: 0;
+        border-radius: 20px;
+        outline: 3px solid goldenrod;
+    }
+
+    .goldtag {
+        position: absolute;
+        padding: 4px 8px;
+        background: goldenrod;
+        border-radius: 15px;
+        right: 8px;
+        top: 8px;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    .lucide-card {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015)), #050505;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        box-shadow:
+            0 0 0 1px rgba(255, 255, 255, 0.06) inset,
+            0 0 22px rgba(255, 255, 255, 0.14);
+        overflow: hidden;
+    }
+
+    .lucide-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 20px;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), transparent 35%, transparent 65%, rgba(255, 255, 255, 0.05));
+        pointer-events: none;
+    }
+
+    .lucide-card::after {
+        content: "";
+        position: absolute;
+        inset: 1px;
+        border-radius: 19px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        pointer-events: none;
+    }
+
+    .lucide-card h1,
+    .lucide-card p {
+        position: relative;
+        z-index: 1;
+    }
+
+    .lucide-card img {
+        box-sizing: border-box;
+        box-shadow:
+            0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+            0 0 18px rgba(255, 255, 255, 0.12);
+        position: relative;
+        z-index: 1;
+    }
+
+    .luminsdk-card {
+        background: linear-gradient(180deg, rgba(255, 213, 128, 0.12), rgba(255, 213, 128, 0.025)), #080704;
+        border: 1px solid rgba(255, 215, 140, 0.32);
+        box-shadow:
+            0 0 0 1px rgba(255, 226, 168, 0.05) inset,
+            0 0 22px rgba(255, 196, 76, 0.16);
+        overflow: hidden;
+    }
+
+    .luminsdk-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 20px;
+        background: linear-gradient(135deg, rgba(255, 231, 178, 0.14), transparent 32%, transparent 65%, rgba(255, 208, 94, 0.06));
+        pointer-events: none;
+    }
+
+    .luminsdk-card::after {
+        content: "";
+        position: absolute;
+        inset: 1px;
+        border-radius: 19px;
+        border: 1px solid rgba(255, 229, 165, 0.08);
+        pointer-events: none;
+    }
+
+    .luminsdk-card h1,
+    .luminsdk-card p {
+        position: relative;
+        z-index: 1;
+    }
+
+    .sdk-badge {
+        height: 75px;
+        width: 75px;
+        border-radius: 15px;
+        margin-right: 10px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        background: linear-gradient(180deg, #201708, #090806);
+        border: 1px solid rgba(255, 220, 148, 0.18);
+        color: #f3d18c;
+        font-size: 18px;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        box-shadow:
+            0 0 0 1px rgba(255, 224, 158, 0.06) inset,
+            0 0 18px rgba(255, 196, 76, 0.14);
+        position: relative;
+        z-index: 1;
+    }
+</style>
+
+<body class="obfuscate">
+    <div style="padding: 25px; box-sizing: border-box; gap: 20px;">
+        <h1>Partners</h1>
+        <p>Looking to partner? DM <strong style="color: white;">hvtrs</strong> on Discord or join the Discord server.
+        </p>
+        <br>
+        <div class="flex-row" style="width: 100%; flex-wrap: wrap; gap: 15px;">
+            <a href="https://lucideon.top/" target="_blank">
+                <div class="partner-card lucide-card">
+                    <div class="flex-row" style="align-items: center;">
+                        <img src="/assets/img/partners/lucide.webp" alt="">
+                        <h1>Lucide</h1>
+                    </div>
+                    <p>Best proxy to bypass censorship in school with multiple fully unblocked links.</p>
+                </div>
+            </a>
+            <a href="https://vapor.onl/" target="_blank">
+                <div class="partner-card">
+                    <div class="flex-row" style="align-items: center;">
+                        <img src="/assets/img/partners/vapor.png" alt="">
+                        <h1>VAPOR</h1>
+                    </div>
+                    <p>VAPOR is an all in one platform for free music, games, and tools.</p>
+                </div>
+            </a>
+            <a href="https://infamous-tutoring.space/#" target="_blank">
+                <div class="partner-card">
+                    <div class="flex-row" style="align-items: center;">
+                        <img src="/assets/img/partners/infamous.png" alt="">
+                        <h1>Infamous</h1>
+                    </div>
+                    <p>Infamous Network - a collection of UBG sites including games, proxies, a chatroom, music, and
+                        more.</p>
+                </div>
+            </a>
+            <a href="https://galxy.autos/" target="_blank">
+                <div class="partner-card">
+                    <div class="flex-row" style="align-items: center;">
+                        <img src="/assets/img/partners/hydra.png" alt="">
+                        <h1>Hydra Network</h1>
+                    </div>
+                    <p>Hydra Network is a server which provides free websites allowing students to browse unrestricted
+                        and restriction free.
+                        Join us today!</p>
+                </div>
+            </a>
+            <a href="https://splash.best/" target="_blank">
+                <div class="partner-card">
+                    <div class="flex-row" style="align-items: center;">
+                        <img src="/assets/img/partners/splash.webp" alt="">
+                        <h1>SPLASH</h1>
+                    </div>
+                    <p>Secure Proxy for Live Audiovisual SHell</p>
+                </div>
+            </a>
+            <a href="https://luna.loan/" target="_blank">
+                <div class="partner-card">
+                    <div class="flex-row" style="align-items: center;">
+                        <img style="background: var(--bg-3);" src="/assets/img/partners/luna.gif" alt="">
+                        <h1>Luna</h1>
+                    </div>
+                    <p>The best cloudmoon bypass out there!</p>
+                </div>
+            </a>
+            <a href="https://everest.rip/" target="_blank">
+                <div class="partner-card">
+                    <div class="flex-row" style="align-items: center;">
+                        <img style="background: var(--bg-3);" src="/assets/img/partners/everest.gif" alt="">
+                        <h1>Everest</h1>
+                    </div>
+                    <p>
+                        Stop living under a rock and use Everest: the ultimate Scramjet & UV dual-proxy for unblocking
+                        every site and playing
+                        70+ games and exclusive visual novel ports.</p>
+                </div>
+            </a>
+            <a href="https://krypt-on.top/" target="_blank">
+                <div class="partner-card">
+                    <div class="flex-row" style="align-items: center;">
+                        <img style="background: var(--bg-3);" src="/assets/img/partners/krypton.gif" alt="">
+                        <h1>Krypton</h1>
+                    </div>
+                    <p>
+                        Join today if you want an actual good proxy that you can always use</p>
+                </div>
+            </a>
+            <a href="https://squall.cc/" target="_blank">
+                <div class="partner-card">
+                    <div class="flex-row" style="align-items: center;">
+                        <img style="background: var(--bg-3);" src="/assets/img/partners/squall.webp" alt="">
+                        <h1>Squall</h1>
+                    </div>
+                    <p>A lightweight and ultrafast proxy and game site with over 900+ quality games</p>
+                </div>
+            </a>
+            <a href="https://noahsamazingtutoringhelp.github.io/Noahs-Calculus-Tutor/" target="_blank">
+                <div class="partner-card">
+                    <div class="flex-row" style="align-items: center;">
+                        <img style="background: var(--bg-3);" src="/assets/img/partners/noahshub.webp" alt="">
+                        <h1>Noah's Hub</h1>
+                    </div>
+                    <p>One of the biggest unblocked gaming sites, with over 300+ games and an INTERESTING theme.... 😳
+                    </p>
+                </div>
+            </a>
+            <a href="https://petezahgames.com" target="_blank">
+                <div class="partner-card">
+                    <div class="flex-row" style="align-items: center;">
+                        <img style="background: var(--bg-3);" src="/assets/img/partners/petezah.webp" alt="">
+                        <h1>PeteZah Games</h1>
+                    </div>
+                    <p>Explore a curated hub of unblocked games, proxy tools, and school-friendly utilities, all
+                        designed to keep you
+                        entertained and connected.</p>
+                </div>
+            </a>
+            <a href="https://waves.lat/" target="_blank">
+                <div class="partner-card">
+                    <div class="flex-row" style="align-items: center;">
+                        <img style="background: var(--bg-3);" src="/assets/img/partners/waves.ico" alt="">
+                        <h1>Waves!!</h1>
+                    </div>
+                    <p>fast proxy, lot of features, bunch of games, and very nice looking ui</p>
+                </div>
+            </a>
+            <a href="https://velara.cc/" target="_blank">
+                <div class="partner-card">
+                    <div class="flex-row" style="align-items: center;">
+                        <img style="background: var(--bg-3);" src="/assets/img/partners/velara.gif" alt="">
+                        <h1>Velara</h1>
+                    </div>
+                    <p>Velara gives you instant access to 750+ premium games fully unblocked and playable in your
+                        browser. Our built in proxy
+                        and Now.gg bypass help you run your favorite games even on restricted networks. No installs
+                        needed.</p>
+                </div>
+            </a>
+            <a href="https://nikehub.org/" target="_blank">
+                <div class="partner-card">
+                    <div class="flex-row" style="align-items: center;">
+                        <img style="background: var(--bg-3);" src="/assets/img/partners/nikehub.webp" alt="">
+                        <h1>Nikehub</h1>
+                    </div>
+                    <p>An advanced unblocked games site that provides "educational" games</p>
+                </div>
+            </a>
+            <a href="https://keoffical.oneapp.dev/" target="_blank">
+                <div class="partner-card">
+                    <div class="flex-row" style="align-items: center;">
+                        <img style="background: var(--bg-3);" src="/assets/img/partners/unlockedz.webp" alt="">
+                        <h1>Unlockedz</h1>
+                    </div>
+                    <p>Super cool site, with chatrooms and tons of games and events.</p>
+                </div>
+            </a>
+            <a href="https://lunaron.top/" target="_blank">
+                <div class="partner-card">
+                    <div class="flex-row" style="align-items: center;">
+                        <img style="background: var(--bg-3);" src="/assets/img/partners/lunar.webp" alt="">
+                        <h1>Lunar</h1>
+                    </div>
+                    <p>Lunar v2 is a feature packed tabbed proxy designed to bypass censorship.
+                        looks like a real browser. runs smooth. no clutter.</p>
+                </div>
+            </a>
+            <a href="https://otonic.org" target="_blank">
+                <div class="partner-card">
+                    <div class="flex-row" style="align-items: center;">
+                        <img style="background: var(--bg-3);" src="/assets/img/partners/otonic.webp" alt="">
+                        <h1>Otonic</h1>
+                    </div>
+                    <p>Otonic is a games site with over 1100 games, movies, and a proxy. It is updated often and we add
+                        what the community
+                        requests.</p>
+                </div>
+            </a>
+            <a href="https://useaxis.net" target="_blank">
+                <div class="partner-card">
+                    <div class="flex-row" style="align-items: center;">
+                        <img style="background: var(--bg-3);" src="/assets/img/partners/axis.webp" alt="">
+                        <h1>Axis</h1>
+                    </div>
+                    <p>Unblocked games, Cloudmoon bypasses, and Linux VMs.</p>
+                </div>
+            </a>
+            <a href="https://discord.gg/Fdp3N24ZR" target="_blank">
+                <div class="partner-card">
+                    <div class="flex-row" style="align-items: center;">
+                        <img style="background: var(--bg-3);" src="/assets/img/partners/penguin.webp" alt="">
+                        <h1>Penguin0 Web</h1>
+                    </div>
+                    <p>We collect links from different servers and give credit ofc and we share them so you don’t need
+                        to look for them!</p>
+                </div>
+            </a>
+        </div>
+    </div>
+    <script>
+        document.getElementById("csslink").href = `/assets/css/colors/${localStorage.getItem("cherri_theme") ?? "default"}.css`
+    </script>
+
+    <script src="/assets/js/cherri.ads.js"></script>
+
+</body>
+
+</html>
